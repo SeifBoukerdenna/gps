@@ -1,0 +1,88 @@
+/* components/DirectionPanel/DirectionPanel.module.css */
+
+.panel {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 100;
+    background: #eaeaea;
+    /* slightly darker than #f9f9f9 */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    height: 35%hv;
+    opacity: 1;
+    max-height: 1000px;
+    /* Adjust to a sufficiently large value */
+    transition: height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    /* Smoother transition */
+}
+
+.input {
+    margin-top: 8px;
+    padding: 12px;
+    border: 1px solid #bbb;
+    /* slightly darker than #ccc */
+    border-radius: 4px;
+    font-size: 16px;
+    outline: none;
+}
+
+.button {
+    margin-top: 8px;
+    padding: 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    outline: none;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color 0.5s ease-in-out;
+    /* Smoother transition */
+}
+
+.button:hover {
+    background-color: #d6d6d6;
+    /* slightly darker than #e0e0e0 */
+}
+
+.dismissButton {
+    background-color: #999;
+    /* unchanged */
+    color: #fff;
+}
+
+.departureButton {
+    background-color: #3366cc;
+    /* slightly darker than #4285f4 */
+    color: #fff;
+}
+
+.arrivalButton {
+    background-color: #2d7e4a;
+    color: #fff;
+}
+
+.swapButton {
+    background-color: #e68a00;
+    color: #fff;
+}
+
+.setCourseButton {
+    background-color: #cc3329;
+    color: #fff;
+}
+
+.getUserLocation {
+    background-color: #3366cc;
+    color: #fff;
+}
+
+.panel.dismissed {
+    height: 80px;
+    opacity: .75;
+}

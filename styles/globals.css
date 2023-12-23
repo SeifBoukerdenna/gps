@@ -105,3 +105,11 @@ a {
     color-scheme: dark;
   }
 }
+
+
+.map-container {
+  position: relative;
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+}

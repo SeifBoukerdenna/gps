@@ -1,40 +1,92 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
+# GPS React App with Google Maps Integration
+
+## Introduction
+
+This repository contains a GPS application built with React and integrated with Google Maps. The app allows users to search for schools, visualize their location on the map, and calculate distances from randomly generated houses.
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Make sure you have [Node.js](https://nodejs.org/) and [npm](https://www.npmjs.com/) installed on your machine.
+
+### Installation
+
+1. Clone the repository:
+
+``` bash
+git clone https://github.com/elmelz6472/gps.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Navigate to the project directory:
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+``` bash
+cd gps
+```
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+3. Install dependencies:
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+``` bash
+npm install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### Running the App
 
-## Learn More
+Run the development server:
 
-To learn more about Next.js, take a look at the following resources:
+``` bash
+npm run dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Open your browser and navigate to [http://localhost:3000](http://localhost:3000/) to view the app.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Screenshots
 
-## Deploy on Vercel
+<!-- Add screenshots here -->
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Base page
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+![Landing page](pictures/base-min.png)
+
+Clusters with markers and Locations
+
+![App page](pictures/app-min.png)
+
+Directions (only drive)
+
+![Direction](pictures/drive-min.png)
+
+## Project Structure
+
+- Most files are for typescript/next/configs, actual source code is located in the components directory and pages directory
+
+- `components/distance.tsx`: Displays distance information.
+
+- `components/map.tsx`: Main map component.
+
+- `components/places.tsx`: Handles school search functionality.
+
+- `googleMapIds.json`: Lists of different google map ids for hot reloading.
+
+## Environment variables
+
+- Create a .env.local file at the root base of the project and assign your api key to `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY="XXXXXXXXXXXXXXXXXX"`
+
+- Optionally use your own map for styling through `NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID="XXXXXXX`
+
+## TODOs
+
+- Implement multiple modes of transit.
+
+- Better maps.
+
+- Lots more features.
+
+- Improve UI/UX.
+
+- Add tests for components.
+
+- Enhance error handling.
+
+- Optimize code for production.

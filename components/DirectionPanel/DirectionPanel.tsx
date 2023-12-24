@@ -28,7 +28,6 @@ const DirectionPanel: React.FC = () => {
     }
 
     const [isDismissed, setIsDismissed] = useState(false)
-    const [isExpanded, setIsExpanded] = useState(false)
     const handleDismiss = () => {
         setIsDismissed(true)
     }

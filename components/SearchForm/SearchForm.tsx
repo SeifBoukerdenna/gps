@@ -1,6 +1,9 @@
 // SearchForm.tsx
 import React, { useState } from 'react'
-import usePlacesAutocomplete from 'use-places-autocomplete'
+import usePlacesAutocomplete, {
+    getGeocode,
+    getLatLng,
+} from 'use-places-autocomplete'
 import {
     Combobox,
     ComboboxInput,
@@ -11,24 +14,38 @@ import {
 import '@reach/combobox/styles.css'
 import styles from './SearchForm.module.css'
 import Draggable from 'react-draggable'
+import { useMapContext } from '../Map/MapContext'
 
 const SearchForm = () => {
     const [address, setAddress] = useState('')
+    const { center, setCenter, destination } = useMapContext()
 
     const {
         ready,
         value,
-        suggestions: { status, data },
         setValue,
+        suggestions: { status, data },
+        clearSuggestions,
     } = usePlacesAutocomplete({
-        debounce: 300,
         requestOptions: {
-            types: ['geocode'],
+            types: ['address', 'establishment', 'geocode'],
+            componentRestrictions: {
+                country: 'ca',
+            },
         },
     })
 
-    const handleSelect = (address: string) => {
+    const handleSelect = async (address: string) => {
         setValue(address, false)
+        // clearSuggestions()
+
+        const results = await getGeocode({ address: address })
+        const { lat, lng } = await getLatLng(results[0])
+        setCenter({ lat, lng })
+
+        console.log(address)
+        console.log({ lat, lng })
+
         // Additional actions when an address is selected
         // For example, you may want to fetch additional details about the selected place.
     }

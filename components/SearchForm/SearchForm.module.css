@@ -2,13 +2,16 @@
 
 .searchFormContainer {
     position: absolute;
-    top: 10px;
-    left: 10px;
-    z-index: 1000;
+    top: 75vh;
+    left: 38%;
+    transform: translateX(-50%);
+    z-index: 100;
+    width: 50%;
 }
 
 .inputField {
-    width: 200px;
+    text-align: center;
+    width: 100%;
     padding: 10px;
     font-size: 16px;
     border-radius: 4px;
@@ -19,4 +22,5 @@
     padding: 10px;
     font-size: 16px;
     cursor: pointer;
+    background-color: #ccc;
 }

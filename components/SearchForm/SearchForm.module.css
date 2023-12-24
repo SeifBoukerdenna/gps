@@ -1,0 +1,22 @@
+/* SearchForm.module.css */
+
+.searchFormContainer {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 1000;
+}
+
+.inputField {
+    width: 200px;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.suggestionItem {
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}

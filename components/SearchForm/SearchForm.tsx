@@ -1,9 +1,7 @@
 // SearchForm.tsx
 import React, { useState } from 'react'
-import usePlacesAutocomplete, {
-    getGeocode,
-    getLatLng,
-} from 'use-places-autocomplete'
+import { useCustomPlacesAutocomplete } from '../../utils/Hooks/PlacesAutoCompleteHook'
+import { getGeocode, getLatLng } from 'use-places-autocomplete'
 import {
     Combobox,
     ComboboxInput,
@@ -23,6 +21,7 @@ const SearchForm = () => {
         center,
         setCenter,
         destination,
+        setDestination,
         destinationName,
         setInitialSearch,
     } = useMapContext()
@@ -30,17 +29,10 @@ const SearchForm = () => {
     const {
         ready,
         value,
-        setValue,
+        setValue, // Now you can use setValue in this component
         suggestions: { status, data },
         clearSuggestions,
-    } = usePlacesAutocomplete({
-        // requestOptions: {
-        //     // types: ['address', 'establishment', 'geocode'],
-        //     // componentRestrictions: {
-        //     //     country: 'ca',
-        //     // },
-        // },
-    })
+    } = useCustomPlacesAutocomplete()
 
     const handleSelect = async (address: string) => {
         setValue(address, false)
@@ -49,9 +41,7 @@ const SearchForm = () => {
         const results = await getGeocode({ address: address })
         const { lat, lng } = await getLatLng(results[0])
         setCenter({ lat, lng })
-
-        console.log(address)
-        console.log({ lat, lng })
+        setDestination({ lat, lng })
 
         setInitialSearch(true)
 
@@ -66,7 +56,7 @@ const SearchForm = () => {
             <div ref={nodeRef} className={styles.searchFormContainer}>
                 <Combobox onSelect={handleSelect}>
                     <ComboboxInput
-                        value={value}
+                        value={value.toString()}
                         onChange={(e) => {
                             setValue(e.target.value)
                             setAddress(e.target.value)
@@ -77,22 +67,16 @@ const SearchForm = () => {
                                 ? destinationName.toString()
                                 : 'Search your destination'
                         }
-                        className={styles.inputField} // Apply the input field style
+                        className={styles.inputField}
                     />
                     <ComboboxPopover className={styles.suggestionContainer}>
-                        <ComboboxList
-                            style={{
-                                listStyle: 'none',
-                                padding: '0',
-                                margin: '0',
-                            }}
-                        >
+                        <ComboboxList>
                             {status === 'OK' &&
                                 data.map(({ place_id, description }) => (
                                     <ComboboxOption
                                         key={place_id}
                                         value={description}
-                                        className={styles.suggestionItem} // Apply the suggestion item style
+                                        className={styles.suggestionItem}
                                     />
                                 ))}
                         </ComboboxList>

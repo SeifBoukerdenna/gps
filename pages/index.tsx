@@ -11,7 +11,7 @@ import SearchForm from '../components/SearchForm/SearchForm'
 export const libraries = String(['places'])
 
 export default function Home() {
-    const { initialSearch } = useMapContext()
+    const { initialSearch, destination } = useMapContext()
     console.log('initialSearch ', initialSearch)
 
     const { isLoaded } = useLoadScript({
@@ -24,9 +24,7 @@ export default function Home() {
     return (
         <MapProvider>
             <Map />
-            {initialSearch ? <DirectionPanel /> : <SearchForm />}
+            {destination ? <DirectionPanel /> : <SearchForm />}
         </MapProvider>
     )
 }
-
-// AIzaSyDsPIUYokmkqE_gJRfHzsYDcyM3ib679bw

@@ -16,9 +16,9 @@
     height: 35%hv;
     opacity: 1;
     max-height: 1000px;
-    /* Adjust to a sufficiently large value */
+    width: 40vw;
     transition: height 0.5s ease-in-out, opacity 0.5s ease-in-out;
-    /* Smoother transition */
+
 }
 
 .input {

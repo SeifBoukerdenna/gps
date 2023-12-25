@@ -1,21 +1,16 @@
 import React from 'react'
 import { useLoadScript } from '@react-google-maps/api'
 import { MapProvider } from '../components/Map/MapContext'
-import { useMapContext } from '../components/Map/MapContext'
 
+import DynamicFormRenderer from '../components/DynamicFormRenderer/DynamicFormRenderer'
 import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner'
 import Map from '../components/Map/Map'
-import DirectionPanel from '../components/DirectionPanel/DirectionPanel'
-import SearchForm from '../components/SearchForm/SearchForm'
-
-export const libraries = String(['places'])
+import SearchBarDepature from '../components/SearchBar/SearchBarDeparture'
+import Parent from '../components/SearchBar/SearchBarParentTest'
 
 export default function Home() {
-    const { initialSearch, destination } = useMapContext()
-    console.log('initialSearch ', initialSearch)
-
     const { isLoaded } = useLoadScript({
-        googleMapsApiKey: 'AIzaSyDsPIUYokmkqE_gJRfHzsYDcyM3ib679bw',
+        googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
         libraries: ['places'],
     })
 
@@ -23,8 +18,10 @@ export default function Home() {
 
     return (
         <MapProvider>
-            <Map />
-            {destination ? <DirectionPanel /> : <SearchForm />}
+            {/* <Map /> */}
+            {/* <DynamicFormRenderer /> */}
+            {/* <SearchBarDepature /> */}
+            <Parent />
         </MapProvider>
     )
 }

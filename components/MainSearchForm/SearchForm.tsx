@@ -23,6 +23,7 @@ const SearchForm = () => {
         destination,
         setDestination,
         destinationName,
+        setDestinationName,
         setInitialSearch,
     } = useMapContext()
 
@@ -43,6 +44,7 @@ const SearchForm = () => {
         setCenter({ lat, lng })
         setDestination({ lat, lng })
 
+        setDestinationName(address)
         setInitialSearch(true)
 
         // Additional actions when an address is selected

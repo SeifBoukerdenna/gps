@@ -14,6 +14,12 @@ interface MapContextProps {
     destinationName: string | null
     setInitialSearch: React.Dispatch<React.SetStateAction<boolean>>
     initialSearch: boolean
+    departureAddressName: string | null
+    setDepartureAddressName: React.Dispatch<React.SetStateAction<string | null>>
+    departureAddress: google.maps.LatLngLiteral | null
+    setDepartureAddress: React.Dispatch<
+        React.SetStateAction<google.maps.LatLngLiteral | null>
+    >
 }
 
 const MapContext = createContext<MapContextProps>({} as MapContextProps)
@@ -44,6 +50,13 @@ export const MapProvider: React.FC<MapProviderProps> = ({ children }) => {
 
     const [initialSearch, setInitialSearch] = useState<boolean>(false)
 
+    const [departureAddressName, setDepartureAddressName] = useState<
+        string | null
+    >(null)
+
+    const [departureAddress, setDepartureAddress] =
+        useState<google.maps.LatLngLiteral | null>(null)
+
     useEffect(() => {
         localStorage.setItem('userLocation', JSON.stringify(center))
     }, [center])
@@ -59,6 +72,10 @@ export const MapProvider: React.FC<MapProviderProps> = ({ children }) => {
                 setDestinationName,
                 initialSearch,
                 setInitialSearch,
+                departureAddressName,
+                setDepartureAddressName,
+                departureAddress,
+                setDepartureAddress,
             }}
         >
             {children}

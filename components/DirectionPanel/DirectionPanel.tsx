@@ -6,7 +6,7 @@ import styles from './DirectionPanel.module.css'
 import Draggable from 'react-draggable'
 
 const DirectionPanel: React.FC = () => {
-    const { center, setCenter, destination } = useMapContext()
+    const { center, setCenter, destination, destinationName } = useMapContext()
 
     const handleLocateUser = () => {
         if (navigator.geolocation) {
@@ -66,7 +66,11 @@ const DirectionPanel: React.FC = () => {
                         />
                         <input
                             type="text"
-                            placeholder="Arrival Address"
+                            placeholder={
+                                destinationName
+                                    ? destinationName.toString()
+                                    : 'Arrival Address'
+                            }
                             className={styles.input}
                             // value={}
                             // onChange={(e) => setArrivalAddress(e.target.value)}

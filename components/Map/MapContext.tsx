@@ -1,6 +1,7 @@
 // components/Map/MapContext.tsx
 
 import React, { createContext, useContext, useState, useEffect } from 'react'
+import convertCoordinatesToAddress from '../../utils/CoordToName'
 
 interface MapContextProps {
     center: google.maps.LatLngLiteral
@@ -9,6 +10,10 @@ interface MapContextProps {
     setDestination: React.Dispatch<
         React.SetStateAction<google.maps.LatLngLiteral | null>
     >
+    setDestinationName: React.Dispatch<React.SetStateAction<string | null>>
+    destinationName: string | null
+    setInitialSearch: React.Dispatch<React.SetStateAction<boolean>>
+    initialSearch: boolean
 }
 
 const MapContext = createContext<MapContextProps>({} as MapContextProps)
@@ -35,13 +40,26 @@ export const MapProvider: React.FC<MapProviderProps> = ({ children }) => {
     const [destination, setDestination] =
         useState<google.maps.LatLngLiteral | null>(null)
 
+    const [destinationName, setDestinationName] = useState<string | null>(null)
+
+    const [initialSearch, setInitialSearch] = useState<boolean>(false)
+
     useEffect(() => {
         localStorage.setItem('userLocation', JSON.stringify(center))
     }, [center])
 
     return (
         <MapContext.Provider
-            value={{ center, setCenter, destination, setDestination }}
+            value={{
+                center,
+                setCenter,
+                destination,
+                setDestination,
+                destinationName,
+                setDestinationName,
+                initialSearch,
+                setInitialSearch,
+            }}
         >
             {children}
         </MapContext.Provider>

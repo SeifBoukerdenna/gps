@@ -5,6 +5,7 @@ import { useMapContext } from './MapContext'
 import styles from './Map.module.css'
 import { MapOptions } from '../../types'
 import GoogleMapIds from '../../googleMapIds.json'
+import convertCoordinatesToAddress from '../../utils/CoordToName'
 
 const containerStyle = {
     width: '100vw',
@@ -12,13 +13,24 @@ const containerStyle = {
 }
 
 const Map: React.FC = () => {
-    const { center, setCenter, destination, setDestination } = useMapContext()
+    const {
+        center,
+        setCenter,
+        destination,
+        setDestination,
+        setDestinationName,
+    } = useMapContext()
     const mapRef = useRef<google.maps.Map | null>(null)
 
-    const handleMapClick = (e: google.maps.MapMouseEvent) => {
+    const handleMapClick = async (e: google.maps.MapMouseEvent) => {
         const clickedLatlng = e.latLng?.toJSON() // Convert to LatLngLiteral
         if (clickedLatlng) {
-            setDestination(clickedLatlng) // Set the new destination
+            const namedAdress = await convertCoordinatesToAddress(
+                e.latLng?.toJSON() as google.maps.LatLngLiteral
+            )
+            setDestination(clickedLatlng)
+            setDestinationName(namedAdress)
+
             mapRef.current?.panTo(clickedLatlng) // Pan the map to the clicked location
         }
     }

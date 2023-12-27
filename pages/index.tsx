@@ -18,10 +18,11 @@ export default function Home() {
 
     return (
         <MapProvider>
-            {/* <Map /> */}
-            {/* <DynamicFormRenderer /> */}
-            {/* <SearchBarDepature /> */}
-            <Parent />
+            <Map />
+            <DynamicFormRenderer />
+            {/* <Parent /> */}
         </MapProvider>
     )
 }
+
+// Parent is for testing purposes only

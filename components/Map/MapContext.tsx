@@ -1,7 +1,6 @@
 // components/Map/MapContext.tsx
 
 import React, { createContext, useContext, useState, useEffect } from 'react'
-import convertCoordinatesToAddress from '../../utils/CoordToName'
 
 interface MapContextProps {
     center: google.maps.LatLngLiteral

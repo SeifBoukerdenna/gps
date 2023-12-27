@@ -2,7 +2,7 @@ import axios from 'axios';
 
 
 
-const convertCoordinatesToAddress = async (coords: google.maps.LatLngLiteral | null): Promise<string> => {
+const convertCoordinatesToAddress = async (coords: google.maps.LatLngLiteral): Promise<string> => {
   try {
     const response = await axios.get(
       `https://maps.googleapis.com/maps/api/geocode/json?latlng=${coords.lat},${coords.lng}&key=AIzaSyDsPIUYokmkqE_gJRfHzsYDcyM3ib679bw`

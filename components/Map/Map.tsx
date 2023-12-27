@@ -14,18 +14,13 @@ const containerStyle = {
 }
 
 const Map: React.FC = () => {
-    const {
-        center,
-        setCenter,
-        destination,
-        setDestination,
-        setDestinationName,
-    } = useMapContext()
+    const { center, destination, setDestination, setDestinationName } =
+        useMapContext()
 
     const {
         ready,
         value,
-        setValue, // Now you can use setValue in this component
+        setValue,
         suggestions: { status, data },
         clearSuggestions,
     } = useCustomPlacesAutocomplete()
@@ -40,7 +35,6 @@ const Map: React.FC = () => {
             )
             setDestination(clickedLatlng)
             setDestinationName(namedAdress)
-            setValue('') //I WANT TO CHANGE THE VALUE OF THE INPUT WHENVER A CLICK EVENT HAPPENS BUT IT DOESNT CHANGE
 
             mapRef.current?.panTo(clickedLatlng)
         }
@@ -69,7 +63,6 @@ const Map: React.FC = () => {
                 onLoad={onLoad}
                 options={options}
             >
-                {/* Marker for the clicked (destination) position */}
                 {destination && <Marker position={destination} />}
             </GoogleMap>
         </div>

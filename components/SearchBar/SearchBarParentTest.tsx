@@ -3,6 +3,7 @@ import SearchBarDeparture from './SearchBarDeparture'
 import { useState } from 'react'
 
 export default function Parent() {
+    
     return (
         <div>
             <SearchBarDeparture />

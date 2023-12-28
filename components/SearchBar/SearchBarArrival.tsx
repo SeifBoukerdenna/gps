@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import styles from './SearchBarArrival.module.css';
 import usePlacesAutocomplete, {
     getGeocode,
     getLatLng,
@@ -11,7 +12,7 @@ import {
     ComboboxOption,
 } from '@reach/combobox'
 import '@reach/combobox/styles.css'
-import styles from '../MainSearchForm/SearchForm.module.css'
+//import styles from '../MainSearchForm/SearchForm.module.css'
 import { useMapContext } from '../Map/MapContext'
 
 const PlacesSearchBar = () => {
@@ -51,6 +52,7 @@ const PlacesSearchBar = () => {
                     }}
                     disabled={!ready}
                     placeholder="Search for a location"
+                    className={styles.input}
                 />
                 {status === 'OK' && (
                     <ComboboxPopover>

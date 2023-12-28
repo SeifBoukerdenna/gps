@@ -5,7 +5,7 @@
     top: 10px;
     left: 10px;
     z-index: 100;
-    background: #eaeaea;
+    background: white;
     /* slightly darker than #f9f9f9 */
     padding: 20px;
     border-radius: 10px;
@@ -16,8 +16,11 @@
     height: 35%hv;
     opacity: 1;
     max-height: 1000px;
-    width: 40vw;
+    width: 30vw;
     transition: height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
 }
 
@@ -47,17 +50,30 @@
 
 .button:hover {
     background-color: #d6d6d6;
+    color: #514D6E;
     /* slightly darker than #e0e0e0 */
 }
 
 .dismissButton {
-    background-color: #999;
+    position: absolute;
+    top: 2px;
+    right: 10px;
+    cursor: pointer;
+    background: #F1F4F7;
     /* unchanged */
-    color: #fff;
+    color: #514D6E;
+    padding: 6px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .departureButton {
-    background-color: #3366cc;
+    background-color: red;
     /* slightly darker than #4285f4 */
     color: #fff;
 }
@@ -68,18 +84,26 @@
 }
 
 .swapButton {
-    background-color: #e68a00;
-    color: #fff;
+    position: absolute;
+    top: 50px;
+    right: 60px;
+    background-color: #F1F4F7;
+    color: #514D6E;
+
 }
 
 .setCourseButton {
-    background-color: #cc3329;
-    color: #fff;
+    background-color: #F1F4F7;
+    color: #514D6E;
+    width: 20vw;
+   
 }
 
 .getUserLocation {
-    background-color: #3366cc;
-    color: #fff;
+    background-color: #F1F4F7;
+    color: #514D6E;
+    width : 20vw;
+
 }
 
 .panel.dismissed {

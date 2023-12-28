@@ -105,11 +105,13 @@ const DirectionPanel: React.FC = () => {
                 {!isDismissed && (
                     <>
                         <button
-                            className={`${styles.button} ${styles.dismissButton}`}
-                            onClick={handleDismiss}
+                         className={`${styles.button} ${styles.dismissButton}`}
+                         onClick={handleDismiss}
                         >
-                            Dismiss
+                        {/* Use the Unicode character for minimize icon */}
+                         &#8230;
                         </button>
+
 
                         <div className={styles.searchFormContainer}>
                             <input
@@ -182,18 +184,18 @@ const DirectionPanel: React.FC = () => {
                         <button
                             className={`${styles.button} ${styles.swapButton}`}
                         >
-                            Swap
+                           &#8593;&#8595;
                         </button>
                         <button
                             className={`${styles.button} ${styles.setCourseButton}`}
                         >
-                            Set Course
+                            Find the best way to your destination
                         </button>
                         <button
                             className={`${styles.button} ${styles.getUserLocation}`}
                             onClick={handleLocateUser}
                         >
-                            Get location
+                            Use My Location
                         </button>
                     </>
                 )}
@@ -202,7 +204,7 @@ const DirectionPanel: React.FC = () => {
                         className={`${styles.button} ${styles.expandButton}`}
                         onClick={handleExpand}
                     >
-                        Expand
+                        +
                     </button>
                 )}
             </div>

@@ -1,4 +1,6 @@
 .debugContainer {
+    width: 40%;
+    height: 50%;
     position: absolute;
     right: 0;
     top: 0;

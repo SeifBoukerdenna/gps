@@ -25,14 +25,6 @@ const Map: React.FC = () => {
         setDepartureAddressName,
     } = useMapContext()
 
-    const {
-        ready,
-        value,
-        setValue,
-        suggestions: { status, data },
-        clearSuggestions,
-    } = useCustomPlacesAutocomplete()
-
     const mapRef = useRef<google.maps.Map | null>(null)
 
     const handleMapClick = async (e: google.maps.MapMouseEvent) => {
@@ -71,13 +63,13 @@ const Map: React.FC = () => {
                 onLoad={onLoad}
                 options={options}
             >
-                {departureAddress && (
+                {departureAddress && departureAddressName && (
                     <Marker
                         position={departureAddress}
                         icon={{
                             path: google.maps.SymbolPath.CIRCLE,
-                            scale: 10,
-                            fillColor: '#4285F4',
+                            scale: 15,
+                            fillColor: 'red',
                             fillOpacity: 1,
                             strokeColor: 'white',
                             strokeWeight: 2,

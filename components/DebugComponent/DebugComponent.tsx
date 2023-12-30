@@ -22,24 +22,24 @@ const DebugComponent: React.FC = () => {
                 <pre>{JSON.stringify(center)}</pre>
             </div>
             <div className={styles.debugItem}>
-                <span>Destination:</span>
-                <pre>{JSON.stringify(destination)}</pre>
-            </div>
-            <div className={styles.debugItem}>
-                <span>Destination Name:</span>
-                <pre>{destinationName}</pre>
-            </div>
-            <div className={styles.debugItem}>
-                <span>Initial Search:</span>
-                <pre>{initialSearch.toString()}</pre>
-            </div>
-            <div className={styles.debugItem}>
                 <span>Departure Address Name:</span>
                 <pre>{departureAddressName}</pre>
             </div>
             <div className={styles.debugItem}>
                 <span>Departure Address:</span>
                 <pre>{JSON.stringify(departureAddress)}</pre>
+            </div>
+            <div className={styles.debugItem}>
+                <span>Destination Name:</span>
+                <pre>{destinationName}</pre>
+            </div>
+            <div className={styles.debugItem}>
+                <span>Destination:</span>
+                <pre>{JSON.stringify(destination)}</pre>
+            </div>
+            <div className={styles.debugItem}>
+                <span>Initial Search:</span>
+                <pre>{initialSearch.toString()}</pre>
             </div>
             <div className={styles.debugItem}>
                 <span>Selected Mode</span>

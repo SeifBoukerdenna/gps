@@ -7,6 +7,7 @@ import convertCoordinatesToAddress from '../../utils/CoordToName'
 import { getGeocode, getLatLng } from 'use-places-autocomplete'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
+import QuestionsPanel from "../QuestionsPanel/QuestionsPanel"
 
 import {
     faCar,
@@ -71,6 +72,21 @@ const DirectionPanel: React.FC = () => {
 
     const nodeRef = React.useRef(null)
 
+    const [selectedTransportationMode, setSelectedTransportationMode] = useState<string | null>(null);
+
+    const [showQuestionsPanel, setShowQuestionsPanel] = useState(false);
+
+    const handleShowQuestionsPanel = () => {
+        setShowQuestionsPanel(true);
+      };
+   
+      const handleQuestionsPanelClose = (selectedPriority: string | null) => {
+        console.log('User selected priority:', selectedPriority);
+        setShowQuestionsPanel(false);
+    };
+
+      
+
     const {
         ready,
         value,
@@ -114,6 +130,7 @@ const DirectionPanel: React.FC = () => {
                 { ...icon, iconName: icon.iconName },
             ])
         }
+        setSelectedTransportationMode(icon.iconName);
     }
 
     let flagInput
@@ -273,16 +290,6 @@ const DirectionPanel: React.FC = () => {
                                 )}
                             </div>
                         </div>
-
-                        <button
-                            className={`${styles.button} ${styles.setCourseButton}`}
-                        >
-                            <FontAwesomeIcon
-                                icon={faMapMarkedAlt}
-                                className={styles.icon}
-                            />
-                            Find the best way to your destination
-                        </button>
                         <button
                             className={`${styles.button} ${styles.getUserLocation}`}
                             onClick={handleLocateUser}
@@ -293,6 +300,24 @@ const DirectionPanel: React.FC = () => {
                             />
                             Use My Location
                         </button>
+
+                        <button
+                            className={`${styles.button} ${styles.setCourseButton}`} onClick={handleShowQuestionsPanel}
+                        >
+                            <FontAwesomeIcon
+                                icon={faMapMarkedAlt}
+                                className={styles.icon}
+                            />
+                            Find the best way to your destination
+                        </button>
+                        {showQuestionsPanel && (
+                         <QuestionsPanel
+                        onClose={handleQuestionsPanelClose}
+                        selectedTransportationMode={selectedTransportationMode}
+                        />
+                        )}
+
+                     
                     </>
                 )}
                 {isDismissed && (
@@ -306,6 +331,8 @@ const DirectionPanel: React.FC = () => {
                         />
                     </button>
                 )}
+                
+         
             </div>
         </Draggable>
     )

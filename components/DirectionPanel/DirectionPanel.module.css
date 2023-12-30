@@ -1,12 +1,12 @@
 /* components/DirectionPanel/DirectionPanel.module.css */
 
+
 .panel {
     position: absolute;
     top: 10px;
     left: 10px;
     z-index: 100;
     background: white;
-    /* slightly darker than #f9f9f9 */
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
@@ -21,6 +21,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    font-family: 'Roboto', sans-serif;
 
 }
 
@@ -45,7 +46,6 @@
     font-weight: bold;
     text-align: center;
     transition: background-color 0.5s ease-in-out;
-    /* Smoother transition */
 }
 
 .button:hover {
@@ -54,59 +54,108 @@
     /* slightly darker than #e0e0e0 */
 }
 
-.dismissButton {
-    position: absolute;
-    top: 2px;
-    right: 10px;
-    cursor: pointer;
-    background: #F1F4F7;
-    /* unchanged */
-    color: #514D6E;
-    padding: 6px;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    outline: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
 
-.departureButton {
-    background-color: red;
-    /* slightly darker than #4285f4 */
-    color: #fff;
-}
-
-.arrivalButton {
-    background-color: #2d7e4a;
-    color: #fff;
-}
 
 .swapButton {
-    position: absolute;
-    top: 50px;
-    right: 60px;
+    position: relative;
     background-color: #F1F4F7;
     color: #514D6E;
-
+    align-self: flex-end;
 }
 
 .setCourseButton {
     background-color: #F1F4F7;
     color: #514D6E;
     width: 20vw;
-   
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
 }
 
 .getUserLocation {
     background-color: #F1F4F7;
     color: #514D6E;
-    width : 20vw;
-
+    width: 20vw;
+    display: flex;
+    align-items: center;
+    gap: 3rem;
 }
 
+
+
 .panel.dismissed {
-    height: 80px;
-    opacity: .75;
+    height: 10%;
+    width: 10%;
+    opacity: .95;
+}
+
+
+
+.groupTop {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1rem;
+}
+
+.groupIcons {
+    background-color: #F1F4F7;
+    border-radius: 1rem;
+    display: flex;
+    gap: 1rem;
+    /* Adjust the gap between icons */
+}
+
+.iconButton {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: .5rem;
+    transition: color 0.3s ease;
+}
+
+
+
+.icon {
+    color: #514D6E;
+    font-size: 24px;
+}
+
+
+.selected {
+    color: #00aa00;
+    /* Green color for selected icons */
+}
+
+.iconButton:hover .icon {
+    color: #00aa00;
+    /* Change color on hover */
+}
+
+
+
+.selectedIcon {
+    color: green;
+}
+
+.iconButton:hover:not(.selectedIcon) {
+    color: 00aa00;
+}
+
+.inputContainer {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    /* Ensures children take full width */
+}
+
+.iconButton.selected {
+    color: green;
+    /* Adjust the text color as needed */
+}
+
+.iconButton:hover {
+    color: green;
 }

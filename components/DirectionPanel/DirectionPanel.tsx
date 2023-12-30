@@ -4,15 +4,20 @@ import styles from './DirectionPanel.module.css'
 import Draggable from 'react-draggable'
 import { useCustomPlacesAutocomplete } from '../../utils/Hooks/PlacesAutoCompleteHook'
 import convertCoordinatesToAddress from '../../utils/CoordToName'
-import {
-    Combobox,
-    ComboboxInput,
-    ComboboxPopover,
-    ComboboxList,
-    ComboboxOption,
-} from '@reach/combobox'
-import '@reach/combobox/styles.css'
 import { getGeocode, getLatLng } from 'use-places-autocomplete'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
+
+import {
+    faCar,
+    faBus,
+    faWalking,
+    faPlane,
+    faMap,
+    faCompass,
+    faMapMarkedAlt,
+    faUser,
+} from '@fortawesome/free-solid-svg-icons'
 
 const DirectionPanel: React.FC = () => {
     const {
@@ -26,6 +31,8 @@ const DirectionPanel: React.FC = () => {
         setDepartureAddress,
         departureAddressName,
         departureAddress,
+        selectedIcons,
+        setSelectedIcons,
     } = useMapContext()
 
     const handleLocateUser = () => {
@@ -43,6 +50,7 @@ const DirectionPanel: React.FC = () => {
                     setCenter(newPosition)
                     setDepartureAddress(newPosition)
                     setDepartureAddressName(nameAddressUser)
+                    console.log('New Departure Address:', newPosition)
                 },
                 () => {
                     console.log('Geolocation permission denied or unavailable.')
@@ -80,11 +88,6 @@ const DirectionPanel: React.FC = () => {
         setDepartureAddress({ lat, lng })
     }
 
-    const handleSelectDeparture = async (address: string) => {
-        setDepartureAddressName(address)
-        // clearSuggestions()
-    }
-
     const handleKeyDown = (e: { key: string; preventDefault: () => void }) => {
         if (e.key === 'Tab') {
             console.log('tab')
@@ -93,6 +96,27 @@ const DirectionPanel: React.FC = () => {
             setDepartureAddressName(destinationName as string)
         }
     }
+
+    const handleIconClick = (icon: IconDefinition) => {
+        if (
+            selectedIcons.some(
+                (selectedIcon) => selectedIcon.iconName === icon.iconName
+            )
+        ) {
+            setSelectedIcons(
+                selectedIcons.filter(
+                    (selectedIcon) => selectedIcon.iconName !== icon.iconName
+                )
+            )
+        } else {
+            setSelectedIcons([
+                ...selectedIcons,
+                { ...icon, iconName: icon.iconName },
+            ])
+        }
+    }
+
+    let flagInput
 
     return (
         <Draggable nodeRef={nodeRef}>
@@ -104,97 +128,169 @@ const DirectionPanel: React.FC = () => {
             >
                 {!isDismissed && (
                     <>
-                        <button
-                         className={`${styles.button} ${styles.dismissButton}`}
-                         onClick={handleDismiss}
-                        >
-                        {/* Use the Unicode character for minimize icon */}
-                         &#8230;
-                        </button>
+                        <div className={styles.groupTop}>
+                            <button className={styles.button}>
+                                <FontAwesomeIcon
+                                    icon={faUser}
+                                    className={styles.icon}
+                                />
+                            </button>
 
+                            <div className={styles.groupIcons}>
+                                <button
+                                    className={styles.iconButton}
+                                    onClick={() => handleIconClick(faBus)}
+                                >
+                                    <FontAwesomeIcon
+                                        icon={faBus}
+                                        className={`${styles.icon} ${
+                                            selectedIcons.includes(faBus)
+                                                ? styles.selectedIcon
+                                                : ''
+                                        }`}
+                                    />
+                                </button>
+                                <button
+                                    className={styles.iconButton}
+                                    onClick={() => handleIconClick(faCar)}
+                                >
+                                    <FontAwesomeIcon
+                                        icon={faCar}
+                                        className={`${styles.icon} ${
+                                            selectedIcons.includes(faCar)
+                                                ? styles.selectedIcon
+                                                : ''
+                                        }`}
+                                    />
+                                </button>
+                                <button
+                                    className={styles.iconButton}
+                                    onClick={() => handleIconClick(faPlane)}
+                                >
+                                    <FontAwesomeIcon
+                                        icon={faPlane}
+                                        className={`${styles.icon} ${
+                                            selectedIcons.includes(faPlane)
+                                                ? styles.selectedIcon
+                                                : ''
+                                        }`}
+                                    />
+                                </button>
+                            </div>
 
-                        <div className={styles.searchFormContainer}>
-                            <input
-                                type="text"
-                                placeholder={
-                                    departureAddressName
-                                        ? departureAddressName.toString()
-                                        : 'Enter a departure'
-                                }
-                                className={styles.input}
-                                value={value}
-                                onChange={(e) => {
-                                    setValue(e.target.value)
-                                    setDepartureAddressName(e.target.value)
-                                }}
-                                onKeyDown={handleKeyDown}
-                                // disabled={!ready}
-                            />
-                            {status === 'OK' && (
-                                <ul className={styles.suggestionContainer}>
-                                    {data.map(({ place_id, description }) => (
-                                        <li
-                                            key={place_id}
-                                            className={styles.suggestionItem}
-                                            onClick={() =>
-                                                handleSelect(description)
-                                            }
-                                        >
-                                            {description}
-                                        </li>
-                                    ))}
-                                </ul>
-                            )}
+                            <button
+                                className={`${styles.button} ${styles.dismissButton}`}
+                                onClick={handleDismiss}
+                            >
+                                &#8230;
+                            </button>
                         </div>
 
-                        <div className={styles.searchFormContainer}>
-                            <input
-                                type="text"
-                                placeholder={
-                                    destinationName
-                                        ? destinationName.toString()
-                                        : 'Search your destination'
-                                }
-                                className={styles.input}
-                                // value={destinationName as string}
-                                onChange={(e) => {
-                                    // setValue(e.target.value)
-                                    setDestinationName(e.target.value)
-                                }}
-                                onKeyDown={handleKeyDown}
-                                // disabled={!ready}
-                            />
-                            {status === 'OK' && (
-                                <ul className={styles.suggestionContainer}>
-                                    {data.map(({ place_id, description }) => (
-                                        <li
-                                            key={place_id}
-                                            className={styles.suggestionItem}
-                                            onClick={() =>
-                                                handleSelect(description)
-                                            }
-                                        >
-                                            {description}
-                                        </li>
-                                    ))}
-                                </ul>
-                            )}
+                        <div className={styles.inputContainer}>
+                            <div className={styles.searchFormContainer}>
+                                <input
+                                    type="text"
+                                    placeholder={
+                                        departureAddressName
+                                            ? departureAddressName.toString()
+                                            : 'Enter a departure'
+                                    }
+                                    className={styles.input}
+                                    value={value}
+                                    onChange={(e) => {
+                                        setValue(e.target.value)
+                                        setDepartureAddressName(e.target.value)
+                                    }}
+                                    onKeyDown={handleKeyDown}
+                                    // disabled={!ready}
+                                />
+                                {status === 'OK' && (
+                                    <ul className={styles.suggestionContainer}>
+                                        {data.map(
+                                            ({ place_id, description }) => (
+                                                <li
+                                                    key={place_id}
+                                                    className={
+                                                        styles.suggestionItem
+                                                    }
+                                                    onClick={() =>
+                                                        handleSelect(
+                                                            description
+                                                        )
+                                                    }
+                                                >
+                                                    {description}
+                                                </li>
+                                            )
+                                        )}
+                                    </ul>
+                                )}
+                            </div>
+
+                            <button
+                                className={`${styles.button} ${styles.swapButton}`}
+                            >
+                                &#8593;&#8595;
+                            </button>
+
+                            <div className={styles.searchFormContainer}>
+                                <input
+                                    type="text"
+                                    placeholder={
+                                        destinationName
+                                            ? destinationName.toString()
+                                            : 'Search your destination'
+                                    }
+                                    className={styles.input}
+                                    // value={destinationName as string}
+                                    onChange={(e) => {
+                                        // setValue(e.target.value)
+                                        setDestinationName(e.target.value)
+                                    }}
+                                    onKeyDown={handleKeyDown}
+                                    // disabled={!ready}
+                                />
+                                {status === 'OK' && false && (
+                                    <ul className={styles.suggestionContainer}>
+                                        {data.map(
+                                            ({ place_id, description }) => (
+                                                <li
+                                                    key={place_id}
+                                                    className={
+                                                        styles.suggestionItem
+                                                    }
+                                                    onClick={() =>
+                                                        handleSelect(
+                                                            description
+                                                        )
+                                                    }
+                                                >
+                                                    {description}
+                                                </li>
+                                            )
+                                        )}
+                                    </ul>
+                                )}
+                            </div>
                         </div>
 
-                        <button
-                            className={`${styles.button} ${styles.swapButton}`}
-                        >
-                           &#8593;&#8595;
-                        </button>
                         <button
                             className={`${styles.button} ${styles.setCourseButton}`}
                         >
+                            <FontAwesomeIcon
+                                icon={faMapMarkedAlt}
+                                className={styles.icon}
+                            />
                             Find the best way to your destination
                         </button>
                         <button
                             className={`${styles.button} ${styles.getUserLocation}`}
                             onClick={handleLocateUser}
                         >
+                            <FontAwesomeIcon
+                                icon={faCompass}
+                                className={styles.icon}
+                            />
                             Use My Location
                         </button>
                     </>
@@ -204,7 +300,10 @@ const DirectionPanel: React.FC = () => {
                         className={`${styles.button} ${styles.expandButton}`}
                         onClick={handleExpand}
                     >
-                        +
+                        <FontAwesomeIcon
+                            icon={faMapMarkedAlt}
+                            className={styles.icon}
+                        />
                     </button>
                 )}
             </div>

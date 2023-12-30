@@ -1,6 +1,7 @@
 // components/Map/MapContext.tsx
 
 import React, { createContext, useContext, useState, useEffect } from 'react'
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 
 interface MapContextProps {
     center: google.maps.LatLngLiteral
@@ -19,6 +20,8 @@ interface MapContextProps {
     setDepartureAddress: React.Dispatch<
         React.SetStateAction<google.maps.LatLngLiteral | null>
     >
+    selectedIcons: IconDefinition[]
+    setSelectedIcons: React.Dispatch<React.SetStateAction<IconDefinition[]>>
 }
 
 const MapContext = createContext<MapContextProps>({} as MapContextProps)
@@ -30,6 +33,8 @@ interface MapProviderProps {
 }
 
 export const MapProvider: React.FC<MapProviderProps> = ({ children }) => {
+    const [selectedIcons, setSelectedIcons] = useState<IconDefinition[]>([])
+
     const getSavedLocation = (): google.maps.LatLngLiteral => {
         const savedLocation = localStorage.getItem('userLocation')
         if (savedLocation) {
@@ -75,6 +80,8 @@ export const MapProvider: React.FC<MapProviderProps> = ({ children }) => {
                 setDepartureAddressName,
                 departureAddress,
                 setDepartureAddress,
+                selectedIcons,
+                setSelectedIcons,
             }}
         >
             {children}

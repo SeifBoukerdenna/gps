@@ -14,8 +14,16 @@ const containerStyle = {
 }
 
 const Map: React.FC = () => {
-    const { center, destination, setDestination, setDestinationName } =
-        useMapContext()
+    const {
+        center,
+        destination,
+        setDestination,
+        setDestinationName,
+        departureAddress,
+        departureAddressName,
+        setDepartureAddress,
+        setDepartureAddressName,
+    } = useMapContext()
 
     const {
         ready,
@@ -63,6 +71,19 @@ const Map: React.FC = () => {
                 onLoad={onLoad}
                 options={options}
             >
+                {departureAddress && (
+                    <Marker
+                        position={departureAddress}
+                        icon={{
+                            path: google.maps.SymbolPath.CIRCLE,
+                            scale: 10,
+                            fillColor: '#4285F4',
+                            fillOpacity: 1,
+                            strokeColor: 'white',
+                            strokeWeight: 2,
+                        }}
+                    />
+                )}
                 {destination && <Marker position={destination} />}
             </GoogleMap>
         </div>

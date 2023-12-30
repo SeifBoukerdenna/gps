@@ -1,0 +1,20 @@
+.debugContainer {
+    position: absolute;
+    right: 0;
+    top: 0;
+    border: 1px solid #ccc;
+    padding: 16px;
+    margin: 16px;
+    border-radius: 8px;
+    background-color: #acacac;
+    z-index: 10;
+}
+
+.debugItem {
+    margin-bottom: 8px;
+}
+
+.debugItem span {
+    font-weight: bold;
+    margin-right: 8px;
+}

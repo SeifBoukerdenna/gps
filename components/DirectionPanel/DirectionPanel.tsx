@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useMapContext } from '../Map/MapContext'
 import styles from './DirectionPanel.module.css'
 import Draggable from 'react-draggable'
@@ -18,6 +18,7 @@ import {
     faCompass,
     faMapMarkedAlt,
     faUser,
+    faL,
 } from '@fortawesome/free-solid-svg-icons'
 
 const DirectionPanel: React.FC = () => {
@@ -34,6 +35,8 @@ const DirectionPanel: React.FC = () => {
         departureAddress,
         selectedIcons,
         setSelectedIcons,
+        setIsFocused,
+        isFocused,
     } = useMapContext()
 
     const handleLocateUser = () => {
@@ -52,6 +55,7 @@ const DirectionPanel: React.FC = () => {
                     setDepartureAddress(newPosition)
                     setDepartureAddressName(nameAddressUser)
                     console.log('New Departure Address:', newPosition)
+                    setIsFocused(false)
                 },
                 () => {
                     console.log('Geolocation permission denied or unavailable.')
@@ -99,6 +103,7 @@ const DirectionPanel: React.FC = () => {
     }
 
     const handleSelectArrival = async (address: string) => {
+        console.log('clickeddd')
         setArrivalValue(address, false)
         setDestinationName(address)
         clearArrivalSuggestions()
@@ -152,10 +157,12 @@ const DirectionPanel: React.FC = () => {
     }
 
     const refDeparture = useOnclickOutside(() => {
+        // setIsFocused(false)
         clearDepartureSuggestions()
     })
 
     const refArrival = useOnclickOutside(() => {
+        // setIsFocused(false)
         clearArrivalSuggestions()
     })
 
@@ -168,6 +175,7 @@ const DirectionPanel: React.FC = () => {
     }, [departureAddressName, setDepartureValue])
 
     const swapInfo = () => {
+        setIsFocused(false)
         const tempDepartureData = {
             address: departureAddress,
             addressName: departureAddressName,
@@ -185,6 +193,8 @@ const DirectionPanel: React.FC = () => {
         setDestinationName(tempDepartureData.addressName)
     }
 
+    const inputRef = useRef(null)
+
     return (
         <Draggable nodeRef={nodeRef}>
             <div
@@ -193,6 +203,10 @@ const DirectionPanel: React.FC = () => {
                     isDismissed ? styles.dismissed : ''
                 }`}
             >
+                <div
+                    ref={inputRef}
+                    onClick={() => console.log('clicked')}
+                ></div>
                 {!isDismissed && (
                     <>
                         <div className={styles.groupTop}>
@@ -232,12 +246,12 @@ const DirectionPanel: React.FC = () => {
                                 </button>
                                 <button
                                     className={styles.iconButton}
-                                    onClick={() => handleIconClick(faPlane)}
+                                    onClick={() => handleIconClick(faWalking)}
                                 >
                                     <FontAwesomeIcon
-                                        icon={faPlane}
+                                        icon={faWalking}
                                         className={`${styles.icon} ${
-                                            selectedIcons.includes(faPlane)
+                                            selectedIcons.includes(faWalking)
                                                 ? styles.selectedIcon
                                                 : ''
                                         }`}
@@ -255,8 +269,8 @@ const DirectionPanel: React.FC = () => {
 
                         <div className={styles.inputContainer}>
                             <div
-                                ref={refDeparture}
                                 className={styles.searchFormContainer}
+                                ref={refDeparture}
                             >
                                 <input
                                     type="text"
@@ -271,10 +285,13 @@ const DirectionPanel: React.FC = () => {
                                         setDepartureValue(e.target.value)
                                         setDepartureAddressName(e.target.value)
                                     }}
-                                    onKeyDown={handleKeyDownDeparture}
+                                    onKeyDown={() => {
+                                        handleKeyDownDeparture
+                                        setIsFocused(true)
+                                    }}
                                     disabled={!departureReady}
                                 />
-                                {departureStatus === 'OK' && (
+                                {departureStatus === 'OK' && isFocused && (
                                     <ul className={styles.suggestionContainer}>
                                         {departureData.map(
                                             ({ place_id, description }) => (
@@ -287,6 +304,7 @@ const DirectionPanel: React.FC = () => {
                                                         handleSelectDeparture(
                                                             description
                                                         )
+                                                        setIsFocused(false)
                                                     }}
                                                 >
                                                     {description}
@@ -298,8 +316,8 @@ const DirectionPanel: React.FC = () => {
                             </div>
 
                             <div
-                                ref={refArrival}
                                 className={styles.searchFormContainer}
+                                ref={refArrival}
                             >
                                 <input
                                     type="text"
@@ -314,10 +332,13 @@ const DirectionPanel: React.FC = () => {
                                         setArrivalValue(e.target.value)
                                         setDestinationName(e.target.value)
                                     }}
-                                    onKeyDown={handleKeyDownArrival}
+                                    onKeyDown={() => {
+                                        handleKeyDownArrival
+                                        setIsFocused(true)
+                                    }}
                                     disabled={!arrivalReady}
                                 />
-                                {arrivalStatus === 'OK' && (
+                                {arrivalStatus === 'OK' && isFocused && (
                                     <ul className={styles.suggestionContainer}>
                                         {arrivalData.map(
                                             ({ place_id, description }) => (
@@ -330,6 +351,8 @@ const DirectionPanel: React.FC = () => {
                                                         handleSelectArrival(
                                                             description
                                                         )
+                                                        console.log('clicked')
+                                                        setIsFocused(false)
                                                     }}
                                                 >
                                                     {description}

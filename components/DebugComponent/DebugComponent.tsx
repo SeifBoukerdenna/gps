@@ -12,6 +12,7 @@ const DebugComponent: React.FC = () => {
         departureAddressName,
         departureAddress,
         selectedIcons,
+        isFocused,
     } = useMapContext()
 
     return (
@@ -48,6 +49,10 @@ const DebugComponent: React.FC = () => {
                         <li key={index}>{icon.iconName}</li>
                     ))}
                 </ul>
+            </div>
+            <div className={styles.debugItem}>
+                <span>Is focused?</span>
+                <pre>{isFocused.toString()}</pre>
             </div>
         </div>
     )

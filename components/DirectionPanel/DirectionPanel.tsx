@@ -266,7 +266,7 @@ const DirectionPanel: React.FC = () => {
                                             : 'Enter a departure'
                                     }
                                     className={styles.input}
-                                    value={departureValue}
+                                    value={departureValue || ''}
                                     onChange={(e) => {
                                         setDepartureValue(e.target.value)
                                         setDepartureAddressName(e.target.value)
@@ -283,11 +283,11 @@ const DirectionPanel: React.FC = () => {
                                                     className={
                                                         styles.suggestionItem
                                                     }
-                                                    onClick={() =>
+                                                    onClick={() => {
                                                         handleSelectDeparture(
                                                             description
                                                         )
-                                                    }
+                                                    }}
                                                 >
                                                     {description}
                                                 </li>
@@ -309,7 +309,7 @@ const DirectionPanel: React.FC = () => {
                                             : 'Search your destination'
                                     }
                                     className={styles.input}
-                                    value={arrivalValue}
+                                    value={arrivalValue || ''}
                                     onChange={(e) => {
                                         setArrivalValue(e.target.value)
                                         setDestinationName(e.target.value)
@@ -326,11 +326,11 @@ const DirectionPanel: React.FC = () => {
                                                     className={
                                                         styles.suggestionItem
                                                     }
-                                                    onClick={() =>
+                                                    onClick={() => {
                                                         handleSelectArrival(
                                                             description
                                                         )
-                                                    }
+                                                    }}
                                                 >
                                                     {description}
                                                 </li>
@@ -349,15 +349,6 @@ const DirectionPanel: React.FC = () => {
                         </div>
 
                         <button
-                            className={`${styles.button} ${styles.setCourseButton}`}
-                        >
-                            <FontAwesomeIcon
-                                icon={faMapMarkedAlt}
-                                className={styles.icon}
-                            />
-                            Find the best way to your destination
-                        </button>
-                        <button
                             className={`${styles.button} ${styles.getUserLocation}`}
                             onClick={handleLocateUser}
                         >
@@ -366,6 +357,18 @@ const DirectionPanel: React.FC = () => {
                                 className={styles.icon}
                             />
                             Use My Location
+                        </button>
+                        <button
+                            className={`${styles.button} ${styles.setCourseButton}`}
+                            onClick={() => {
+                                console.log('Hello world')
+                            }}
+                        >
+                            <FontAwesomeIcon
+                                icon={faMapMarkedAlt}
+                                className={styles.icon}
+                            />
+                            Find the best way to your destination
                         </button>
                     </>
                 )}

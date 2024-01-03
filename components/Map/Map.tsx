@@ -1,12 +1,11 @@
 // components/Map/Map.tsx
 import React, { useMemo, useRef, useState } from 'react'
-import { GoogleMap, Marker } from '@react-google-maps/api'
+import { GoogleMap, Marker, DirectionsRenderer } from '@react-google-maps/api'
 import { useMapContext } from './MapContext'
 import styles from './Map.module.css'
 import { MapOptions } from '../../types'
 import GoogleMapIds from '../../googleMapIds.json'
 import convertCoordinatesToAddress from '../../utils/CoordToName'
-import { useCustomPlacesAutocomplete } from '../../utils/Hooks/PlacesAutoCompleteHook'
 
 const containerStyle = {
     width: '100vw',

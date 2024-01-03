@@ -16,7 +16,7 @@ export default function Home() {
     const [showDebug, setShowDebug] = useState(false)
 
     const handleKeyPress = (e: KeyboardEvent) => {
-        if (e.key === 'e') {
+        if (e.key === 'Q') {
             setShowDebug((prev) => !prev)
         }
     }

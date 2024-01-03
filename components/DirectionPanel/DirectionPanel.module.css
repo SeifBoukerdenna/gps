@@ -38,6 +38,8 @@
     font-weight: bold;
     text-align: center;
     transition: background-color 0.5s ease-in-out;
+    background-color: #EFEFEF;
+    color: black;
 }
 
 .button:hover {
@@ -163,6 +165,8 @@
     font-size: 14px;
     outline: none;
     width: 85%;
+    background-color: white;
+    color: black;
 }
 
 .input:focus {
@@ -174,6 +178,8 @@
     position: relative;
     margin-bottom: 0px;
     flex-grow: 1;
+    background-color: white;
+    color: black;
 }
 
 .suggestionContainer {

@@ -16,12 +16,25 @@
     font-size: 16px;
     border-radius: 4px;
     border: 1px solid #ccc;
+    background-color: white;
+    color: black;
     
 }
+
+.suggestionContainer {
+    background-color: black;
+}
+
 
 .suggestionItem {
     padding: 10px;
     font-size: 16px;
     cursor: pointer;
-    background-color: #ccc;
+    background-color: white;
+    color: black;
+}
+
+
+.suggestionItem:hover {
+    background-color: #f9f9f9;
 }

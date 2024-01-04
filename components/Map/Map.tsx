@@ -1,7 +1,7 @@
 // components/Map/Map.tsx
 import React, { useMemo, useRef, useState } from 'react'
 import { GoogleMap, Marker, DirectionsRenderer } from '@react-google-maps/api'
-import { useMapContext } from './MapContext'
+import { useMapContext } from '../Contexts/MapContext'
 import styles from './Map.module.css'
 import { MapOptions } from '../../types'
 import GoogleMapIds from '../../googleMapIds.json'

@@ -1,6 +1,6 @@
 // components/DebugComponent/DebugComponent.tsx
 import React from 'react'
-import { useMapContext } from '../Map/MapContext'
+import { useMapContext } from '../Contexts/MapContext'
 import styles from './DebugComponent.module.css'
 
 const DebugComponent: React.FC = () => {

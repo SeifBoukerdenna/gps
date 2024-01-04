@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import styles from './SearchBarArrival.module.css';
+import styles from './SearchBarArrival.module.css'
 import usePlacesAutocomplete, {
     getGeocode,
     getLatLng,
@@ -13,7 +13,7 @@ import {
 } from '@reach/combobox'
 import '@reach/combobox/styles.css'
 //import styles from '../MainSearchForm/SearchForm.module.css'
-import { useMapContext } from '../Map/MapContext'
+import { useMapContext } from '../Contexts/MapContext'
 
 const PlacesSearchBar = () => {
     const {

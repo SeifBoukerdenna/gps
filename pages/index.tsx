@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useLoadScript } from '@react-google-maps/api'
-import { MapProvider } from '../components/Map/MapContext'
+import { MapProvider } from '../components/Contexts/MapContext'
+import { SettingsProvider } from '../components/Contexts/SettingsContext'
 
 import DynamicFormRenderer from '../components/DynamicFormRenderer/DynamicFormRenderer'
 import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner'
@@ -32,8 +33,9 @@ export default function Home() {
     return (
         <MapProvider>
             <Map />
-            <DynamicFormRenderer />
-            {/* <Parent /> */}
+            <SettingsProvider>
+                <DynamicFormRenderer />
+            </SettingsProvider>
             {showDebug && <DebugComponent />}
         </MapProvider>
     )

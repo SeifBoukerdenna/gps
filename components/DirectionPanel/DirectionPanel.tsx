@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useMapContext } from '../Map/MapContext'
+import { useMapContext } from '../Contexts/MapContext'
 import styles from './DirectionPanel.module.css'
 import Draggable from 'react-draggable'
 import { useCustomPlacesAutocomplete } from '../../utils/Hooks/PlacesAutoCompleteHook'
@@ -8,18 +8,17 @@ import { getGeocode, getLatLng } from 'use-places-autocomplete'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 import useOnclickOutside from 'react-cool-onclickoutside'
-
+import SettingsPanel from '../SettingsPanel/SettingsPanel'
+import getLocalStorageItem from '../../utils/retrieveLocalStorageItem'
 import {
     faCar,
     faBus,
     faWalking,
-    faPlane,
-    faMap,
     faCompass,
     faMapMarkedAlt,
-    faUser,
-    faL,
+    faCog,
 } from '@fortawesome/free-solid-svg-icons'
+import { useSettingsContext } from '../Contexts/SettingsContext'
 
 const DirectionPanel: React.FC = () => {
     const {
@@ -38,6 +37,8 @@ const DirectionPanel: React.FC = () => {
         setIsFocused,
         isFocused,
     } = useMapContext()
+
+    const { isSettingsVisible, setIsSettingsVisible } = useSettingsContext()
 
     const handleLocateUser = () => {
         if (navigator.geolocation) {
@@ -157,12 +158,10 @@ const DirectionPanel: React.FC = () => {
     }
 
     const refDeparture = useOnclickOutside(() => {
-        // setIsFocused(false)
         clearDepartureSuggestions()
     })
 
     const refArrival = useOnclickOutside(() => {
-        // setIsFocused(false)
         clearArrivalSuggestions()
     })
 
@@ -193,221 +192,245 @@ const DirectionPanel: React.FC = () => {
         setDestinationName(tempDepartureData.addressName)
     }
 
-    const inputRef = useRef(null)
+    const storedHomeAddress = getLocalStorageItem('homeAddress')
 
     return (
-        <Draggable nodeRef={nodeRef}>
-            <div
-                ref={nodeRef}
-                className={`${styles.panel} ${
-                    isDismissed ? styles.dismissed : ''
-                }`}
-            >
+        <>
+            <Draggable nodeRef={nodeRef}>
                 <div
-                    ref={inputRef}
-                    onClick={() => console.log('clicked')}
-                ></div>
-                {!isDismissed && (
-                    <>
-                        <div className={styles.groupTop}>
-                            <button className={styles.button}>
+                    ref={nodeRef}
+                    className={`${styles.panel} ${
+                        isDismissed ? styles.dismissed : ''
+                    }`}
+                >
+                    {!isDismissed && (
+                        <>
+                            <div className={styles.groupTop}>
+                                <button
+                                    className={styles.button}
+                                    onClick={() => setIsSettingsVisible(true)}
+                                >
+                                    <FontAwesomeIcon
+                                        icon={faCog}
+                                        className={styles.icon}
+                                    />
+                                </button>
+
+                                <div className={styles.groupIcons}>
+                                    <button
+                                        className={styles.iconButton}
+                                        onClick={() => handleIconClick(faBus)}
+                                    >
+                                        <FontAwesomeIcon
+                                            icon={faBus}
+                                            className={`${styles.icon} ${
+                                                selectedIcons.includes(faBus)
+                                                    ? styles.selectedIcon
+                                                    : ''
+                                            }`}
+                                        />
+                                    </button>
+                                    <button
+                                        className={styles.iconButton}
+                                        onClick={() => handleIconClick(faCar)}
+                                    >
+                                        <FontAwesomeIcon
+                                            icon={faCar}
+                                            className={`${styles.icon} ${
+                                                selectedIcons.includes(faCar)
+                                                    ? styles.selectedIcon
+                                                    : ''
+                                            }`}
+                                        />
+                                    </button>
+                                    <button
+                                        className={styles.iconButton}
+                                        onClick={() =>
+                                            handleIconClick(faWalking)
+                                        }
+                                    >
+                                        <FontAwesomeIcon
+                                            icon={faWalking}
+                                            className={`${styles.icon} ${
+                                                selectedIcons.includes(
+                                                    faWalking
+                                                )
+                                                    ? styles.selectedIcon
+                                                    : ''
+                                            }`}
+                                        />
+                                    </button>
+                                </div>
+
+                                <button
+                                    className={`${styles.button} ${styles.dismissButton}`}
+                                    onClick={handleDismiss}
+                                >
+                                    &#8230;
+                                </button>
+                            </div>
+
+                            <div className={styles.inputContainer}>
+                                <div
+                                    className={styles.searchFormContainer}
+                                    ref={refDeparture}
+                                >
+                                    <input
+                                        type="text"
+                                        placeholder={
+                                            departureAddressName
+                                                ? departureAddressName.toString()
+                                                : 'Enter a departure'
+                                        }
+                                        className={styles.input}
+                                        value={
+                                            storedHomeAddress ||
+                                            departureValue ||
+                                            ''
+                                        }
+                                        onChange={(e) => {
+                                            setDepartureValue(e.target.value)
+                                            setDepartureAddressName(
+                                                e.target.value
+                                            )
+                                        }}
+                                        onKeyDown={() => {
+                                            handleKeyDownDeparture
+                                            setIsFocused(true)
+                                        }}
+                                        disabled={!departureReady}
+                                    />
+                                    {departureStatus === 'OK' && isFocused && (
+                                        <ul
+                                            className={
+                                                styles.suggestionContainer
+                                            }
+                                        >
+                                            {departureData.map(
+                                                ({ place_id, description }) => (
+                                                    <li
+                                                        key={place_id}
+                                                        className={
+                                                            styles.suggestionItem
+                                                        }
+                                                        onClick={() => {
+                                                            handleSelectDeparture(
+                                                                description
+                                                            )
+                                                            setIsFocused(false)
+                                                        }}
+                                                    >
+                                                        {description}
+                                                    </li>
+                                                )
+                                            )}
+                                        </ul>
+                                    )}
+                                </div>
+
+                                <div
+                                    className={styles.searchFormContainer}
+                                    ref={refArrival}
+                                >
+                                    <input
+                                        type="text"
+                                        placeholder={
+                                            destinationName
+                                                ? destinationName.toString()
+                                                : 'Search your destination'
+                                        }
+                                        className={styles.input}
+                                        value={arrivalValue || ''}
+                                        onChange={(e) => {
+                                            setArrivalValue(e.target.value)
+                                            setDestinationName(e.target.value)
+                                        }}
+                                        onKeyDown={() => {
+                                            handleKeyDownArrival
+                                            setIsFocused(true)
+                                        }}
+                                        disabled={!arrivalReady}
+                                    />
+                                    {arrivalStatus === 'OK' && isFocused && (
+                                        <ul
+                                            className={
+                                                styles.suggestionContainer
+                                            }
+                                        >
+                                            {arrivalData.map(
+                                                ({ place_id, description }) => (
+                                                    <li
+                                                        key={place_id}
+                                                        className={
+                                                            styles.suggestionItem
+                                                        }
+                                                        onClick={() => {
+                                                            handleSelectArrival(
+                                                                description
+                                                            )
+                                                            console.log(
+                                                                'clicked'
+                                                            )
+                                                            setIsFocused(false)
+                                                        }}
+                                                    >
+                                                        {description}
+                                                    </li>
+                                                )
+                                            )}
+                                        </ul>
+                                    )}
+                                </div>
+
+                                <button
+                                    className={`${styles.button} ${styles.swapButton}`}
+                                    onClick={swapInfo}
+                                >
+                                    &#8593;&#8595;
+                                </button>
+                            </div>
+
+                            <button
+                                className={`${styles.button} ${styles.getUserLocation}`}
+                                onClick={handleLocateUser}
+                            >
                                 <FontAwesomeIcon
-                                    icon={faUser}
+                                    icon={faCompass}
                                     className={styles.icon}
                                 />
+                                Use My Location
                             </button>
-
-                            <div className={styles.groupIcons}>
-                                <button
-                                    className={styles.iconButton}
-                                    onClick={() => handleIconClick(faBus)}
-                                >
-                                    <FontAwesomeIcon
-                                        icon={faBus}
-                                        className={`${styles.icon} ${
-                                            selectedIcons.includes(faBus)
-                                                ? styles.selectedIcon
-                                                : ''
-                                        }`}
-                                    />
-                                </button>
-                                <button
-                                    className={styles.iconButton}
-                                    onClick={() => handleIconClick(faCar)}
-                                >
-                                    <FontAwesomeIcon
-                                        icon={faCar}
-                                        className={`${styles.icon} ${
-                                            selectedIcons.includes(faCar)
-                                                ? styles.selectedIcon
-                                                : ''
-                                        }`}
-                                    />
-                                </button>
-                                <button
-                                    className={styles.iconButton}
-                                    onClick={() => handleIconClick(faWalking)}
-                                >
-                                    <FontAwesomeIcon
-                                        icon={faWalking}
-                                        className={`${styles.icon} ${
-                                            selectedIcons.includes(faWalking)
-                                                ? styles.selectedIcon
-                                                : ''
-                                        }`}
-                                    />
-                                </button>
-                            </div>
-
                             <button
-                                className={`${styles.button} ${styles.dismissButton}`}
-                                onClick={handleDismiss}
+                                className={`${styles.button} ${styles.setCourseButton}`}
+                                onClick={() => {
+                                    console.log('Hello world')
+                                }}
                             >
-                                &#8230;
-                            </button>
-                        </div>
-
-                        <div className={styles.inputContainer}>
-                            <div
-                                className={styles.searchFormContainer}
-                                ref={refDeparture}
-                            >
-                                <input
-                                    type="text"
-                                    placeholder={
-                                        departureAddressName
-                                            ? departureAddressName.toString()
-                                            : 'Enter a departure'
-                                    }
-                                    className={styles.input}
-                                    value={departureValue || ''}
-                                    onChange={(e) => {
-                                        setDepartureValue(e.target.value)
-                                        setDepartureAddressName(e.target.value)
-                                    }}
-                                    onKeyDown={() => {
-                                        handleKeyDownDeparture
-                                        setIsFocused(true)
-                                    }}
-                                    disabled={!departureReady}
+                                <FontAwesomeIcon
+                                    icon={faMapMarkedAlt}
+                                    className={styles.icon}
                                 />
-                                {departureStatus === 'OK' && isFocused && (
-                                    <ul className={styles.suggestionContainer}>
-                                        {departureData.map(
-                                            ({ place_id, description }) => (
-                                                <li
-                                                    key={place_id}
-                                                    className={
-                                                        styles.suggestionItem
-                                                    }
-                                                    onClick={() => {
-                                                        handleSelectDeparture(
-                                                            description
-                                                        )
-                                                        setIsFocused(false)
-                                                    }}
-                                                >
-                                                    {description}
-                                                </li>
-                                            )
-                                        )}
-                                    </ul>
-                                )}
-                            </div>
-
-                            <div
-                                className={styles.searchFormContainer}
-                                ref={refArrival}
-                            >
-                                <input
-                                    type="text"
-                                    placeholder={
-                                        destinationName
-                                            ? destinationName.toString()
-                                            : 'Search your destination'
-                                    }
-                                    className={styles.input}
-                                    value={arrivalValue || ''}
-                                    onChange={(e) => {
-                                        setArrivalValue(e.target.value)
-                                        setDestinationName(e.target.value)
-                                    }}
-                                    onKeyDown={() => {
-                                        handleKeyDownArrival
-                                        setIsFocused(true)
-                                    }}
-                                    disabled={!arrivalReady}
-                                />
-                                {arrivalStatus === 'OK' && isFocused && (
-                                    <ul className={styles.suggestionContainer}>
-                                        {arrivalData.map(
-                                            ({ place_id, description }) => (
-                                                <li
-                                                    key={place_id}
-                                                    className={
-                                                        styles.suggestionItem
-                                                    }
-                                                    onClick={() => {
-                                                        handleSelectArrival(
-                                                            description
-                                                        )
-                                                        console.log('clicked')
-                                                        setIsFocused(false)
-                                                    }}
-                                                >
-                                                    {description}
-                                                </li>
-                                            )
-                                        )}
-                                    </ul>
-                                )}
-                            </div>
-
-                            <button
-                                className={`${styles.button} ${styles.swapButton}`}
-                                onClick={swapInfo}
-                            >
-                                &#8593;&#8595;
+                                Find the best way to your destination
                             </button>
-                        </div>
-
+                        </>
+                    )}
+                    {isDismissed && (
                         <button
-                            className={`${styles.button} ${styles.getUserLocation}`}
-                            onClick={handleLocateUser}
-                        >
-                            <FontAwesomeIcon
-                                icon={faCompass}
-                                className={styles.icon}
-                            />
-                            Use My Location
-                        </button>
-                        <button
-                            className={`${styles.button} ${styles.setCourseButton}`}
-                            onClick={() => {
-                                console.log('Hello world')
-                            }}
+                            className={`${styles.button} ${styles.expandButton}`}
+                            onClick={handleExpand}
                         >
                             <FontAwesomeIcon
                                 icon={faMapMarkedAlt}
                                 className={styles.icon}
                             />
-                            Find the best way to your destination
                         </button>
-                    </>
-                )}
-                {isDismissed && (
-                    <button
-                        className={`${styles.button} ${styles.expandButton}`}
-                        onClick={handleExpand}
-                    >
-                        <FontAwesomeIcon
-                            icon={faMapMarkedAlt}
-                            className={styles.icon}
-                        />
-                    </button>
-                )}
-            </div>
-        </Draggable>
+                    )}
+                </div>
+            </Draggable>
+
+            {isSettingsVisible && <SettingsPanel />}
+            {/* <SettingsPanel /> */}
+        </>
     )
 }
 

@@ -28,6 +28,15 @@ const SettingsPanel: React.FC = () => {
     const { defaultDepartureAdressName, setDefaultDepartureAdressName } =
         useMapContext()
 
+    useEffect(() => {
+        setHomeAddress(defaultDepartureAdressName as string),
+            [
+                setHomeAddress,
+                defaultDepartureAdressName,
+                setDefaultDepartureAdressName,
+            ]
+    })
+
     const {
         ready: defaultDepartureReady,
         value: defaultDepartureValue,
@@ -43,6 +52,10 @@ const SettingsPanel: React.FC = () => {
         defaultClearDepartureSuggestions()
     })
 
+    console.log(homeAddress, 'HOME ADDRESS')
+    console.log(localStorage.getItem('homeAddress'), 'localStorage')
+
+    const [hasChanged, setHasChanged] = useState(false)
     return (
         <div className={styles.SettingsPanel}>
             <h2>Settings</h2>
@@ -71,10 +84,17 @@ const SettingsPanel: React.FC = () => {
                         type="text"
                         placeholder={'Enter a default place'}
                         className={styles.input}
-                        value={defaultDepartureValue || ''}
+                        value={
+                            hasChanged
+                                ? defaultDepartureAdressName || ''
+                                : localStorage.getItem('homeAddress') ||
+                                  defaultDepartureAdressName ||
+                                  ''
+                        }
                         onChange={(e) => {
                             setDefaultDepartureValue(e.target.value)
                             setDefaultDepartureAdressName(e.target.value)
+                            setHasChanged(true)
                         }}
                         disabled={!defaultDepartureReady}
                     />
@@ -89,6 +109,11 @@ const SettingsPanel: React.FC = () => {
                                             setDefaultDepartureAdressName(
                                                 description
                                             )
+                                            setDefaultDepartureValue(
+                                                description,
+                                                false
+                                            )
+                                            defaultClearDepartureSuggestions()
                                         }}
                                     >
                                         {description}
@@ -121,15 +146,18 @@ const SettingsPanel: React.FC = () => {
             <button
                 onClick={() => {
                     console.log('click save')
-                    localStorage.setItem('favoriteCar', favoriteCar)
+                    localStorage.setItem(
+                        'favoriteCar',
+                        JSON.stringify(favoriteCar)
+                    )
                     localStorage.setItem('homeAddress', homeAddress)
                     localStorage.setItem(
                         'favoriteDestination',
-                        favoriteDestination
+                        JSON.stringify(favoriteDestination)
                     )
                     localStorage.setItem(
                         'publicTransportInfo',
-                        publicTransportInfo
+                        JSON.stringify(publicTransportInfo)
                     )
                     setIsSettingsVisible(false)
                 }}

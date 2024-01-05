@@ -192,8 +192,6 @@ const DirectionPanel: React.FC = () => {
         setDestinationName(tempDepartureData.addressName)
     }
 
-    const storedHomeAddress = getLocalStorageItem('homeAddress')
-
     return (
         <>
             <Draggable nodeRef={nodeRef}>
@@ -283,11 +281,7 @@ const DirectionPanel: React.FC = () => {
                                                 : 'Enter a departure'
                                         }
                                         className={styles.input}
-                                        value={
-                                            storedHomeAddress ||
-                                            departureValue ||
-                                            ''
-                                        }
+                                        value={departureValue || ''}
                                         onChange={(e) => {
                                             setDepartureValue(e.target.value)
                                             setDepartureAddressName(

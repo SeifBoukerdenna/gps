@@ -308,7 +308,7 @@ const DirectionPanel: React.FC = () => {
                                 icon={faMapMarkedAlt}
                                 className={styles.icon}
                             />
-                            Find the best way to your destination
+                            Choose the best way to your destination
                         </button>
                         {showQuestionsPanel && (
                          <QuestionsPanel

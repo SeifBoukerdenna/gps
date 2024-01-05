@@ -150,7 +150,7 @@ const QuestionsPanel: React.FC<QuestionsPanelProps> = ({ onClose, selectedTransp
         </>
       );
     } else if (selectedTransportationMode === 'bus') {
-      console.log("buss")
+      
       return (
         <>
           <label htmlFor="busQuestion">Do you have an opus card?</label>
@@ -188,17 +188,8 @@ const QuestionsPanel: React.FC<QuestionsPanelProps> = ({ onClose, selectedTransp
   return (
     <div className={styles.questionsPanel}>
       {renderQuestions()}
-      <label htmlFor="prioritySelect">What do you want to prioritize?</label>
-      <select
-        id="prioritySelect"
-        value={selectedPriority ?? ''}
-        onChange={(e) => setSelectedPriority(e.target.value)}
-      >
-        <option value="" disabled>Select an option</option>
-        <option value="time">Time</option>
-        <option value="money">Money</option>
-      </select>
-      <button onClick={() => onClose(selectedPriority)}>Submit</button>
+    
+      <button onClick={() => onClose(selectedPriority)}>Compare</button>
     </div>
   );
 }

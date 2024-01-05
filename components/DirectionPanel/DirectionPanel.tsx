@@ -153,9 +153,11 @@ const DirectionPanel: React.FC = () => {
                                 />
                             </button>
 
-                            <div className={styles.groupIcons}>
+                            <div className={`${styles.groupIcons} ${selectedIcons.length === 2 ? styles.selectedContainer : ''}`}>
                                 <button
-                                    className={styles.iconButton}
+                                    className={`${styles.iconButton} ${
+                                        selectedIcons.includes(faBus) ? styles.selectedIcon : ''
+                                      }`}
                                     onClick={() => handleIconClick(faBus)}
                                 >
                                     <FontAwesomeIcon
@@ -168,7 +170,9 @@ const DirectionPanel: React.FC = () => {
                                     />
                                 </button>
                                 <button
-                                    className={styles.iconButton}
+                                    className={`${styles.iconButton} ${
+                                        selectedIcons.includes(faCar) ? styles.selectedIcon : ''
+                                      }`}
                                     onClick={() => handleIconClick(faCar)}
                                 >
                                     <FontAwesomeIcon
@@ -180,19 +184,7 @@ const DirectionPanel: React.FC = () => {
                                         }`}
                                     />
                                 </button>
-                                <button
-                                    className={styles.iconButton}
-                                    onClick={() => handleIconClick(faPlane)}
-                                >
-                                    <FontAwesomeIcon
-                                        icon={faPlane}
-                                        className={`${styles.icon} ${
-                                            selectedIcons.includes(faPlane)
-                                                ? styles.selectedIcon
-                                                : ''
-                                        }`}
-                                    />
-                                </button>
+                        
                             </div>
 
                             <button

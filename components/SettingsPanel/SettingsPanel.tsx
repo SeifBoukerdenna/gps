@@ -9,15 +9,13 @@ import useOnclickOutside from 'react-cool-onclickoutside'
 const SettingsPanel: React.FC = () => {
     const [favoriteCar, setFavoriteCar] = useState<string>('')
     const [homeAddress, setHomeAddress] = useState<string>('')
-    const [favoriteDestination, setFavoriteDestination] = useState<string>('')
+    const [favoriteAddress, setFavoriteAddress] = useState<string>('')
     const [publicTransportInfo, setPublicTransportInfo] = useState<string>('')
 
     useEffect(() => {
         setFavoriteCar(localStorage.getItem('favoriteCar') || '')
         setHomeAddress(localStorage.getItem('homeAddress') || '')
-        setFavoriteDestination(
-            localStorage.getItem('favoriteDestination') || ''
-        )
+        setFavoriteAddress(localStorage.getItem('favoriteDestination') || '')
         setPublicTransportInfo(
             localStorage.getItem('publicTransportInfo') || ''
         )
@@ -25,8 +23,12 @@ const SettingsPanel: React.FC = () => {
 
     const { setIsSettingsVisible } = useSettingsContext()
 
-    const { defaultDepartureAdressName, setDefaultDepartureAdressName } =
-        useMapContext()
+    const {
+        defaultDepartureAdressName,
+        setDefaultDepartureAdressName,
+        defaultArrivalAdressName,
+        setDefaultArrivalAdressName,
+    } = useMapContext()
 
     useEffect(() => {
         setHomeAddress(defaultDepartureAdressName as string),
@@ -34,6 +36,15 @@ const SettingsPanel: React.FC = () => {
                 setHomeAddress,
                 defaultDepartureAdressName,
                 setDefaultDepartureAdressName,
+            ]
+    })
+
+    useEffect(() => {
+        setFavoriteAddress(defaultArrivalAdressName as string),
+            [
+                setFavoriteAddress,
+                defaultArrivalAdressName,
+                setDefaultArrivalAdressName,
             ]
     })
 
@@ -48,14 +59,21 @@ const SettingsPanel: React.FC = () => {
         clearSuggestions: defaultClearDepartureSuggestions,
     } = useCustomPlacesAutocomplete()
 
+    const {
+        ready: defaultArrivalReady,
+        value: defaultArrivalValue,
+        setValue: setDefaultArrivalValue,
+        suggestions: { status: defaultArrivalStatus, data: defaultArrivalData },
+        clearSuggestions: defaultClearArrivalSuggestions,
+    } = useCustomPlacesAutocomplete()
+
     const refDefaultDeparture = useOnclickOutside(() => {
         defaultClearDepartureSuggestions()
     })
 
-    console.log(homeAddress, 'HOME ADDRESS')
-    console.log(localStorage.getItem('homeAddress'), 'localStorage')
+    const [hasChangedDeparture, setHasChangedDeparture] = useState(false)
+    const [hasChangedArrival, setHasChangedArrival] = useState(false)
 
-    const [hasChanged, setHasChanged] = useState(false)
     return (
         <div className={styles.SettingsPanel}>
             <h2>Settings</h2>
@@ -85,7 +103,7 @@ const SettingsPanel: React.FC = () => {
                         placeholder={'Enter a default place'}
                         className={styles.input}
                         value={
-                            hasChanged
+                            hasChangedDeparture
                                 ? defaultDepartureAdressName || ''
                                 : localStorage.getItem('homeAddress') ||
                                   defaultDepartureAdressName ||
@@ -94,7 +112,7 @@ const SettingsPanel: React.FC = () => {
                         onChange={(e) => {
                             setDefaultDepartureValue(e.target.value)
                             setDefaultDepartureAdressName(e.target.value)
-                            setHasChanged(true)
+                            setHasChangedDeparture(true)
                         }}
                         disabled={!defaultDepartureReady}
                     />
@@ -129,9 +147,39 @@ const SettingsPanel: React.FC = () => {
                 Favorite Destination:
                 <input
                     type="text"
-                    value={favoriteDestination}
-                    onChange={(e) => setFavoriteDestination(e.target.value)}
+                    placeholder={'Enter a default arrival place'}
+                    className={styles.input}
+                    value={
+                        hasChangedArrival
+                            ? defaultArrivalAdressName || ''
+                            : localStorage.getItem('favoriteDestination') ||
+                              defaultArrivalAdressName ||
+                              ''
+                    }
+                    onChange={(e) => {
+                        setDefaultArrivalValue(e.target.value)
+                        setDefaultArrivalAdressName(e.target.value)
+                        setHasChangedArrival(true)
+                    }}
+                    disabled={!defaultArrivalReady}
                 />
+                {defaultArrivalStatus === 'OK' && (
+                    <ul className={styles.suggestionContainer}>
+                        {defaultArrivalData.map(({ place_id, description }) => (
+                            <li
+                                key={place_id}
+                                className={styles.suggestionItem}
+                                onClick={() => {
+                                    setDefaultArrivalAdressName(description)
+                                    setDefaultArrivalValue(description, false)
+                                    defaultClearArrivalSuggestions()
+                                }}
+                            >
+                                {description}
+                            </li>
+                        ))}
+                    </ul>
+                )}
             </label>
 
             <label>
@@ -146,19 +194,10 @@ const SettingsPanel: React.FC = () => {
             <button
                 onClick={() => {
                     console.log('click save')
-                    localStorage.setItem(
-                        'favoriteCar',
-                        JSON.stringify(favoriteCar)
-                    )
+                    localStorage.setItem('favoriteCar', 'BMW')
                     localStorage.setItem('homeAddress', homeAddress)
-                    localStorage.setItem(
-                        'favoriteDestination',
-                        JSON.stringify(favoriteDestination)
-                    )
-                    localStorage.setItem(
-                        'publicTransportInfo',
-                        JSON.stringify(publicTransportInfo)
-                    )
+                    localStorage.setItem('favoriteDestination', favoriteAddress)
+                    localStorage.setItem('publicTransportInfo', '')
                     setIsSettingsVisible(false)
                 }}
             >

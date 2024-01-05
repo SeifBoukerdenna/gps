@@ -30,6 +30,11 @@ interface MapContextProps {
     setDefaultDepartureAdressName: React.Dispatch<
         React.SetStateAction<string | null>
     >
+
+    defaultArrivalAdressName: string | null
+    setDefaultArrivalAdressName: React.Dispatch<
+        React.SetStateAction<string | null>
+    >
 }
 
 const MapContext = createContext<MapContextProps>({} as MapContextProps)
@@ -78,6 +83,10 @@ export const MapProvider: React.FC<MapProviderProps> = ({ children }) => {
     const [defaultDepartureAdressName, setDefaultDepartureAdressName] =
         useState<string | null>(null)
 
+    const [defaultArrivalAdressName, setDefaultArrivalAdressName] = useState<
+        string | null
+    >(null)
+
     return (
         <MapContext.Provider
             value={{
@@ -99,6 +108,8 @@ export const MapProvider: React.FC<MapProviderProps> = ({ children }) => {
                 setIsFocused,
                 defaultDepartureAdressName,
                 setDefaultDepartureAdressName,
+                defaultArrivalAdressName,
+                setDefaultArrivalAdressName,
             }}
         >
             {children}

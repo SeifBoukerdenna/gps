@@ -192,6 +192,9 @@ const DirectionPanel: React.FC = () => {
         setDestinationName(tempDepartureData.addressName)
     }
 
+    const [hasChangedDeparture, setHasChangedDeparture] = useState(false)
+    const [hasChangedArrival, setHasChangedArrival] = useState(false)
+
     return (
         <>
             <Draggable nodeRef={nodeRef}>
@@ -276,9 +279,13 @@ const DirectionPanel: React.FC = () => {
                                     <input
                                         type="text"
                                         placeholder={
-                                            departureAddressName
-                                                ? departureAddressName.toString()
-                                                : 'Enter a departure'
+                                            hasChangedDeparture
+                                                ? departureAddressName
+                                                    ? departureAddressName.toString()
+                                                    : 'Enter a departure'
+                                                : localStorage.getItem(
+                                                      'homeAddress'
+                                                  ) || ''
                                         }
                                         className={styles.input}
                                         value={departureValue || ''}
@@ -329,9 +336,13 @@ const DirectionPanel: React.FC = () => {
                                     <input
                                         type="text"
                                         placeholder={
-                                            destinationName
-                                                ? destinationName.toString()
-                                                : 'Search your destination'
+                                            hasChangedArrival
+                                                ? destinationName
+                                                    ? destinationName.toString()
+                                                    : 'Enter an arrival'
+                                                : localStorage.getItem(
+                                                      'favoriteDestination'
+                                                  ) || ''
                                         }
                                         className={styles.input}
                                         value={arrivalValue || ''}

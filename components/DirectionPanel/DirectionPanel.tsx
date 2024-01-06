@@ -7,9 +7,12 @@ import convertCoordinatesToAddress from '../../utils/CoordToName'
 import { getGeocode, getLatLng } from 'use-places-autocomplete'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
+
+import QuestionsPanel from "../QuestionsPanel/QuestionsPanel"
 import useOnclickOutside from 'react-cool-onclickoutside'
 import SettingsPanel from '../SettingsPanel/SettingsPanel'
 import getLocalStorageItem from '../../utils/retrieveLocalStorageItem'
+
 import {
     faCar,
     faBus,
@@ -76,6 +79,21 @@ const DirectionPanel: React.FC = () => {
     }
 
     const nodeRef = React.useRef(null)
+
+    const [selectedTransportationMode, setSelectedTransportationMode] = useState<string | null>(null);
+
+    const [showQuestionsPanel, setShowQuestionsPanel] = useState(false);
+
+    const handleShowQuestionsPanel = () => {
+        setShowQuestionsPanel(true);
+      };
+   
+      const handleQuestionsPanelClose = (selectedPriority: string | null) => {
+        console.log('User selected priority:', selectedPriority);
+        setShowQuestionsPanel(false);
+    };
+
+      
 
     const {
         ready: departureReady,
@@ -155,6 +173,7 @@ const DirectionPanel: React.FC = () => {
                 { ...icon, iconName: icon.iconName },
             ])
         }
+        setSelectedTransportationMode(icon.iconName);
     }
 
     const refDeparture = useOnclickOutside(() => {
@@ -188,6 +207,8 @@ const DirectionPanel: React.FC = () => {
         setDepartureAddress(tempArrivalData.address)
         setDepartureAddressName(tempArrivalData.addressName)
 
+
+
         setDestination(tempDepartureData.address)
         setDestinationName(tempDepartureData.addressName)
     }
@@ -217,11 +238,14 @@ const DirectionPanel: React.FC = () => {
                                     />
                                 </button>
 
-                                <div className={styles.groupIcons}>
-                                    <button
-                                        className={styles.iconButton}
-                                        onClick={() => handleIconClick(faBus)}
-                                    >
+                                <div className={`${styles.groupIcons} ${selectedIcons.length === 2 ? styles.selectedContainer : ''}`}>
+                                <button
+                                    className={`${styles.iconButton} ${
+                                        selectedIcons.includes(faBus) ? styles.selectedIcon : ''
+                                      }`}
+                                    onClick={() => handleIconClick(faBus)}
+                                  
+                                  
                                         <FontAwesomeIcon
                                             icon={faBus}
                                             className={`${styles.icon} ${
@@ -232,8 +256,10 @@ const DirectionPanel: React.FC = () => {
                                         />
                                     </button>
                                     <button
-                                        className={styles.iconButton}
-                                        onClick={() => handleIconClick(faCar)}
+                                        className={`${styles.iconButton} ${
+                                        selectedIcons.includes(faCar) ? styles.selectedIcon : ''
+                                      }`}
+                                    onClick={() => handleIconClick(faCar)}
                                     >
                                         <FontAwesomeIcon
                                             icon={faCar}
@@ -264,11 +290,14 @@ const DirectionPanel: React.FC = () => {
                                 </div>
 
                                 <button
+
                                     className={`${styles.button} ${styles.dismissButton}`}
                                     onClick={handleDismiss}
                                 >
                                     &#8230;
                                 </button>
+
+                        
                             </div>
 
                             <div className={styles.inputContainer}>
@@ -415,6 +444,33 @@ const DirectionPanel: React.FC = () => {
                                     icon={faMapMarkedAlt}
                                     className={styles.icon}
                                 />
+
+                                {status === 'OK' && false && (
+                                    <ul className={styles.suggestionContainer}>
+                                        {data.map(
+                                            ({ place_id, description }) => (
+                                                <li
+                                                    key={place_id}
+                                                    className={
+                                                        styles.suggestionItem
+                                                    }
+                                                    onClick={() =>
+                                                        handleSelect(
+                                                            description
+                                                        )
+                                                    }
+                                                >
+                                                    {description}
+                                                </li>
+                                            )
+                                        )}
+                                    </ul>
+                                )}
+                            </div>
+                        </div>
+                        <button
+                            className={`${styles.button} ${styles.getUserLocation}`}
+                            onClick={handleLocateUser}
                                 Find the best way to your destination
                             </button>
                         </>
@@ -423,11 +479,51 @@ const DirectionPanel: React.FC = () => {
                         <button
                             className={`${styles.button} ${styles.expandButton}`}
                             onClick={handleExpand}
+
+                        >
+                            <FontAwesomeIcon
+                                icon={faCompass}
+                                className={styles.icon}
+                            />
+
+                            Use My Location
+                        </button>
+
+                        <button
+                            className={`${styles.button} ${styles.setCourseButton}`} onClick={handleShowQuestionsPanel}
                         >
                             <FontAwesomeIcon
                                 icon={faMapMarkedAlt}
                                 className={styles.icon}
                             />
+                            Choose the best way to your destination
+                        </button>
+                        {showQuestionsPanel && (
+                         <QuestionsPanel
+                        onClose={handleQuestionsPanelClose}
+                        selectedTransportationMode={selectedTransportationMode}
+                        />
+                        )}
+
+                     
+                    </>
+                )}
+                {isDismissed && (
+                    <button
+                        className={`${styles.button} ${styles.expandButton}`}
+                        onClick={handleExpand}
+                    >
+                        <FontAwesomeIcon
+                            icon={faMapMarkedAlt}
+                            className={styles.icon}
+                        />
+                    </button>
+                )}
+                
+         
+            </div>
+        </Draggable>
+
                         </button>
                     )}
                 </div>

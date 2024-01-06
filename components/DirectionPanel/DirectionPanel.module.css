@@ -120,12 +120,12 @@
 
 
 .selected {
-    color: #00aa00;
+    color:blue;
     /* Green color for selected icons */
 }
 
 .iconButton:hover .icon {
-    color: #00aa00;
+    color: green;
     /* Change color on hover */
 }
 
@@ -146,6 +146,9 @@
     align-items: stretch;
 }
 
+
+  
+
 .iconButton.selected {
     color: green;
     /* Adjust the text color as needed */
@@ -155,6 +158,14 @@
     color: green;
 }
 
+
+
+.selectedContainer {
+    background-color:  #A7DAB5;
+    border: 2px solid green;
+    transition: background-color 0.3s ease-in-out; 
+   
+  }
 
 
 .input {

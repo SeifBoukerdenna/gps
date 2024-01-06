@@ -5,6 +5,7 @@
     width: 20vw;
     padding: 20px;
     border-radius: 8px;
+
   
   }
   
@@ -37,4 +38,23 @@
     background-color: #d6d6d6;
     color: #514D6E;
   }
-  
+  .dropdown{
+    width: 100%;
+    display:flex;
+    margin:6px;
+  }
+
+  .firstdropdownContainer{
+    display:flex;
+    width: 100%;
+  }
+  .seconddropdownContainer{
+    display: flex;
+    width:100%;
+  }
+  .timePer {
+    margin:0 4px;
+    color:#514D6E;
+    display:flex;
+    
+  }

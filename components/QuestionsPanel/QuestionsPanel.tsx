@@ -10,7 +10,8 @@ interface QuestionsPanelProps {
 }
 
 const QuestionsPanel: React.FC<QuestionsPanelProps> = ({ onClose, selectedTransportationMode }) => {
-  const [selectedPriority, setSelectedPriority] = useState<string | null>(null);
+  const [frequencyPriority, setFrequencyPriority] = useState<string | null>(null);
+  const [timePriority, setTimePriority] = useState<string | null>(null);
   const [busQuestionAnswer, setBusQuestionAnswer] = useState<string | null>(null);
   const [opusCardType, setOpusCardType] = useState<string | null>(null);
   const [carQuestionAnswer, setCarQuestionAnswer] = useState<string | null>(null);
@@ -186,12 +187,46 @@ const QuestionsPanel: React.FC<QuestionsPanelProps> = ({ onClose, selectedTransp
   };
 
   return (
-    <div className={styles.questionsPanel}>
-      {renderQuestions()}
-    
-      <button onClick={() => onClose(selectedPriority)}>Compare</button>
+  <div className={styles.questionsPanel}>
+    {renderQuestions()}
+    <label htmlFor="frequency">How frequently are you planning on going to your destination?</label>
+    <div className={styles.dropdown}>
+      <div className={styles.firstdropdownContainer}>
+        <select
+          id="frequencySelect"
+          value={frequencyPriority ?? ''}
+          onChange={(e) => setFrequencyPriority(e.target.value)}
+          className={styles.firstdropdownContainer}
+        >
+          <option value="" disabled>Select an option</option>
+          <option>one </option>
+          <option>two </option>
+          <option>three </option>
+          <option>four </option>
+          <option>five</option>
+          <option>six </option>
+          <option>seven </option>
+          <option>eight </option>
+          <option>nine</option>
+        </select>
+      </div>
+      <span className={styles.timePer}>time per</span>
+      <div className={styles.seconddropdownContainer}>
+        <select
+          id="timeSelect"
+          value={timePriority ?? ''}
+          onChange={(e) => setTimePriority(e.target.value)}
+          className={styles.seconddropdown}
+        >
+          <option value="" disabled>Select an option</option>
+          <option>day</option>
+          <option>month</option>
+          <option>year</option>
+        </select>
+      </div>
     </div>
-  );
-}
-
+    <button onClick={() => onClose(frequencyPriority)}>Compare</button>
+  </div>
+);
+  }
 export default QuestionsPanel;

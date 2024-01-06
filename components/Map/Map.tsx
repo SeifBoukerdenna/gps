@@ -1,12 +1,11 @@
 // components/Map/Map.tsx
 import React, { useMemo, useRef, useState } from 'react'
-import { GoogleMap, Marker } from '@react-google-maps/api'
-import { useMapContext } from './MapContext'
+import { GoogleMap, Marker, DirectionsRenderer } from '@react-google-maps/api'
+import { useMapContext } from '../Contexts/MapContext'
 import styles from './Map.module.css'
 import { MapOptions } from '../../types'
 import GoogleMapIds from '../../googleMapIds.json'
 import convertCoordinatesToAddress from '../../utils/CoordToName'
-import { useCustomPlacesAutocomplete } from '../../utils/Hooks/PlacesAutoCompleteHook'
 
 const containerStyle = {
     width: '100vw',
@@ -24,14 +23,6 @@ const Map: React.FC = () => {
         setDepartureAddress,
         setDepartureAddressName,
     } = useMapContext()
-
-    const {
-        ready,
-        value,
-        setValue,
-        suggestions: { status, data },
-        clearSuggestions,
-    } = useCustomPlacesAutocomplete()
 
     const mapRef = useRef<google.maps.Map | null>(null)
 
@@ -71,13 +62,13 @@ const Map: React.FC = () => {
                 onLoad={onLoad}
                 options={options}
             >
-                {departureAddress && (
+                {departureAddress && departureAddressName && (
                     <Marker
                         position={departureAddress}
                         icon={{
                             path: google.maps.SymbolPath.CIRCLE,
-                            scale: 10,
-                            fillColor: '#4285F4',
+                            scale: 15,
+                            fillColor: 'red',
                             fillOpacity: 1,
                             strokeColor: 'white',
                             strokeWeight: 2,

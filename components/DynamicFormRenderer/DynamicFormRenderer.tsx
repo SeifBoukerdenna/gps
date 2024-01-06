@@ -1,12 +1,14 @@
 import React from 'react'
 import DirectionPanel from '../DirectionPanel/DirectionPanel'
 import SearchForm from '../MainSearchForm/SearchForm'
-import { useMapContext } from '../Map/MapContext'
+import { useMapContext } from '../Contexts/MapContext'
 
 const ConditionalFormRenderer = () => {
-    const { destination } = useMapContext()
+    const { destination, departureAddress } = useMapContext()
 
-    return destination ? <DirectionPanel /> : <SearchForm />
+    const shouldRenderSearchForm = !destination && !departureAddress
+
+    return shouldRenderSearchForm ? <SearchForm /> : <DirectionPanel />
 }
 
 export default ConditionalFormRenderer

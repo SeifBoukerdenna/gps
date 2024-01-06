@@ -22,6 +22,19 @@ interface MapContextProps {
     >
     selectedIcons: IconDefinition[]
     setSelectedIcons: React.Dispatch<React.SetStateAction<IconDefinition[]>>
+
+    isFocused: boolean
+    setIsFocused: React.Dispatch<React.SetStateAction<boolean>>
+
+    defaultDepartureAdressName: string | null
+    setDefaultDepartureAdressName: React.Dispatch<
+        React.SetStateAction<string | null>
+    >
+
+    defaultArrivalAdressName: string | null
+    setDefaultArrivalAdressName: React.Dispatch<
+        React.SetStateAction<string | null>
+    >
 }
 
 const MapContext = createContext<MapContextProps>({} as MapContextProps)
@@ -65,6 +78,15 @@ export const MapProvider: React.FC<MapProviderProps> = ({ children }) => {
         localStorage.setItem('userLocation', JSON.stringify(center))
     }, [center])
 
+    const [isFocused, setIsFocused] = useState(false)
+
+    const [defaultDepartureAdressName, setDefaultDepartureAdressName] =
+        useState<string | null>(null)
+
+    const [defaultArrivalAdressName, setDefaultArrivalAdressName] = useState<
+        string | null
+    >(null)
+
     return (
         <MapContext.Provider
             value={{
@@ -82,6 +104,12 @@ export const MapProvider: React.FC<MapProviderProps> = ({ children }) => {
                 setDepartureAddress,
                 selectedIcons,
                 setSelectedIcons,
+                isFocused,
+                setIsFocused,
+                defaultDepartureAdressName,
+                setDefaultDepartureAdressName,
+                defaultArrivalAdressName,
+                setDefaultArrivalAdressName,
             }}
         >
             {children}

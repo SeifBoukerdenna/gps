@@ -1,6 +1,6 @@
 // components/DebugComponent/DebugComponent.tsx
 import React from 'react'
-import { useMapContext } from '../Map/MapContext'
+import { useMapContext } from '../Contexts/MapContext'
 import styles from './DebugComponent.module.css'
 
 const DebugComponent: React.FC = () => {
@@ -12,6 +12,7 @@ const DebugComponent: React.FC = () => {
         departureAddressName,
         departureAddress,
         selectedIcons,
+        isFocused,
     } = useMapContext()
 
     return (
@@ -22,18 +23,6 @@ const DebugComponent: React.FC = () => {
                 <pre>{JSON.stringify(center)}</pre>
             </div>
             <div className={styles.debugItem}>
-                <span>Destination:</span>
-                <pre>{JSON.stringify(destination)}</pre>
-            </div>
-            <div className={styles.debugItem}>
-                <span>Destination Name:</span>
-                <pre>{destinationName}</pre>
-            </div>
-            <div className={styles.debugItem}>
-                <span>Initial Search:</span>
-                <pre>{initialSearch.toString()}</pre>
-            </div>
-            <div className={styles.debugItem}>
                 <span>Departure Address Name:</span>
                 <pre>{departureAddressName}</pre>
             </div>
@@ -42,12 +31,28 @@ const DebugComponent: React.FC = () => {
                 <pre>{JSON.stringify(departureAddress)}</pre>
             </div>
             <div className={styles.debugItem}>
+                <span>Destination Name:</span>
+                <pre>{destinationName}</pre>
+            </div>
+            <div className={styles.debugItem}>
+                <span>Destination:</span>
+                <pre>{JSON.stringify(destination)}</pre>
+            </div>
+            <div className={styles.debugItem}>
+                <span>Initial Search:</span>
+                <pre>{initialSearch.toString()}</pre>
+            </div>
+            <div className={styles.debugItem}>
                 <span>Selected Mode</span>
                 <ul>
                     {selectedIcons.map((icon, index) => (
                         <li key={index}>{icon.iconName}</li>
                     ))}
                 </ul>
+            </div>
+            <div className={styles.debugItem}>
+                <span>Is focused?</span>
+                <pre>{isFocused.toString()}</pre>
             </div>
         </div>
     )

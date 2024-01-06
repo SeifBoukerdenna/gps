@@ -3,8 +3,8 @@
 
 .panel {
     position: absolute;
-    top: 10px;
-    left: 10px;
+    top: 1rem;
+    left: 1rem;
     z-index: 100;
     background: white;
     padding: 20px;
@@ -25,15 +25,7 @@
 
 }
 
-.input {
-    margin-top: 8px;
-    padding: 12px;
-    border: 1px solid #bbb;
-    /* slightly darker than #ccc */
-    border-radius: 4px;
-    font-size: 16px;
-    outline: none;
-}
+
 
 .button {
     margin-top: 8px;
@@ -46,6 +38,8 @@
     font-weight: bold;
     text-align: center;
     transition: background-color 0.5s ease-in-out;
+    background-color: #EFEFEF;
+    color: black;
 }
 
 .button:hover {
@@ -57,7 +51,9 @@
 
 
 .swapButton {
-    position: relative;
+    position: absolute;
+    top: 35%;
+    right: 10%;
     background-color: #F1F4F7;
     color: #514D6E;
     align-self: flex-end;
@@ -148,7 +144,6 @@
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    /* Ensures children take full width */
 }
 
 
@@ -163,9 +158,62 @@
     color: green;
 }
 
+
+
 .selectedContainer {
     background-color:  #A7DAB5;
     border: 2px solid green;
     transition: background-color 0.3s ease-in-out; 
    
   }
+
+
+.input {
+    margin-top: 8px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    outline: none;
+    width: 85%;
+    background-color: white;
+    color: black;
+}
+
+.input:focus {
+    border-color: #3498db;
+}
+
+.searchFormContainer {
+    width: 100%;
+    position: relative;
+    margin-bottom: 0px;
+    flex-grow: 1;
+    background-color: white;
+    color: black;
+}
+
+.suggestionContainer {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    width: 83%;
+    z-index: 1;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.suggestionItem {
+    cursor: pointer;
+    padding: 12px;
+    transition: background-color 0.3s ease;
+}
+
+.suggestionItem:hover {
+    background-color: #f9f9f9;
+    /* Light gray on hover */
+}

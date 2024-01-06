@@ -10,6 +10,8 @@ import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 import useOnclickOutside from 'react-cool-onclickoutside'
 import SettingsPanel from '../SettingsPanel/SettingsPanel'
 import getLocalStorageItem from '../../utils/retrieveLocalStorageItem'
+import QuestionsPanel from '../QuestionsPanel/QuestionsPanel'
+
 import {
     faCar,
     faBus,
@@ -18,6 +20,7 @@ import {
     faMapMarkedAlt,
     faCog,
 } from '@fortawesome/free-solid-svg-icons'
+
 import { useSettingsContext } from '../Contexts/SettingsContext'
 
 const DirectionPanel: React.FC = () => {
@@ -76,6 +79,20 @@ const DirectionPanel: React.FC = () => {
     }
 
     const nodeRef = React.useRef(null)
+
+    const [selectedTransportationMode, setSelectedTransportationMode] =
+        useState<string | null>(null)
+
+    const [showQuestionsPanel, setShowQuestionsPanel] = useState(false)
+
+    const handleShowQuestionsPanel = () => {
+        setShowQuestionsPanel(true)
+    }
+
+    const handleQuestionsPanelClose = (selectedPriority: string | null) => {
+        console.log('User selected priority:', selectedPriority)
+        setShowQuestionsPanel(false)
+    }
 
     const {
         ready: departureReady,
@@ -217,9 +234,19 @@ const DirectionPanel: React.FC = () => {
                                     />
                                 </button>
 
-                                <div className={styles.groupIcons}>
+                                <div
+                                    className={`${styles.groupIcons} ${
+                                        selectedIcons.length === 2
+                                            ? styles.selectedContainer
+                                            : ''
+                                    }`}
+                                >
                                     <button
-                                        className={styles.iconButton}
+                                        className={`${styles.iconButton} ${
+                                            selectedIcons.includes(faBus)
+                                                ? styles.selectedIcon
+                                                : ''
+                                        }`}
                                         onClick={() => handleIconClick(faBus)}
                                     >
                                         <FontAwesomeIcon
@@ -232,30 +259,17 @@ const DirectionPanel: React.FC = () => {
                                         />
                                     </button>
                                     <button
-                                        className={styles.iconButton}
+                                        className={`${styles.iconButton} ${
+                                            selectedIcons.includes(faCar)
+                                                ? styles.selectedIcon
+                                                : ''
+                                        }`}
                                         onClick={() => handleIconClick(faCar)}
                                     >
                                         <FontAwesomeIcon
                                             icon={faCar}
                                             className={`${styles.icon} ${
                                                 selectedIcons.includes(faCar)
-                                                    ? styles.selectedIcon
-                                                    : ''
-                                            }`}
-                                        />
-                                    </button>
-                                    <button
-                                        className={styles.iconButton}
-                                        onClick={() =>
-                                            handleIconClick(faWalking)
-                                        }
-                                    >
-                                        <FontAwesomeIcon
-                                            icon={faWalking}
-                                            className={`${styles.icon} ${
-                                                selectedIcons.includes(
-                                                    faWalking
-                                                )
                                                     ? styles.selectedIcon
                                                     : ''
                                             }`}
@@ -407,16 +421,22 @@ const DirectionPanel: React.FC = () => {
                             </button>
                             <button
                                 className={`${styles.button} ${styles.setCourseButton}`}
-                                onClick={() => {
-                                    console.log('Hello world')
-                                }}
+                                onClick={handleShowQuestionsPanel}
                             >
                                 <FontAwesomeIcon
                                     icon={faMapMarkedAlt}
                                     className={styles.icon}
                                 />
-                                Find the best way to your destination
+                                Choose the best way to your destination
                             </button>
+                            {showQuestionsPanel && (
+                                <QuestionsPanel
+                                    onClose={handleQuestionsPanelClose}
+                                    selectedTransportationMode={
+                                        selectedTransportationMode
+                                    }
+                                />
+                            )}
                         </>
                     )}
                     {isDismissed && (

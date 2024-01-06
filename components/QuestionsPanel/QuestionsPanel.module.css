@@ -22,6 +22,8 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     margin-bottom: 10px;
+    background-color: white;
+    color:black;
 }
 
 .questionsPanel button {
@@ -29,19 +31,22 @@
     background-color: #F1F4F7;
     color: #514D6E;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
+    align-items: center;
+    padding: 15px;
 }
 
 .questionsPanel button:hover {
-    background-color: #d6d6d6;
-    color: #514D6E;
+    background-color:#A7DAB5;
+    color: green;
 }
 
 .dropdown {
     width: 100%;
     display: flex;
     margin: 6px;
+    
 }
 
 .firstdropdownContainer {
@@ -52,11 +57,15 @@
 .seconddropdownContainer {
     display: flex;
     width: 100%;
+   
 }
 
 .timePer {
     margin: 0 4px;
     color: #514D6E;
     display: flex;
+}
 
+.compareButtonContainer{
+  text-align: center;
 }

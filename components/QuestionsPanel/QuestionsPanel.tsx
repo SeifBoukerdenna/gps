@@ -287,7 +287,11 @@ const QuestionsPanel: React.FC<QuestionsPanelProps> = ({
                     </select>
                 </div>
             </div>
-            <button onClick={() => onClose(frequencyPriority)}>Compare</button>
+            <div className={styles.compareButtonContainer}>
+            <button className={styles.compareButton} onClick={() => onClose(frequencyPriority)}>
+                Choose the best option for you
+            </button>
+            </div>
         </div>
     )
 }

@@ -215,12 +215,12 @@ const DirectionPanel: React.FC = () => {
     return (
         <>
             <Draggable nodeRef={nodeRef}>
-                <div
-                    ref={nodeRef}
-                    className={`${styles.panel} ${
-                        isDismissed ? styles.dismissed : ''
-                    }`}
-                >
+            <div
+            ref={nodeRef}
+            className={`${styles.panel} ${
+            isDismissed ? styles.dismissed : ''
+            } ${isDismissed ? '' : styles.expanded}`}
+            >
                     {!isDismissed && (
                         <>
                             <div className={styles.groupTop}>

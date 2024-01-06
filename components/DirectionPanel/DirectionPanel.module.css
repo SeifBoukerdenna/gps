@@ -53,10 +53,18 @@
 .swapButton {
     position: absolute;
     top: 35%;
-    right: 10%;
+    right: 30%;
     background-color: #F1F4F7;
     color: #514D6E;
     align-self: flex-end;
+}
+.inputContainer{
+    position: relative;
+    right: -4%;
+}
+.expanded .swapButton {
+    top: 15%;
+    right: 0%; 
 }
 
 .setCourseButton {

@@ -1,5 +1,5 @@
 // components/Map/Map.tsx
-import React, { useMemo, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { GoogleMap, Marker, DirectionsRenderer } from '@react-google-maps/api'
 import { useMapContext } from '../../Contexts/MapContext'
 import styles from './Map.module.css'
@@ -53,6 +53,31 @@ const Map: React.FC = () => {
         mapRef.current = mapInstance
     }
 
+    const polylineRef = useRef<google.maps.Polyline | null>(null)
+
+    useEffect(() => {
+        if (polylineRef.current) {
+            polylineRef.current.setMap(null)
+        }
+        if (directions) {
+            const line = new google.maps.Polyline({
+                path: directions.overview_path,
+                strokeColor: 'black',
+                strokeOpacity: 1,
+                strokeWeight: 3,
+            })
+
+            line.setMap(mapRef.current)
+            polylineRef.current = line
+        }
+    }, [directions])
+
+    useEffect(() => {
+        if (polylineRef.current) {
+            polylineRef.current.setMap(null)
+        }
+    }, [destination, departureAddress, departureAddressName])
+
     return (
         <div className={styles.mapContainer}>
             <GoogleMap
@@ -77,21 +102,7 @@ const Map: React.FC = () => {
                     />
                 )}
                 {destination && <Marker position={destination} />}
-                {directions && (
-                    <div>
-                        {directions.toString()}
-                        <DirectionsRenderer
-                            directions={directions}
-                            options={{
-                                polylineOptions: {
-                                    zIndex: 50,
-                                    strokeColor: '#1976D2',
-                                    strokeWeight: 5,
-                                },
-                            }}
-                        />
-                    </div>
-                )}
+                {directions && <div>{directions.toString()}</div>}
             </GoogleMap>
         </div>
     )

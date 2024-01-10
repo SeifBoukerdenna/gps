@@ -16,14 +16,10 @@ const ComparaisonPanel = () => {
     const { destination, departureAddress, setDirections, directions } =
         useMapContext()
 
-    const [routesInfo, setRoutesInfo] = useState<RouteInfo[] | undefined>(
-        undefined
-    )
+    const [routesInfo, setRoutesInfo] = useState<RouteInfo[]>([])
     const [directionsResults, setDirectionsResults] = useState<
-        google.maps.DirectionsResult[] | undefined
-    >(undefined)
-
-    let arrayDestination: google.maps.DirectionsResult[]
+        google.maps.DirectionsResult[]
+    >([])
 
     useEffect(() => {
         const fetchRoutes = async () => {
@@ -34,18 +30,17 @@ const ComparaisonPanel = () => {
                     google.maps.TravelMode.DRIVING
                 )
                 if (result) {
-                    console.log('results:: ', result)
-                    setRoutesInfo(result.routesInfo || [])
-                    setDirectionsResults(result.result || [])
-                    setDirections(result.result)
+                    console.log('resultsss  ', result)
+                    setRoutesInfo(result.routesInfo)
+                    setDirectionsResults(result.result)
                 }
             } catch (error) {
-                console.error('Error calculating routes:', error)
+                console.error('Error fetching routes:', error)
             }
         }
 
         fetchRoutes()
-    }, [destination, departureAddress])
+    }, [departureAddress, destination])
 
     return (
         <>
@@ -62,11 +57,10 @@ const ComparaisonPanel = () => {
                             className={styles.leftColumn}
                             onClick={() => {
                                 console.log('LEFTCOLUMN')
-                                setDirections(
-                                    directionsResults[0] as google.maps.DirectionsResult
+                                setDirections(directionsResults[0].routes[0])
+                                console.log(
+                                    directionsResults[0].routes[0].overview_path
                                 )
-                                // console.log(directionsResults)
-                                console.log('directions ', typeof directions)
                             }}
                         >
                             <div className={styles.column}>
@@ -78,7 +72,7 @@ const ComparaisonPanel = () => {
                                         icon={faClock}
                                         className={styles.icon}
                                     />
-                                    Time: {routesInfo[0].duration}
+                                    Time: {routesInfo[0].duration}c
                                 </div>
                                 <div className={styles.info}>
                                     <FontAwesomeIcon
@@ -87,13 +81,6 @@ const ComparaisonPanel = () => {
                                     />
                                     Distance: {routesInfo[0].distance}
                                 </div>
-                                {/* {routesInfo[0].steps &&
-                                    routesInfo[0].steps.length > 0 && (
-                                        <div className={styles.info}>
-                                            Steps:{' '}
-                                            {routesInfo[0].steps.join(', ')}
-                                        </div>
-                                    )} */}
                                 <div className={styles.info}>
                                     <FontAwesomeIcon
                                         icon={faMoneyBillAlt}
@@ -110,6 +97,13 @@ const ComparaisonPanel = () => {
                                 className={styles.rightColumn}
                                 onClick={() => {
                                     console.log('right columnnn')
+                                    console.log(
+                                        directionsResults[0].routes[1]
+                                            .overview_path
+                                    )
+                                    setDirections(
+                                        directionsResults[0].routes[1]
+                                    )
                                 }}
                             >
                                 <div className={styles.column}>

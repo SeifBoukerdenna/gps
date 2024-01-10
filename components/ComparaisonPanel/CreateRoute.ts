@@ -1,7 +1,4 @@
-import { useMapContext } from "../../Contexts/MapContext";
-
-type TransportationMode = 'driving' | 'transit' | 'walking';
-
+// CreateRoute.ts
 
 export interface RouteInfo {
   duration: string;
@@ -13,33 +10,42 @@ export const calculateRoutes = async (
   origin: google.maps.LatLngLiteral,
   destination: google.maps.LatLngLiteral,
   mode: google.maps.TravelMode
-): Promise<{ routesInfo: RouteInfo[] | null; result: any } | null> => {
-  const directionsService = new google.maps.DirectionsService();
+): Promise<{ routesInfo: RouteInfo[]; result: google.maps.DirectionsResult[] } | null> => {
+  return new Promise((resolve) => {
+    try {
+      const directionsService = new google.maps.DirectionsService();
 
-  const request: google.maps.DirectionsRequest = {
-    origin,
-    destination,
-    travelMode: mode as google.maps.TravelMode,
-    provideRouteAlternatives: true,
-  };
+      const request: google.maps.DirectionsRequest = {
+        origin,
+        destination,
+        travelMode: mode,
+        provideRouteAlternatives: true,
+      };
 
-  return new Promise((resolve, reject) => {
-    directionsService.route(request, (result, status) => {
-      if (status === 'OK' && result) {
-        console.log("results from createRoute ", result)
-        const routesInfo: RouteInfo[] = result.routes.map((route) => ({
-          duration: route.legs[0].duration?.text || '',
-          distance: route.legs[0].distance?.text || '',
-          steps: route.legs[0].steps.map((step) => step.instructions || ''),
-        }));
 
-        console.log('Routes Information:', routesInfo);
-        resolve({ routesInfo, result });
-      } else {
-        console.error(`Error fetching directions: ${status}`);
-        resolve(null);
-      }
-    });
+      directionsService.route(request, (result, status) => {
+        if (status === 'OK' && result) {
+          const routesInfo: RouteInfo[] = result.routes.map((route) => ({
+            duration: route.legs[0].duration?.text || '',
+            distance: route.legs[0].distance?.text || '',
+            steps: route.legs[0].steps.map((step) => step.instructions || ''),
+          }));
+
+          // Ensure result is an array
+          const resultArray: google.maps.DirectionsResult[] = Array.isArray(result)
+            ? result
+            : [result];
+
+
+          resolve({ routesInfo, result: resultArray });
+        } else {
+          console.error(`Error fetching directions: ${status}`);
+          resolve(null);
+        }
+      });
+    } catch (error) {
+      console.error('Error calculating routes:', error);
+      resolve(null);
+    }
   });
 };
-

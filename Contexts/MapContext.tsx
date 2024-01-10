@@ -37,9 +37,9 @@ interface MapContextProps {
         React.SetStateAction<string | null>
     >
 
-    directions: google.maps.DirectionsResult | undefined
+    directions: google.maps.DirectionsRoute | undefined
     setDirections: React.Dispatch<
-        React.SetStateAction<google.maps.DirectionsResult | undefined>
+        React.SetStateAction<google.maps.DirectionsRoute | undefined>
     >
 }
 
@@ -94,7 +94,7 @@ export const MapProvider: React.FC<MapProviderProps> = ({ children }) => {
     >(null)
 
     const [directions, setDirections] = useState<
-        google.maps.DirectionsResult | undefined
+        google.maps.DirectionsRoute | undefined
     >(undefined)
 
     return (

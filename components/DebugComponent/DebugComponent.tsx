@@ -3,6 +3,7 @@ import React from 'react'
 import { useMapContext } from '../../Contexts/MapContext'
 import styles from './DebugComponent.module.css'
 import { useDirectionContext } from '../../Contexts/DirectionContext'
+import { useSettingsContext } from '../../Contexts/SettingsContext'
 
 const DebugComponent: React.FC = () => {
     const {
@@ -18,6 +19,8 @@ const DebugComponent: React.FC = () => {
     } = useMapContext()
 
     const { isComparaisonPanel } = useDirectionContext()
+
+    const { carInfoUser, setCarInfoUser } = useSettingsContext()
 
     return (
         <div className={styles.debugContainer}>
@@ -65,6 +68,14 @@ const DebugComponent: React.FC = () => {
             <div className={styles.debugItem}>
                 <span>Directions</span>
                 <pre>{directions?.overview_path.toString()}</pre>
+            </div>
+            <div className={styles.debugItem}>
+                <span>carInfoUser</span>
+                <pre>Make: {carInfoUser?.make}</pre>
+                <pre>Model: {carInfoUser?.model}</pre>
+                <pre>Year: {carInfoUser?.year}</pre>
+                <pre>Fuel Type: {carInfoUser?.fuel_type}</pre>
+                <pre>Combination MPG: {carInfoUser?.combination_mpg}</pre>
             </div>
         </div>
     )

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { fetchData, AjaxOptions } from '../../utils/ajaxUtils'
 import styles from './SettingsPanel.module.css'
 
 import { useSettingsContext } from '../../Contexts/SettingsContext'
@@ -21,7 +22,7 @@ const SettingsPanel: React.FC = () => {
         )
     }, [])
 
-    const { setIsSettingsVisible } = useSettingsContext()
+    const { setIsSettingsVisible, setCarInfoUser } = useSettingsContext()
 
     const {
         defaultDepartureAdressName,
@@ -31,22 +32,20 @@ const SettingsPanel: React.FC = () => {
     } = useMapContext()
 
     useEffect(() => {
-        setHomeAddress(defaultDepartureAdressName as string),
-            [
-                setHomeAddress,
-                defaultDepartureAdressName,
-                setDefaultDepartureAdressName,
-            ]
-    })
+        setHomeAddress(defaultDepartureAdressName as string)
+    }, [
+        setHomeAddress,
+        defaultDepartureAdressName,
+        setDefaultDepartureAdressName,
+    ])
 
     useEffect(() => {
-        setFavoriteAddress(defaultArrivalAdressName as string),
-            [
-                setFavoriteAddress,
-                defaultArrivalAdressName,
-                setDefaultArrivalAdressName,
-            ]
-    })
+        setFavoriteAddress(defaultArrivalAdressName as string)
+    }, [
+        setFavoriteAddress,
+        defaultArrivalAdressName,
+        setDefaultArrivalAdressName,
+    ])
 
     const {
         ready: defaultDepartureReady,
@@ -74,22 +73,31 @@ const SettingsPanel: React.FC = () => {
     const [hasChangedDeparture, setHasChangedDeparture] = useState(false)
     const [hasChangedArrival, setHasChangedArrival] = useState(false)
 
+    // Example usage:
+    const model = 'camry'
+    const apiKey = process.env.NEXT_CAR_API_KEY || ''
+
+    const endpoint = `https://api.api-ninjas.com/v1/cars?model=${model}`
+    const options: AjaxOptions = {
+        method: 'GET',
+        headers: {
+            'X-Api-Key': 'UVY95MwCMh2OJxPXL165Fg==rfaA4tZTB7wIc4jq',
+            'Content-Type': 'application/json',
+        },
+    }
     return (
         <div className={styles.SettingsPanel}>
             <h2>Settings</h2>
 
             <label>
                 Favorite Car:
-                <select
-                    value={favoriteCar}
-                    onChange={(e) => setFavoriteCar(e.target.value)}
-                    className={styles.dropdown}
-                >
-                    <option value="">Select Car</option>
-                    <option value="sedan">Sedan</option>
-                    <option value="suv">SUV</option>
-                    <option value="truck">Truck</option>
-                </select>
+                <input
+                    type="text"
+                    onChange={(e) => {
+                        setFavoriteCar(e.target.value)
+                    }}
+                    placeholder={localStorage.getItem('favoriteCar') || ''}
+                />
             </label>
 
             <label>
@@ -192,12 +200,31 @@ const SettingsPanel: React.FC = () => {
             </label>
 
             <button
-                onClick={() => {
+                onClick={async () => {
                     console.log('click save')
-                    localStorage.setItem('favoriteCar', 'BMW')
+
                     localStorage.setItem('homeAddress', homeAddress)
                     localStorage.setItem('favoriteDestination', favoriteAddress)
                     localStorage.setItem('publicTransportInfo', '')
+
+                    // Fetch data using AJAX
+                    const model = favoriteCar || '' // Change this to get the actual value
+                    console.log(model)
+                    if (model != '') {
+                        const endpoint = `https://api.api-ninjas.com/v1/cars?limit=2&model=${model}`
+                        const options: AjaxOptions = {
+                            method: 'GET',
+                            headers: {
+                                'X-Api-Key':
+                                    'UVY95MwCMh2OJxPXL165Fg==rfaA4tZTB7wIc4jq',
+                                'Content-Type': 'application/json',
+                            },
+                        }
+
+                        const result = await fetchData<any>(endpoint, options)
+                        console.log(result)
+                        setCarInfoUser(result[0])
+                    }
                     setIsSettingsVisible(false)
                 }}
             >

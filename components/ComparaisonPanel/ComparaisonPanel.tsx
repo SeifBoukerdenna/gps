@@ -3,15 +3,21 @@ import { useDirectionContext } from '../../Contexts/DirectionContext'
 import { useMapContext } from '../../Contexts/MapContext'
 import styles from './ComparaisonPanel.module.css'
 import { calculateRoutes, RouteInfo } from './CreateRoute'
+import { mpgToLPer100km } from '../../utils/fuelConverter'
 import {
     faClock,
     faMoneyBillAlt,
     faRoad,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { useSettingsContext } from '../../Contexts/SettingsContext'
+
+const $perLitre = 1.5
 
 const ComparaisonPanel = () => {
     const { setIsComparaisonPanel } = useDirectionContext()
+
+    const { carInfoUser } = useSettingsContext()
 
     const { destination, departureAddress, setDirections, directions } =
         useMapContext()
@@ -41,6 +47,8 @@ const ComparaisonPanel = () => {
 
         fetchRoutes()
     }, [departureAddress, destination])
+
+    console.log(parseFloat(routesInfo[0].distance))
 
     return (
         <>
@@ -82,7 +90,19 @@ const ComparaisonPanel = () => {
                                         icon={faMoneyBillAlt}
                                         className={styles.icon}
                                     />
-                                    Money: $10
+                                    Money:
+                                    {Number(
+                                        (
+                                            (mpgToLPer100km(
+                                                carInfoUser?.combination_mpg ||
+                                                    10
+                                            ) /
+                                                100) *
+                                            parseFloat(routesInfo[0].distance) *
+                                            $perLitre
+                                        ).toFixed(2)
+                                    )}
+                                    $
                                 </div>
                             </div>
                         </div>
@@ -120,7 +140,21 @@ const ComparaisonPanel = () => {
                                             icon={faMoneyBillAlt}
                                             className={styles.icon}
                                         />
-                                        Money: $15
+                                        Money:
+                                        {Number(
+                                            (
+                                                (mpgToLPer100km(
+                                                    carInfoUser?.combination_mpg ||
+                                                        10
+                                                ) /
+                                                    100) *
+                                                parseFloat(
+                                                    routesInfo[1].distance
+                                                ) *
+                                                $perLitre
+                                            ).toFixed(2)
+                                        )}
+                                        $
                                     </div>
                                 </div>
                             </div>

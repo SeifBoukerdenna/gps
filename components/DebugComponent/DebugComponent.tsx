@@ -14,6 +14,7 @@ const DebugComponent: React.FC = () => {
         departureAddress,
         selectedIcons,
         isFocused,
+        directions,
     } = useMapContext()
 
     const { isComparaisonPanel } = useDirectionContext()
@@ -60,6 +61,10 @@ const DebugComponent: React.FC = () => {
             <div className={styles.debugItem}>
                 <span>Is comparaison panel?</span>
                 <pre>{isComparaisonPanel.toString()}</pre>
+            </div>
+            <div className={styles.debugItem}>
+                <span>Directions</span>
+                <pre>{directions?.toString()}</pre>
             </div>
         </div>
     )

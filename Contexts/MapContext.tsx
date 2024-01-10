@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
+import { DirectionsResult } from '../types'
 
 interface MapContextProps {
     center: google.maps.LatLngLiteral
@@ -34,6 +35,11 @@ interface MapContextProps {
     defaultArrivalAdressName: string | null
     setDefaultArrivalAdressName: React.Dispatch<
         React.SetStateAction<string | null>
+    >
+
+    directions: google.maps.DirectionsResult | undefined
+    setDirections: React.Dispatch<
+        React.SetStateAction<google.maps.DirectionsResult | undefined>
     >
 }
 
@@ -87,6 +93,10 @@ export const MapProvider: React.FC<MapProviderProps> = ({ children }) => {
         string | null
     >(null)
 
+    const [directions, setDirections] = useState<
+        google.maps.DirectionsResult | undefined
+    >(undefined)
+
     return (
         <MapContext.Provider
             value={{
@@ -110,6 +120,8 @@ export const MapProvider: React.FC<MapProviderProps> = ({ children }) => {
                 setDefaultDepartureAdressName,
                 defaultArrivalAdressName,
                 setDefaultArrivalAdressName,
+                directions,
+                setDirections,
             }}
         >
             {children}

@@ -22,6 +22,7 @@ const Map: React.FC = () => {
         departureAddressName,
         setDepartureAddress,
         setDepartureAddressName,
+        directions,
     } = useMapContext()
 
     const mapRef = useRef<google.maps.Map | null>(null)
@@ -76,6 +77,21 @@ const Map: React.FC = () => {
                     />
                 )}
                 {destination && <Marker position={destination} />}
+                {directions && (
+                    <div>
+                        {directions.toString()}
+                        <DirectionsRenderer
+                            directions={directions}
+                            options={{
+                                polylineOptions: {
+                                    zIndex: 50,
+                                    strokeColor: '#1976D2',
+                                    strokeWeight: 5,
+                                },
+                            }}
+                        />
+                    </div>
+                )}
             </GoogleMap>
         </div>
     )

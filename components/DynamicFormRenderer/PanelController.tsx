@@ -8,7 +8,7 @@ const PanelController = () => {
 
     const shouldRenderComparaisonPanel = isComparaisonPanel
 
-    console.log(isComparaisonPanel)
+    console.log('isComparaisonPanel ', isComparaisonPanel)
 
     return shouldRenderComparaisonPanel ? <ComparaisonPanel /> : <div></div>
 }

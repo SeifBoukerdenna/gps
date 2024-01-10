@@ -22,7 +22,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 import { useSettingsContext } from '../../Contexts/SettingsContext'
-import { useDirectionContext } from '../../Contexts/DirectionContext'
 
 const DirectionPanel: React.FC = () => {
     const {
@@ -86,13 +85,9 @@ const DirectionPanel: React.FC = () => {
 
     const [showQuestionsPanel, setShowQuestionsPanel] = useState(false)
 
-    const handleShowQuestionsPanel = () => {
-        setShowQuestionsPanel(true)
-    }
-
     const handleQuestionsPanelClose = (selectedPriority: string | null) => {
         console.log('User selected priority:', selectedPriority)
-        setShowQuestionsPanel(false)
+        // setShowQuestionsPanel(false)
     }
 
     const {
@@ -159,12 +154,14 @@ const DirectionPanel: React.FC = () => {
     const handleIconClick = (icon: IconDefinition) => {
         if (
             selectedIcons.some(
-                (selectedIcon) => selectedIcon.iconName === icon.iconName
+                (selectedIcon: { iconName: string }) =>
+                    selectedIcon.iconName === icon.iconName
             )
         ) {
             setSelectedIcons(
                 selectedIcons.filter(
-                    (selectedIcon) => selectedIcon.iconName !== icon.iconName
+                    (selectedIcon: { iconName: string }) =>
+                        selectedIcon.iconName !== icon.iconName
                 )
             )
         } else {
@@ -213,6 +210,10 @@ const DirectionPanel: React.FC = () => {
     const [hasChangedDeparture, setHasChangedDeparture] = useState(false)
     const [hasChangedArrival, setHasChangedArrival] = useState(false)
 
+    const handleShowQuestionsPanel = () => {
+        setShowQuestionsPanel(true)
+    }
+
     return (
         <>
             <Draggable nodeRef={nodeRef}>
@@ -220,7 +221,7 @@ const DirectionPanel: React.FC = () => {
                     ref={nodeRef}
                     className={`${styles.panel} ${
                         isDismissed ? styles.dismissed : ''
-                    }`}
+                    } ${isDismissed ? '' : styles.expanded}`}
                 >
                     {!isDismissed && (
                         <>
@@ -310,8 +311,16 @@ const DirectionPanel: React.FC = () => {
                                                 e.target.value
                                             )
                                         }}
-                                        onKeyDown={() => {
-                                            handleKeyDownDeparture
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Tab') {
+                                                e.preventDefault()
+                                                console.log('Tab')
+                                                setDepartureValue(
+                                                    localStorage.getItem(
+                                                        'homeAddress'
+                                                    ) || ''
+                                                )
+                                            }
                                             setIsFocused(true)
                                         }}
                                         disabled={!departureReady}
@@ -365,8 +374,16 @@ const DirectionPanel: React.FC = () => {
                                             setArrivalValue(e.target.value)
                                             setDestinationName(e.target.value)
                                         }}
-                                        onKeyDown={() => {
-                                            handleKeyDownArrival
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Tab') {
+                                                e.preventDefault()
+                                                console.log('Tab')
+                                                setArrivalValue(
+                                                    localStorage.getItem(
+                                                        'favoriteDestination'
+                                                    ) || ''
+                                                )
+                                            }
                                             setIsFocused(true)
                                         }}
                                         disabled={!arrivalReady}
@@ -422,7 +439,10 @@ const DirectionPanel: React.FC = () => {
                             </button>
                             <button
                                 className={`${styles.button} ${styles.setCourseButton}`}
-                                onClick={handleShowQuestionsPanel}
+                                onClick={() => {
+                                    setShowQuestionsPanel(true)
+                                    console.log('clickeddd')
+                                }}
                             >
                                 <FontAwesomeIcon
                                     icon={faMapMarkedAlt}

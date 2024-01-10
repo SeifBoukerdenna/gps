@@ -56,11 +56,7 @@ const ComparaisonPanel = () => {
                         <div
                             className={styles.leftColumn}
                             onClick={() => {
-                                console.log('LEFTCOLUMN')
                                 setDirections(directionsResults[0].routes[0])
-                                console.log(
-                                    directionsResults[0].routes[0].overview_path
-                                )
                             }}
                         >
                             <div className={styles.column}>
@@ -72,7 +68,7 @@ const ComparaisonPanel = () => {
                                         icon={faClock}
                                         className={styles.icon}
                                     />
-                                    Time: {routesInfo[0].duration}c
+                                    Time: {routesInfo[0].duration}
                                 </div>
                                 <div className={styles.info}>
                                     <FontAwesomeIcon
@@ -96,11 +92,6 @@ const ComparaisonPanel = () => {
                             <div
                                 className={styles.rightColumn}
                                 onClick={() => {
-                                    console.log('right columnnn')
-                                    console.log(
-                                        directionsResults[0].routes[1]
-                                            .overview_path
-                                    )
                                     setDirections(
                                         directionsResults[0].routes[1]
                                     )
@@ -124,13 +115,6 @@ const ComparaisonPanel = () => {
                                         />
                                         Distance: {routesInfo[1].distance}
                                     </div>
-                                    {/* {routesInfo[1].steps &&
-                                        routesInfo[1].steps.length > 0 && (
-                                            <div className={styles.info}>
-                                                Steps:{' '}
-                                                {routesInfo[1].steps.join(', ')}
-                                            </div>
-                                        )} */}
                                     <div className={styles.info}>
                                         <FontAwesomeIcon
                                             icon={faMoneyBillAlt}

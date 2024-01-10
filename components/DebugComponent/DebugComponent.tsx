@@ -64,7 +64,7 @@ const DebugComponent: React.FC = () => {
             </div>
             <div className={styles.debugItem}>
                 <span>Directions</span>
-                <pre>{directions?.toString()}</pre>
+                <pre>{directions?.overview_path.toString()}</pre>
             </div>
         </div>
     )

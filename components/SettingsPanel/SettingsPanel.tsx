@@ -224,6 +224,7 @@ const SettingsPanel: React.FC = () => {
                         const result = await fetchData<any>(endpoint, options)
                         console.log(result)
                         setCarInfoUser(result[0])
+                        localStorage.setItem('favoriteCar', favoriteCar)
                     }
                     setIsSettingsVisible(false)
                 }}

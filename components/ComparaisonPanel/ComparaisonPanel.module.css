@@ -70,6 +70,7 @@
 }
 
 .separator {
+    text-align: left;
     width: 1px;
     background-color: #ddd;
     margin: 0 20px;

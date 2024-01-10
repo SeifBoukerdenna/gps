@@ -11,10 +11,21 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useSettingsContext } from '../../Contexts/SettingsContext'
-
-const $perLitre = 1.5
+import { fetchGasPrice } from '../../utils/fetchGazPrices'
 
 const ComparaisonPanel = () => {
+    const [gasPrice, setGasPrice] = useState<number | null>(null)
+
+    useEffect(() => {
+        const retrieveNationalSinglePrice = async () => {
+            const price = await fetchGasPrice()
+            setGasPrice(price)
+            console.log('GAZPRICE ', gasPrice)
+        }
+
+        retrieveNationalSinglePrice()
+    }, [])
+
     const { setIsComparaisonPanel } = useDirectionContext()
 
     const { carInfoUser } = useSettingsContext()
@@ -47,8 +58,6 @@ const ComparaisonPanel = () => {
 
         fetchRoutes()
     }, [departureAddress, destination])
-
-    console.log(parseFloat(routesInfo[0].distance))
 
     return (
         <>
@@ -99,7 +108,7 @@ const ComparaisonPanel = () => {
                                             ) /
                                                 100) *
                                             parseFloat(routesInfo[0].distance) *
-                                            $perLitre
+                                            (gasPrice || 1.5)
                                         ).toFixed(2)
                                     )}
                                     $
@@ -151,7 +160,7 @@ const ComparaisonPanel = () => {
                                                 parseFloat(
                                                     routesInfo[1].distance
                                                 ) *
-                                                $perLitre
+                                                (gasPrice || 1.5)
                                             ).toFixed(2)
                                         )}
                                         $

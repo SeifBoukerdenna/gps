@@ -20,6 +20,7 @@ export const calculateRoutes = async (
         destination,
         travelMode: mode,
         provideRouteAlternatives: true,
+        unitSystem: google.maps.UnitSystem.METRIC,
       };
 
 

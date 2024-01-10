@@ -26,7 +26,6 @@ async function retrieveNationalSinglePrice(url: string): Promise<number | undefi
       if (nationalSinglePriceElement) {
         const priceString = nationalSinglePriceElement.textContent?.trim();
         if (priceString) {
-          // Use parseFloat if the value can have decimals, or parseInt for integers
           return parseFloat(priceString);
         }
       }

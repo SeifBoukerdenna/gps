@@ -16,16 +16,6 @@ import { fetchGasPrice } from '../../utils/fetchGazPrices'
 const ComparaisonPanel = () => {
     const [gasPrice, setGasPrice] = useState<number | null>(null)
 
-    useEffect(() => {
-        const retrieveNationalSinglePrice = async () => {
-            const price = await fetchGasPrice()
-            setGasPrice(price)
-            console.log('GAZPRICE ', gasPrice)
-        }
-
-        retrieveNationalSinglePrice()
-    }, [])
-
     const { setIsComparaisonPanel } = useDirectionContext()
 
     const { carInfoUser } = useSettingsContext()
@@ -58,6 +48,24 @@ const ComparaisonPanel = () => {
 
         fetchRoutes()
     }, [departureAddress, destination])
+
+    if (routesInfo[0]) {
+        {
+            Number(
+                (
+                    (mpgToLPer100km(carInfoUser?.combination_mpg || 10) / 100) *
+                    parseFloat(routesInfo[0].distance) *
+                    (gasPrice || 1.5)
+                ).toFixed(2)
+            )
+        }
+
+        console.log(
+            (mpgToLPer100km(carInfoUser?.combination_mpg || 10) / 100) *
+                parseFloat(routesInfo[0].distance.replace(/,/g, ''))
+        )
+        console.log('distance is ', routesInfo[0].distance)
+    }
 
     return (
         <>
@@ -107,7 +115,12 @@ const ComparaisonPanel = () => {
                                                     10
                                             ) /
                                                 100) *
-                                            parseFloat(routesInfo[0].distance) *
+                                            parseFloat(
+                                                routesInfo[0].distance.replace(
+                                                    /,/g,
+                                                    ''
+                                                )
+                                            ) *
                                             (gasPrice || 1.5)
                                         ).toFixed(2)
                                     )}
@@ -158,7 +171,10 @@ const ComparaisonPanel = () => {
                                                 ) /
                                                     100) *
                                                 parseFloat(
-                                                    routesInfo[1].distance
+                                                    routesInfo[0].distance.replace(
+                                                        /,/g,
+                                                        ''
+                                                    )
                                                 ) *
                                                 (gasPrice || 1.5)
                                             ).toFixed(2)

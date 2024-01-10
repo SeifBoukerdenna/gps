@@ -12,7 +12,7 @@ import {
 import '@reach/combobox/styles.css'
 import styles from './SearchForm.module.css'
 import Draggable from 'react-draggable'
-import { useMapContext } from '../Contexts/MapContext'
+import { useMapContext } from '../../Contexts/MapContext'
 import convertCoordinatesToAddress from '../../utils/CoordToName'
 
 const SearchForm = () => {

@@ -13,7 +13,7 @@ import {
 } from '@reach/combobox'
 import '@reach/combobox/styles.css'
 //import styles from '../MainSearchForm/SearchForm.module.css'
-import { useMapContext } from '../Contexts/MapContext'
+import { useMapContext } from '../../Contexts/MapContext'
 
 const PlacesSearchBar = () => {
     const {

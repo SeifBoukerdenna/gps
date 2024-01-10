@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import styles from './QuestionsPanel.module.css'
-import { useMapContext } from '../../components/Contexts/MapContext'
+import { useMapContext } from '../../Contexts/MapContext'
+import { useDirectionContext } from '../../Contexts/DirectionContext'
 
 interface QuestionsPanelProps {
     onClose: (selectedPriority: string | null) => void
@@ -27,6 +28,7 @@ const QuestionsPanel: React.FC<QuestionsPanelProps> = ({
         null
     )
     const { selectedIcons } = useMapContext()
+    const { isComparaisonPanel, setIsComparaisonPanel } = useDirectionContext()
 
     const renderQuestions = () => {
         if (
@@ -287,7 +289,14 @@ const QuestionsPanel: React.FC<QuestionsPanelProps> = ({
                     </select>
                 </div>
             </div>
-            <button onClick={() => onClose(frequencyPriority)}>Compare</button>
+            <button
+                onClick={() => {
+                    onClose(frequencyPriority)
+                    setIsComparaisonPanel(true)
+                }}
+            >
+                Compare
+            </button>
         </div>
     )
 }

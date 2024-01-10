@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import styles from './SettingsPanel.module.css'
 
-import { useSettingsContext } from '../Contexts/SettingsContext'
+import { useSettingsContext } from '../../Contexts/SettingsContext'
 import { useCustomPlacesAutocomplete } from '../../utils/Hooks/PlacesAutoCompleteHook'
-import { useMapContext } from '../Contexts/MapContext'
+import { useMapContext } from '../../Contexts/MapContext'
 import useOnclickOutside from 'react-cool-onclickoutside'
 
 const SettingsPanel: React.FC = () => {

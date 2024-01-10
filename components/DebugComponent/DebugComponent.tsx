@@ -1,7 +1,8 @@
 // components/DebugComponent/DebugComponent.tsx
 import React from 'react'
-import { useMapContext } from '../Contexts/MapContext'
+import { useMapContext } from '../../Contexts/MapContext'
 import styles from './DebugComponent.module.css'
+import { useDirectionContext } from '../../Contexts/DirectionContext'
 
 const DebugComponent: React.FC = () => {
     const {
@@ -14,6 +15,8 @@ const DebugComponent: React.FC = () => {
         selectedIcons,
         isFocused,
     } = useMapContext()
+
+    const { isComparaisonPanel } = useDirectionContext()
 
     return (
         <div className={styles.debugContainer}>
@@ -53,6 +56,10 @@ const DebugComponent: React.FC = () => {
             <div className={styles.debugItem}>
                 <span>Is focused?</span>
                 <pre>{isFocused.toString()}</pre>
+            </div>
+            <div className={styles.debugItem}>
+                <span>Is comparaison panel?</span>
+                <pre>{isComparaisonPanel.toString()}</pre>
             </div>
         </div>
     )

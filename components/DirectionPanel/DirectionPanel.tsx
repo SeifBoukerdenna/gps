@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useMapContext } from '../Contexts/MapContext'
+import { useMapContext } from '../../Contexts/MapContext'
 import styles from './DirectionPanel.module.css'
 import Draggable from 'react-draggable'
 import { useCustomPlacesAutocomplete } from '../../utils/Hooks/PlacesAutoCompleteHook'
@@ -21,7 +21,8 @@ import {
     faCog,
 } from '@fortawesome/free-solid-svg-icons'
 
-import { useSettingsContext } from '../Contexts/SettingsContext'
+import { useSettingsContext } from '../../Contexts/SettingsContext'
+import { useDirectionContext } from '../../Contexts/DirectionContext'
 
 const DirectionPanel: React.FC = () => {
     const {

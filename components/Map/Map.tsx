@@ -78,6 +78,12 @@ const Map: React.FC = () => {
         }
     }, [destination, departureAddress, departureAddressName])
 
+    // useEffect(() => {
+    //     if (destination) {
+    //         mapRef.current?.panTo(destination)
+    //     }
+    // }, [destination])
+
     return (
         <div className={styles.mapContainer}>
             <GoogleMap

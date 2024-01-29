@@ -114,6 +114,7 @@ const DirectionPanel: React.FC = () => {
         const results = await getGeocode({ address: address })
         const { lat, lng } = await getLatLng(results[0])
         setDepartureAddress({ lat, lng })
+        setCenter({ lat, lng })
     }
 
     const handleSelectArrival = async (address: string) => {
@@ -125,6 +126,7 @@ const DirectionPanel: React.FC = () => {
         const results = await getGeocode({ address: address })
         const { lat, lng } = await getLatLng(results[0])
         setDestination({ lat, lng })
+        setCenter({ lat, lng })
     }
 
     const handleKeyDownDeparture = (e: {

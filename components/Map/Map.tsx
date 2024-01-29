@@ -6,6 +6,10 @@ import styles from './Map.module.css'
 import { MapOptions } from '../../types'
 import GoogleMapIds from '../../googleMapIds.json'
 import convertCoordinatesToAddress from '../../utils/CoordToName'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCog } from '@fortawesome/free-solid-svg-icons'
+import { useSettingsContext } from '../../Contexts/SettingsContext'
+import SettingsPanel from '../SettingsPanel/SettingsPanel'
 
 const containerStyle = {
     width: '100vw',
@@ -84,8 +88,18 @@ const Map: React.FC = () => {
     //     }
     // }, [destination])
 
+    const {setIsSettingsVisible, isSettingsVisible} = useSettingsContext();
     return (
         <div className={styles.mapContainer}>
+             <button
+                                    className={styles.button}
+                                    onClick={() => {setIsSettingsVisible(!isSettingsVisible)}}
+                                >
+                                    <FontAwesomeIcon
+                                        icon={faCog}
+                                        className={styles.icon}
+                                    />
+                                </button>
             <GoogleMap
                 mapContainerStyle={containerStyle}
                 center={center}
@@ -110,6 +124,7 @@ const Map: React.FC = () => {
                 {destination && <Marker position={destination} />}
                 {directions && <div>{directions.toString()}</div>}
             </GoogleMap>
+            {isSettingsVisible && <SettingsPanel />}
         </div>
     )
 }

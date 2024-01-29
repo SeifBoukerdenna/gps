@@ -49,8 +49,9 @@ export default function Home() {
     return (
         <MapProvider>
             <DirectionContextProvider>
+            <SettingsProvider>
                 <Map />
-                <SettingsProvider>
+                
                     <DynamicFormRenderer />
                     <PanelController />
                     {showDebug && <DebugComponent />}

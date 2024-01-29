@@ -190,14 +190,14 @@ const SettingsPanel: React.FC = () => {
                 )}
             </label>
 
-            <label>
+            {/* <label>
                 Public Transport Info:
                 <input
                     type="text"
                     value={publicTransportInfo}
                     onChange={(e) => setPublicTransportInfo(e.target.value)}
                 />
-            </label>
+            </label> */}
 
             <button
                 onClick={async () => {

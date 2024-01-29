@@ -22,8 +22,13 @@
     flex-direction: column;
     align-items: center;
     font-family: 'Roboto', sans-serif;
+    border: black 5px;
+    border-radius: 20px;
 
 }
+
+
+
 
 
 
@@ -98,18 +103,19 @@
 
 
 .groupTop {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 1rem;
+    color: #514D6E;
+    text-align: center;
+    font-weight: bolder;
+    padding-bottom: 15px;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 25px;
 }
 
 .groupIcons {
-    background-color: #F1F4F7;
+    /* background-color: #F1F4F7;
     border-radius: 1rem;
     display: flex;
-    gap: 1rem;
+    gap: 1rem; */
     /* Adjust the gap between icons */
 }
 
@@ -222,3 +228,13 @@
     transition: background-color 0.3s ease-in-out;
 
 }
+
+.paragraph {
+    z-index: 1000;
+    color: black;
+}
+
+.paragraph:hover {
+    background-color: #00aa00;
+}
+

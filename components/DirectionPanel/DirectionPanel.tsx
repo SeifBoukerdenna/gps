@@ -12,6 +12,7 @@ import SettingsPanel from '../SettingsPanel/SettingsPanel'
 import getLocalStorageItem from '../../utils/retrieveLocalStorageItem'
 import QuestionsPanel from '../QuestionsPanel/QuestionsPanel'
 
+
 import {
     faCar,
     faBus,
@@ -22,6 +23,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 import { useSettingsContext } from '../../Contexts/SettingsContext'
+import { useDirectionContext } from '../../Contexts/DirectionContext'
 
 const DirectionPanel: React.FC = () => {
     const {
@@ -42,6 +44,8 @@ const DirectionPanel: React.FC = () => {
     } = useMapContext()
 
     const { isSettingsVisible, setIsSettingsVisible } = useSettingsContext()
+
+    const { isComparaisonPanel,setIsComparaisonPanel} = useDirectionContext()
 
     const handleLocateUser = () => {
         if (navigator.geolocation) {
@@ -219,6 +223,7 @@ const DirectionPanel: React.FC = () => {
     return (
         <>
             <Draggable nodeRef={nodeRef}>
+           
                 <div
                     ref={nodeRef}
                     className={`${styles.panel} ${
@@ -227,8 +232,10 @@ const DirectionPanel: React.FC = () => {
                 >
                     {!isDismissed && (
                         <>
+                         
                             <div className={styles.groupTop}>
-                                <button
+                                <p className='title'>Direction panel</p>
+                                {/* <button
                                     className={styles.button}
                                     onClick={() => setIsSettingsVisible(true)}
                                 >
@@ -236,9 +243,10 @@ const DirectionPanel: React.FC = () => {
                                         icon={faCog}
                                         className={styles.icon}
                                     />
-                                </button>
-
-                                <div
+                                </button> */}
+                               
+                              
+                                {/* <div
                                     className={`${styles.groupIcons} ${
                                         selectedIcons.length === 2
                                             ? styles.selectedContainer
@@ -251,7 +259,7 @@ const DirectionPanel: React.FC = () => {
                                                 ? styles.selectedIcon
                                                 : ''
                                         }`}
-                                        onClick={() => handleIconClick(faBus)}
+                                        //onClick={() => handleIconClick(faBus)}
                                     >
                                         <FontAwesomeIcon
                                             icon={faBus}
@@ -279,16 +287,18 @@ const DirectionPanel: React.FC = () => {
                                             }`}
                                         />
                                     </button>
-                                </div>
+                                </div> */}
 
-                                <button
+                            
+
+                                {/* <button
                                     className={`${styles.button} ${styles.dismissButton}`}
                                     onClick={handleDismiss}
                                 >
                                     &#8230;
-                                </button>
+                                </button> */}
                             </div>
-
+                            
                             <div className={styles.inputContainer}>
                                 <div
                                     className={styles.searchFormContainer}
@@ -442,7 +452,8 @@ const DirectionPanel: React.FC = () => {
                             <button
                                 className={`${styles.button} ${styles.setCourseButton}`}
                                 onClick={() => {
-                                    setShowQuestionsPanel(true)
+                                    //setShowQuestionsPanel(true)
+                                    setIsComparaisonPanel(true)
                                     console.log('clickeddd')
                                 }}
                             >

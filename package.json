@@ -19,10 +19,12 @@
     "dotenv": "^16.3.1",
     "html-parse-stringify2": "^2.0.1",
     "next": "14.0.4",
-    "react": "^18",
+    "react": "18",
     "react-cool-onclickoutside": "^1.7.0",
     "react-dom": "^18",
     "react-draggable": "^4.4.6",
+    "react-fontawesome": "^1.7.1",
+    "react-joyride": "^2.7.2",
     "use-places-autocomplete": "^4.0.1"
   },
   "devDependencies": {

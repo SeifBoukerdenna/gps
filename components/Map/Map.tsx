@@ -8,7 +8,7 @@ import convertCoordinatesToAddress from '../../utils/CoordToName';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
 import { useSettingsContext } from '../../Contexts/SettingsContext';
-import Joyride from 'reactour';
+import Joyride, { Step } from 'react-joyride';
 import SettingsPanel from '../SettingsPanel/SettingsPanel';
 
 const containerStyle = {
@@ -84,23 +84,34 @@ const Map: React.FC = () => {
 
   const { setIsSettingsVisible, isSettingsVisible } = useSettingsContext();
 
-  const [tourSteps, setTourSteps] = useState([
+  const [runTour, setRunTour] = useState(true); // Start the tour automatically
+
+  const tourSteps: Step[] = [
     {
       target: '.settings-button',
-      content: 'Click here to open settings and select the car you want to use.',
-      continuous: true,
-      showSkipButton: true,
-      run: isSettingsVisible,
+      content: 'Click here to open settings and select the car you want to use',
+      disableBeacon: true,
     },
-  ]);
+    
+  ];
 
-  const handleTourEnd = () => {
-    // You can perform any action when the tour ends
+  const handleJoyrideCallback = (data: any) => {
+    const { action, index, type } = data;
+
+    if (action === 'reset' || type === 'tour:end') {
+      setRunTour(false);
+    }
   };
 
   return (
     <div className={styles.mapContainer}>
-      <Joyride steps={tourSteps} />
+      <Joyride
+        steps={tourSteps}
+        continuous
+        showSkipButton
+        run={runTour}
+        callback={handleJoyrideCallback}
+      />
       <button
         className={`${styles.button} settings-button`}
         onClick={() => {

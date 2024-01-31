@@ -63,7 +63,7 @@ const Map: React.FC = () => {
             const line = new google.maps.Polyline({
                 path: directions.overview_path,
                 strokeColor: 'black',
-                strokeOpacity: 1,
+                strokeOpacity: 1.1,
                 strokeWeight: 3,
             })
 

@@ -8,6 +8,14 @@ interface CarInfo {
     combination_mpg: number
 }
 
+const defaultCarInfo: CarInfo = {
+    model: 'n.a',
+    year: NaN,
+    make: 'n.a',
+    fuel_type: 'normal',
+    combination_mpg: 17,
+}
+
 interface SettingsContextProps {
     isSettingsVisible: boolean
     setIsSettingsVisible: React.Dispatch<React.SetStateAction<boolean>>
@@ -23,7 +31,9 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
     children,
 }) => {
     const [isSettingsVisible, setIsSettingsVisible] = useState(false)
-    const [carInfoUser, setCarInfoUser] = useState<CarInfo | null>(null)
+    const [carInfoUser, setCarInfoUser] = useState<CarInfo | null>(
+        defaultCarInfo
+    )
 
     return (
         <SettingsContext.Provider

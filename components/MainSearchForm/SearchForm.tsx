@@ -30,7 +30,7 @@ const SearchForm = () => {
     const {
         ready,
         value,
-        setValue, // Now you can use setValue in this component
+        setValue,
         suggestions: { status, data },
         clearSuggestions,
     } = useCustomPlacesAutocomplete()
@@ -46,23 +46,27 @@ const SearchForm = () => {
 
         setDestinationName(address)
         setInitialSearch(true)
-
-        // Additional actions when an address is selected
-        // For example, you may want to fetch additional details about the selected place.
     }
 
-    const nodeRef = React.useRef(null)
+    const [isTyping, setIsTyping] = useState(false)
 
     return (
-        <Draggable nodeRef={nodeRef}>
-            <div ref={nodeRef} className={styles.searchFormContainer}>
+        <Draggable>
+            <div
+                className={`${styles.searchFormContainer} ${
+                    isTyping ? styles.notShaking : ''
+                }`}
+            >
                 <Combobox onSelect={handleSelect}>
                     <ComboboxInput
                         value={value.toString()}
                         onChange={(e) => {
                             setValue(e.target.value)
                             setAddress(e.target.value)
+                            setIsTyping(true)
                         }}
+                        onFocus={() => setIsTyping(true)}
+                        onBlur={() => setIsTyping(false)}
                         disabled={!ready}
                         placeholder={
                             destinationName

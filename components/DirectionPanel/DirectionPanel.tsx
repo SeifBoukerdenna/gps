@@ -22,6 +22,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 import { useSettingsContext } from '../../Contexts/SettingsContext'
+import { useDirectionContext } from '../../Contexts/DirectionContext'
 
 const DirectionPanel: React.FC = () => {
     const {
@@ -41,9 +42,13 @@ const DirectionPanel: React.FC = () => {
         isFocused,
     } = useMapContext()
 
+    const { isComparaisonPanel, setIsComparaisonPanel } = useDirectionContext()
+
+    const [isLoading, setIsLoading] = useState(false)
     const { isSettingsVisible, setIsSettingsVisible } = useSettingsContext()
 
     const handleLocateUser = () => {
+        setIsLoading(true) // Set loading state to true while fetching location
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 async (position) => {
@@ -60,13 +65,16 @@ const DirectionPanel: React.FC = () => {
                     setDepartureAddressName(nameAddressUser)
                     console.log('New Departure Address:', newPosition)
                     setIsFocused(false)
+                    setIsLoading(false) // Set loading state to false after fetching location
                 },
                 () => {
                     console.log('Geolocation permission denied or unavailable.')
+                    setIsLoading(false) // Set loading state to false if geolocation fails
                 }
             )
         } else {
             console.log('Geolocation is not supported by your browser.')
+            setIsLoading(false) // Set loading state to false if geolocation is not supported
         }
     }
 
@@ -230,7 +238,9 @@ const DirectionPanel: React.FC = () => {
                             <div className={styles.groupTop}>
                                 <button
                                     className={styles.button}
-                                    onClick={() => setIsSettingsVisible(true)}
+                                    onClick={() =>
+                                        setIsSettingsVisible(!isSettingsVisible)
+                                    }
                                 >
                                     <FontAwesomeIcon
                                         icon={faCog}
@@ -432,17 +442,31 @@ const DirectionPanel: React.FC = () => {
                             <button
                                 className={`${styles.button} ${styles.getUserLocation}`}
                                 onClick={handleLocateUser}
+                                disabled={isLoading} // Disable button while loading
                             >
-                                <FontAwesomeIcon
-                                    icon={faCompass}
-                                    className={styles.icon}
-                                />
-                                Use My Location
+                                {isLoading ? ( // Conditionally render loading icon or compass icon
+                                    <FontAwesomeIcon
+                                        icon="spinner"
+                                        spin
+                                        className={styles.icon}
+                                    />
+                                ) : (
+                                    <FontAwesomeIcon
+                                        icon={faCompass}
+                                        className={styles.icon}
+                                    />
+                                )}
+                                {isLoading
+                                    ? 'Getting Location...'
+                                    : 'Use My Location'}
+                                {/* Change button text based on loading state */}
                             </button>
+
                             <button
                                 className={`${styles.button} ${styles.setCourseButton}`}
                                 onClick={() => {
-                                    setShowQuestionsPanel(true)
+                                    // setShowQuestionsPanel(true)
+                                    setIsComparaisonPanel(true)
                                     console.log('clickeddd')
                                 }}
                             >

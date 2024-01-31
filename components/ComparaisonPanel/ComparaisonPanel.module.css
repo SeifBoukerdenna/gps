@@ -10,7 +10,7 @@
     z-index: 100;
     transition: height 0.5s ease-in-out, opacity 0.5s ease-in-out;
     font-family: 'Roboto', sans-serif;
-    color: black;
+    color:black;
     display: flex;
 }
 

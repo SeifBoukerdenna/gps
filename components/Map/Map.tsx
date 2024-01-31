@@ -66,7 +66,7 @@ const Map: React.FC = () => {
         if (directions) {
             const line = new google.maps.Polyline({
                 path: directions.overview_path,
-                strokeColor: 'black',
+                strokeColor: "#151F6D",
                 strokeOpacity: 1,
                 strokeWeight: 3,
             })

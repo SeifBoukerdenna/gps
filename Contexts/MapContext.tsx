@@ -59,7 +59,7 @@ export const MapProvider: React.FC<MapProviderProps> = ({ children }) => {
         if (savedLocation) {
             return JSON.parse(savedLocation)
         }
-        return { lat: -34.397, lng: 150.644 } // default location
+        return { lat: 45.508888, lng: -73.561668} // default location
     }
 
     const [center, setCenter] = useState<google.maps.LatLngLiteral>(

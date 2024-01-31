@@ -182,9 +182,6 @@ const ComparaisonPanel = () => {
                                         $
                                     </div>
                                 </div>
-                                <div className={styles.displayCar}>
-                                    {localStorage.getItem('favoriteCar')}
-                                </div>
                             </div>
                         )}
                     </div>

@@ -486,8 +486,8 @@ const DirectionPanel: React.FC = () => {
                     )}
                 </div>
             </Draggable>
-
-            {isSettingsVisible && <SettingsPanel />}
+          
+            {/* {isSettingsVisible && <SettingsPanel />} */}
             {/* <SettingsPanel /> */}
         </>
     )

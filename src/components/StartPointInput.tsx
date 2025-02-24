@@ -48,6 +48,13 @@ export const StartPointInput: React.FC<{
         clearSuggestions,
     } = placesProps;
 
+    // Update the value when the prop changes (from map click or settings)
+    useEffect(() => {
+        if (initialValue !== value) {
+            setValue(initialValue, false);
+        }
+    }, [initialValue, setValue]);
+
     const handleSelect = async (description: string) => {
         clearSuggestions();
         setValue(description, false);

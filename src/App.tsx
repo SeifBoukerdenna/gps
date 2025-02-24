@@ -16,14 +16,30 @@ const DEFAULT_SETTINGS: UserSettings = {
   homeAddress: 'Montreal, QC',
   favoriteAddresses: [],
   fuelPrice: 1.50,
-  darkMode: false
+  darkMode: true
 };
 
+// Local storage key
+const STORAGE_KEY = 'gps_app_settings';
+
 const App: React.FC = () => {
-  const [settings, setSettings] = useState<UserSettings>(DEFAULT_SETTINGS);
+  // Load settings from localStorage if available
+  const loadSavedSettings = (): UserSettings => {
+    try {
+      const savedSettings = localStorage.getItem(STORAGE_KEY);
+      if (savedSettings) {
+        return JSON.parse(savedSettings);
+      }
+    } catch (error) {
+      console.error('Error loading settings from localStorage:', error);
+    }
+    return DEFAULT_SETTINGS;
+  };
+
+  const [settings, setSettings] = useState<UserSettings>(loadSavedSettings());
 
   const [startPoint, setStartPoint] = useState<google.maps.LatLng | null>(null);
-  const [startAddress, setStartAddress] = useState<string>(DEFAULT_SETTINGS.homeAddress);
+  const [startAddress, setStartAddress] = useState<string>(settings.homeAddress);
 
   const [destination, setDestination] = useState<google.maps.LatLng | null>(null);
   const [destinationAddress, setDestinationAddress] = useState<string>("");
@@ -49,6 +65,28 @@ const App: React.FC = () => {
       document.body.classList.remove('dark-mode');
     }
   }, [settings.darkMode]);
+
+  // Update starting point when settings change
+  useEffect(() => {
+    setStartAddress(settings.homeAddress);
+    // Geocode the new home address
+    if (settings.homeAddress) {
+      geocodeAddress(settings.homeAddress).then(location => {
+        if (location) {
+          setStartPoint(location);
+        }
+      });
+    }
+  }, [settings.homeAddress]);
+
+  // Save settings to localStorage whenever they change
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+    } catch (error) {
+      console.error('Error saving settings to localStorage:', error);
+    }
+  }, [settings]);
 
   // Geocode an address to coordinates
   const geocodeAddress = async (address: string): Promise<google.maps.LatLng | null> => {
@@ -208,6 +246,7 @@ const App: React.FC = () => {
     setMapClickMode(false);
     setClickUsedForDestination(false);
     document.body.classList.remove('dark-mode');
+    localStorage.removeItem(STORAGE_KEY);
   };
 
   // Toggle map click mode
@@ -231,18 +270,24 @@ const App: React.FC = () => {
         onMapClick={handleMapClick}
       />
 
-      <SearchBar onSelect={handleDestinationSelect} />
-
+      {/* Reordered input fields - starting point first, then destination */}
       <StartPointInput
         initialValue={startAddress}
         onSelect={handleStartPointSelect}
       />
 
+      <SearchBar
+        value={destinationAddress}
+        onSelect={handleDestinationSelect}
+      />
+
+      {/* Reordered buttons - Map, then Info, then Settings */}
       <div className="controls">
         <ToggleButton
-          onClick={() => setShowSettings(!showSettings)}
-          icon={<Settings size={24} />}
-          label="Settings"
+          onClick={toggleMapClickMode}
+          icon={<MapPin size={24} />}
+          label="Map Click Mode"
+          className={mapClickMode ? 'active' : ''}
         />
         <ToggleButton
           onClick={() => setShowAbout(!showAbout)}
@@ -250,10 +295,9 @@ const App: React.FC = () => {
           label="About"
         />
         <ToggleButton
-          onClick={toggleMapClickMode}
-          icon={<MapPin size={24} />}
-          label="Map Click Mode"
-          className={mapClickMode ? 'active' : ''}
+          onClick={() => setShowSettings(!showSettings)}
+          icon={<Settings size={24} />}
+          label="Settings"
         />
       </div>
 

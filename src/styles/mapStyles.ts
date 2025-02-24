@@ -161,12 +161,13 @@ export const darkMapStyle = [
   },
 ];
 
+// Enhanced light map style with purple accents
 export const lightMapStyle = [
   {
     elementType: "geometry",
     stylers: [
       {
-        color: "#f5f5f5",
+        color: "#f8f8ff", // Very light purple tint
       },
     ],
   },
@@ -174,7 +175,7 @@ export const lightMapStyle = [
     elementType: "labels.icon",
     stylers: [
       {
-        visibility: "off",
+        visibility: "on",
       },
     ],
   },
@@ -182,7 +183,7 @@ export const lightMapStyle = [
     elementType: "labels.text.fill",
     stylers: [
       {
-        color: "#616161",
+        color: "#5a5a7a", // Dark purple-gray
       },
     ],
   },
@@ -199,7 +200,7 @@ export const lightMapStyle = [
     elementType: "labels.text.fill",
     stylers: [
       {
-        color: "#bdbdbd",
+        color: "#806abd", // Medium purple
       },
     ],
   },
@@ -208,7 +209,7 @@ export const lightMapStyle = [
     elementType: "geometry",
     stylers: [
       {
-        color: "#eeeeee",
+        color: "#f6f4ff", // Very light purple
       },
     ],
   },
@@ -217,7 +218,7 @@ export const lightMapStyle = [
     elementType: "labels.text.fill",
     stylers: [
       {
-        color: "#757575",
+        color: "#6b46c1", // Deep purple
       },
     ],
   },
@@ -226,7 +227,7 @@ export const lightMapStyle = [
     elementType: "geometry",
     stylers: [
       {
-        color: "#e5e5e5",
+        color: "#e6f5e9", // Light green
       },
     ],
   },
@@ -235,7 +236,7 @@ export const lightMapStyle = [
     elementType: "labels.text.fill",
     stylers: [
       {
-        color: "#9e9e9e",
+        color: "#6b9a76", // Green
       },
     ],
   },
@@ -253,7 +254,7 @@ export const lightMapStyle = [
     elementType: "labels.text.fill",
     stylers: [
       {
-        color: "#757575",
+        color: "#805ad5", // Medium purple
       },
     ],
   },
@@ -262,7 +263,7 @@ export const lightMapStyle = [
     elementType: "geometry",
     stylers: [
       {
-        color: "#dadada",
+        color: "#e9e5ff", // Very light purple
       },
     ],
   },
@@ -271,7 +272,7 @@ export const lightMapStyle = [
     elementType: "labels.text.fill",
     stylers: [
       {
-        color: "#616161",
+        color: "#6b46c1", // Deep purple
       },
     ],
   },
@@ -280,7 +281,7 @@ export const lightMapStyle = [
     elementType: "labels.text.fill",
     stylers: [
       {
-        color: "#9e9e9e",
+        color: "#9182bc", // Lavender
       },
     ],
   },
@@ -289,7 +290,7 @@ export const lightMapStyle = [
     elementType: "geometry",
     stylers: [
       {
-        color: "#e5e5e5",
+        color: "#ded9fb", // Light purple
       },
     ],
   },
@@ -298,7 +299,7 @@ export const lightMapStyle = [
     elementType: "geometry",
     stylers: [
       {
-        color: "#eeeeee",
+        color: "#e4e0fb", // Very light purple
       },
     ],
   },
@@ -307,7 +308,7 @@ export const lightMapStyle = [
     elementType: "geometry",
     stylers: [
       {
-        color: "#c9c9c9",
+        color: "#c4d8fa", // Light blue with purple tint
       },
     ],
   },
@@ -316,7 +317,7 @@ export const lightMapStyle = [
     elementType: "labels.text.fill",
     stylers: [
       {
-        color: "#9e9e9e",
+        color: "#8095ce", // Blue-purple
       },
     ],
   },

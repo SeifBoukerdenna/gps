@@ -149,18 +149,18 @@ html {
     z-index: 10;
     animation: slideInDown 0.5s ease;
     transition: all 0.3s ease;
-}
-
-.search-bar {
-    top: 20px;
-    left: 20px;
     width: 350px;
 }
+
 
 .start-point-input {
     top: 20px;
-    left: 380px;
-    width: 350px;
+    left: 20px;
+}
+
+.search-bar {
+    top: 80px;
+    left: 20px;
 }
 
 .search-bar:focus-within,
@@ -818,4 +818,553 @@ body {
 
 .dark-mode .widget-header::before {
     color: rgba(183, 148, 244, 0.3);
+}
+
+/* Enhanced Route Info Widget */
+.route-details {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.route-header {
+    background: linear-gradient(135deg, rgba(128, 90, 213, 0.2), rgba(107, 70, 193, 0.1));
+    border-radius: 10px;
+    padding: 6px;
+    margin-bottom: 8px;
+}
+
+.route-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.route-distance {
+    font-size: 24px;
+    font-weight: 700;
+    color: #805AD5;
+}
+
+.route-duration {
+    background: rgba(128, 90, 213, 0.1);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #805AD5;
+}
+
+.info-section {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 8px;
+}
+
+.info-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+}
+
+.info-row.with-divider {
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 12px 0;
+}
+
+.info-row.cost {
+    margin-top: 4px;
+}
+
+.info-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: rgba(128, 90, 213, 0.1);
+    border-radius: 50%;
+    color: #805AD5;
+}
+
+.info-icon.car {
+    background: rgba(72, 187, 120, 0.1);
+    color: #48bb78;
+}
+
+.info-icon.fuel {
+    background: rgba(66, 153, 225, 0.1);
+    color: #4299e1;
+}
+
+.info-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.info-label {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 2px;
+}
+
+.info-value {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+}
+
+.cost-value {
+    color: #805AD5;
+    font-size: 18px;
+}
+
+.alternative-routes {
+    margin-top: 8px;
+}
+
+.route-buttons-header {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    color: #805AD5;
+    margin-bottom: 12px;
+    padding-left: 4px;
+}
+
+.route-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.route-card {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 8px;
+    border: 1px solid rgba(128, 90, 213, 0.1);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.route-card:hover {
+    transform: translateX(4px);
+    background: rgba(128, 90, 213, 0.05);
+}
+
+.route-card.selected {
+    background: linear-gradient(135deg, rgba(128, 90, 213, 0.2), rgba(107, 70, 193, 0.1));
+    border-color: rgba(128, 90, 213, 0.3);
+    transform: scale(1.02);
+}
+
+.route-number {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: rgba(128, 90, 213, 0.15);
+    color: #805AD5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    margin-right: 12px;
+}
+
+.route-card.selected .route-number {
+    background: #805AD5;
+    color: white;
+}
+
+.route-card-details {
+    flex: 1;
+}
+
+.route-card-distance {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.route-card-duration {
+    font-size: 13px;
+    color: #666;
+}
+
+.route-card-icon {
+    color: #805AD5;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.route-card:hover .route-card-icon,
+.route-card.selected .route-card-icon {
+    opacity: 1;
+}
+
+/* Dark mode styles for route info */
+.dark-mode .route-distance {
+    color: #B794F4;
+}
+
+.dark-mode .route-duration {
+    background: rgba(183, 148, 244, 0.2);
+    color: #B794F4;
+}
+
+.dark-mode .info-section,
+.dark-mode .route-card {
+    background: rgba(40, 40, 60, 0.5);
+}
+
+.dark-mode .info-icon {
+    background: rgba(183, 148, 244, 0.2);
+    color: #B794F4;
+}
+
+.dark-mode .info-icon.car {
+    background: rgba(72, 187, 120, 0.2);
+}
+
+.dark-mode .info-icon.fuel {
+    background: rgba(66, 153, 225, 0.2);
+}
+
+.dark-mode .info-value {
+    color: #f0f0f0;
+}
+
+.dark-mode .info-label {
+    color: #aaa;
+}
+
+.dark-mode .cost-value {
+    color: #B794F4;
+}
+
+.dark-mode .route-buttons-header {
+    color: #B794F4;
+}
+
+.dark-mode .route-card {
+    border-color: rgba(183, 148, 244, 0.2);
+}
+
+.dark-mode .route-card:hover {
+    background: rgba(183, 148, 244, 0.1);
+}
+
+.dark-mode .route-card.selected {
+    background: linear-gradient(135deg, rgba(183, 148, 244, 0.2), rgba(128, 90, 213, 0.2));
+    border-color: rgba(183, 148, 244, 0.4);
+}
+
+.dark-mode .route-number {
+    background: rgba(183, 148, 244, 0.2);
+    color: #B794F4;
+}
+
+.dark-mode .route-card.selected .route-number {
+    background: #B794F4;
+    color: #1a1a2e;
+}
+
+.dark-mode .route-card-icon,
+.dark-mode .route-buttons-header svg {
+    color: #B794F4;
+}
+
+.dark-mode .route-card-duration {
+    color: #aaa;
+}
+
+.dark-mode .info-row.with-divider {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.about-widget {
+    width: 380px;
+}
+
+.about-tabs {
+    display: flex;
+    border-bottom: 1px solid rgba(128, 90, 213, 0.2);
+    margin-bottom: 16px;
+    padding-bottom: 2px;
+}
+
+.about-tab {
+    flex: 1;
+    padding: 10px 16px;
+    border: none;
+    background: none;
+    color: #666;
+    font-weight: 600;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.about-tab:hover {
+    color: #805AD5;
+    background: rgba(128, 90, 213, 0.05);
+}
+
+.about-tab.active {
+    color: #805AD5;
+    border-bottom: 2px solid #805AD5;
+}
+
+.about-content-wrapper {
+    height: 350px;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+
+.about-content-wrapper::-webkit-scrollbar {
+    width: 6px;
+}
+
+.about-content-wrapper::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 3px;
+}
+
+.about-content-wrapper::-webkit-scrollbar-thumb {
+    background: rgba(128, 90, 213, 0.3);
+    border-radius: 3px;
+}
+
+.about-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.about-content p {
+    margin: 0;
+    line-height: 1.6;
+}
+
+.feature-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 12px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.5);
+    transition: all 0.2s ease;
+}
+
+.feature-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(128, 90, 213, 0.1);
+}
+
+.feature-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: rgba(128, 90, 213, 0.1);
+    color: #805AD5;
+    flex-shrink: 0;
+}
+
+.feature-text h4 {
+    margin: 0 0 6px 0;
+    font-size: 16px;
+    color: #444;
+}
+
+.feature-text p {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+}
+
+/* Team section */
+.team-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.team-header h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #805AD5;
+}
+
+.school-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(128, 90, 213, 0.1);
+    color: #805AD5;
+}
+
+.team-intro {
+    margin-bottom: 16px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, rgba(128, 90, 213, 0.1), rgba(107, 70, 193, 0.05));
+}
+
+.team-member {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+    padding: 16px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.5);
+    transition: all 0.2s ease;
+}
+
+.team-member:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(128, 90, 213, 0.1);
+}
+
+.member-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #805AD5, #6B46C1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.member-initial {
+    font-size: 24px;
+    font-weight: 700;
+    color: white;
+}
+
+.member-info {
+    flex: 1;
+}
+
+.member-name {
+    margin: 0 0 2px 0;
+    font-size: 16px;
+    color: #444;
+}
+
+.member-role {
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    color: #805AD5;
+    font-weight: 600;
+}
+
+.member-description {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+    line-height: 1.5;
+}
+
+.project-info {
+    padding: 16px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.5);
+    margin-top: 8px;
+}
+
+.project-info h4 {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+    color: #444;
+}
+
+.project-info p {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    color: #666;
+    line-height: 1.5;
+}
+
+.project-info p:last-child {
+    margin-bottom: 0;
+}
+
+/* Dark mode styles */
+.dark-mode .about-tab {
+    color: #aaa;
+}
+
+.dark-mode .about-tab:hover {
+    color: #B794F4;
+    background: rgba(183, 148, 244, 0.1);
+}
+
+.dark-mode .about-tab.active {
+    color: #B794F4;
+    border-bottom-color: #B794F4;
+}
+
+.dark-mode .about-tabs {
+    border-bottom-color: rgba(183, 148, 244, 0.2);
+}
+
+.dark-mode .feature-item,
+.dark-mode .team-member,
+.dark-mode .project-info {
+    background: rgba(40, 40, 60, 0.5);
+}
+
+.dark-mode .feature-icon,
+.dark-mode .school-logo {
+    background: rgba(183, 148, 244, 0.2);
+    color: #B794F4;
+}
+
+.dark-mode .feature-text h4,
+.dark-mode .member-name,
+.dark-mode .project-info h4 {
+    color: #f0f0f0;
+}
+
+.dark-mode .feature-text p,
+.dark-mode .member-description,
+.dark-mode .project-info p {
+    color: #ccc;
+}
+
+.dark-mode .team-header h3,
+.dark-mode .member-role {
+    color: #B794F4;
+}
+
+.dark-mode .team-intro {
+    background: linear-gradient(135deg, rgba(183, 148, 244, 0.15), rgba(128, 90, 213, 0.1));
+}
+
+.dark-mode .about-content-wrapper::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.dark-mode .about-content-wrapper::-webkit-scrollbar-thumb {
+    background: rgba(183, 148, 244, 0.3);
+}
+
+.dark-mode .member-avatar {
+    background: linear-gradient(135deg, #B794F4, #805AD5);
 }

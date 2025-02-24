@@ -3,7 +3,10 @@ import React, { useEffect, useState } from 'react';
 import usePlacesAutocomplete from 'use-places-autocomplete';
 import { Search } from 'lucide-react';
 
-export const SearchBar: React.FC<{ onSelect: (address: string) => void }> = ({ onSelect }) => {
+export const SearchBar: React.FC<{
+    value?: string;
+    onSelect: (address: string) => void
+}> = ({ value = "", onSelect }) => {
     const [isPlacesApiReady, setIsPlacesApiReady] = useState(false);
 
     // Check if Google Maps Places API is loaded
@@ -34,15 +37,23 @@ export const SearchBar: React.FC<{ onSelect: (address: string) => void }> = ({ o
         requestOptions: {},
         debounce: 300,
         cache: 24 * 60 * 60,
-        initOnMount: isPlacesApiReady
+        initOnMount: isPlacesApiReady,
+        defaultValue: value
     });
 
     const {
-        value,
+        value: inputValue,
         suggestions: { status, data },
         setValue,
         clearSuggestions,
     } = placesProps;
+
+    // Update the value when the prop changes (from map click)
+    useEffect(() => {
+        if (value !== inputValue) {
+            setValue(value, false);
+        }
+    }, [value, setValue]);
 
     const handleSelect = async (description: string) => {
         clearSuggestions();
@@ -58,7 +69,7 @@ export const SearchBar: React.FC<{ onSelect: (address: string) => void }> = ({ o
                 </div>
                 <input
                     type="text"
-                    value={value}
+                    value={inputValue}
                     onChange={(e) => setValue(e.target.value)}
                     placeholder="Enter destination..."
                     className="search-input"

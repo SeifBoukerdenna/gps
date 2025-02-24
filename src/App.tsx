@@ -62,6 +62,8 @@ const App: React.FC = () => {
     return DEFAULT_SETTINGS;
   };
 
+  const [directionsError, setDirectionsError] = useState<string | null>(null);
+
   const [settings, setSettings] = useState<UserSettings>(loadSavedSettings());
 
   // Check if welcome screen has been shown before
@@ -234,37 +236,36 @@ const App: React.FC = () => {
         provideRouteAlternatives: true
       });
 
+      // Check if no route or an empty array
+      if (!result.routes || result.routes.length === 0) {
+        setDirectionsError('No possible road route could be found. Please check your addresses or try another mode.');
+        // Clear existing data
+        setDirections(null);
+        setRouteInfo(null);
+        setAlternativeRoutes([]);
+        return;
+      }
+
+      // If we got here, we do have routes
+      setDirectionsError(null); // clear any previous error
       setDirections(result);
 
-      // Build RouteInfo array
+      // Then build your RouteInfoType array as before
       const routes: RouteInfoType[] = result.routes.map((r) => {
         const distance = r.legs[0].distance?.value || 0;
         const duration = r.legs[0].duration?.text || '';
 
-        // If you want cost = 0 for electric, you can do:
-        // if (settings.car.fuelType === 'electric') {
-        //   fuelCost = 0;
-        // } else { ... }
-
-        // For simplicity, we treat .fuelConsumption as kWh/100km if electric
-        // and .fuelPrice as $/kWh.
-        // The same formula works for gas/diesel too, just a different meaning:
         const fuelCost =
           (distance / 1000) *
           (settings.car.fuelConsumption / 100) *
           settings.fuelPrice;
 
-        // CO2
         const co2Emissions = calculateCO2Emissions(
           distance,
           settings.car.fuelConsumption,
           settings.car.fuelType
         );
-
-        // Rating
         const emissionRating = getEnvironmentalImpactRating(co2Emissions);
-
-        // Trees needed
         const treeEquivalent = calculateTreeEquivalent(co2Emissions);
 
         return {
@@ -282,8 +283,14 @@ const App: React.FC = () => {
       setRouteInfo(routes[0]);
       setSelectedRouteIndex(0);
       setShowRouteInfo(true);
+
     } catch (error) {
       console.error('Error calculating route:', error);
+      setDirectionsError('Oops! Something went wrong retrieving the route.');
+      // Clear any route data
+      setDirections(null);
+      setAlternativeRoutes([]);
+      setRouteInfo(null);
     }
   };
 
@@ -513,7 +520,23 @@ const App: React.FC = () => {
         }}
       />
 
-/* In your App.tsx (or wherever you render StartPointInput & SearchBar) */
+      {/* show an error banner or overlay if directionsError is not null */}
+      {directionsError && (
+        <div className="map-error" style={{ zIndex: 2 }}>
+          <div
+            style={{
+              padding: '20px 30px',
+              borderRadius: '12px',
+              background: 'rgba(255, 0, 0, 0.1)',
+              color: '#ff0033',
+              fontWeight: 600,
+              boxShadow: '0 6px 20px rgba(255, 0, 0, 0.2)'
+            }}
+          >
+            {"Oops! Something went wrong. It looks like you tried to drive across the ocean! 🚗💨🌊 Maybe try a boat next time? 🛥️🐟"}
+          </div>
+        </div>
+      )}
 
       <div
         style={{

@@ -1368,3 +1368,44 @@ body {
 .dark-mode .member-avatar {
     background: linear-gradient(135deg, #B794F4, #805AD5);
 }
+
+/* Social Links Styles */
+.member-links {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.social-link {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 10px;
+    background: rgba(128, 90, 213, 0.1);
+    border-radius: 20px;
+    color: #805AD5;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.social-link:hover {
+    background: rgba(128, 90, 213, 0.2);
+    transform: translateY(-2px);
+}
+
+.social-link:active {
+    transform: translateY(0);
+}
+
+/* Dark mode styles */
+.dark-mode .social-link {
+    background: rgba(183, 148, 244, 0.15);
+    color: #B794F4;
+}
+
+.dark-mode .social-link:hover {
+    background: rgba(183, 148, 244, 0.25);
+}

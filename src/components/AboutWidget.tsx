@@ -1,7 +1,7 @@
 // src/components/AboutWidget.tsx
 import React, { useState } from 'react';
 import { Widget } from './Widget.tsx';
-import { Users, MapPin, Sparkles, Fuel, Moon, Code } from 'lucide-react';
+import { Users, MapPin, Sparkles, Fuel, Moon, Code, Mail, Github, Linkedin } from 'lucide-react';
 
 export const AboutWidget: React.FC<{
     visible: boolean;
@@ -101,6 +101,20 @@ export const AboutWidget: React.FC<{
                                 <p className="member-description">
                                     I like to build stuff lmfaoo
                                 </p>
+                                <div className="member-links">
+                                    <a href="mailto:elmelz6472@gmail.com" className="social-link">
+                                        <Mail size={16} />
+                                        Email
+                                    </a>
+                                    <a href="https://github.com/SeifBoukerdenna" className="social-link">
+                                        <Github size={16} />
+                                        GitHub
+                                    </a>
+                                    <a href="www.linkedin.com/in/seif-boukerdenna" className="social-link">
+                                        <Linkedin size={16} />
+                                        LinkedIn
+                                    </a>
+                                </div>
                             </div>
                         </div>
 
@@ -115,6 +129,20 @@ export const AboutWidget: React.FC<{
                                     Enthusiastic about algorithm optimization and data processing.
                                     Specialized in the fuel consumption calculations and settings functionality.
                                 </p>
+                                <div className="member-links">
+                                    <a href="mailto:student@example.com" className="social-link">
+                                        <Mail size={16} />
+                                        Email
+                                    </a>
+                                    <a href="https://github.com/username" className="social-link">
+                                        <Github size={16} />
+                                        GitHub
+                                    </a>
+                                    <a href="https://linkedin.com/in/username" className="social-link">
+                                        <Linkedin size={16} />
+                                        LinkedIn
+                                    </a>
+                                </div>
                             </div>
                         </div>
 

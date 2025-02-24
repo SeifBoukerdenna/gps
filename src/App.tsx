@@ -3,22 +3,31 @@ import React, { useState, useEffect } from 'react';
 import { UserSettings, RouteInfoType } from './types/types';
 import { Map } from './components/Map';
 import { SearchBar } from './components/SearchBar';
+import { StartPointInput } from './components/StartPointInput';
 import { SettingsWidget } from './components/SettingsWidget';
 import { AboutWidget } from './components/AboutWidget';
 import { RouteInfo } from './components/RouteInfo';
 import { ToggleButton } from './components/ToggleButton';
-import { Info, Settings } from 'lucide-react';
+import { Info, Settings, MapPin, RotateCcw, MousePointer } from 'lucide-react';
+
+// Default settings
+const DEFAULT_SETTINGS: UserSettings = {
+  car: { model: 'Toyota Corolla', fuelConsumption: 7.1 },
+  homeAddress: 'Montreal, QC',
+  favoriteAddresses: [],
+  fuelPrice: 1.50,
+  darkMode: false
+};
 
 const App: React.FC = () => {
-  const [settings, setSettings] = useState<UserSettings>({
-    car: { model: 'Toyota Corolla', fuelConsumption: 7.1 },
-    homeAddress: 'Montreal, QC',
-    favoriteAddresses: [],
-    fuelPrice: 1.50,
-    darkMode: false
-  });
+  const [settings, setSettings] = useState<UserSettings>(DEFAULT_SETTINGS);
+
+  const [startPoint, setStartPoint] = useState<google.maps.LatLng | null>(null);
+  const [startAddress, setStartAddress] = useState<string>(DEFAULT_SETTINGS.homeAddress);
 
   const [destination, setDestination] = useState<google.maps.LatLng | null>(null);
+  const [destinationAddress, setDestinationAddress] = useState<string>("");
+
   const [directions, setDirections] = useState<google.maps.DirectionsResult | null>(null);
   const [routeInfo, setRouteInfo] = useState<RouteInfoType | null>(null);
 
@@ -27,6 +36,10 @@ const App: React.FC = () => {
   const [showRouteInfo, setShowRouteInfo] = useState(false);
   const [alternativeRoutes, setAlternativeRoutes] = useState<RouteInfoType[]>([]);
   const [selectedRouteIndex, setSelectedRouteIndex] = useState(0);
+
+  // New state for map click mode
+  const [mapClickMode, setMapClickMode] = useState(false);
+  const [clickUsedForDestination, setClickUsedForDestination] = useState(false);
 
   // Apply dark mode
   useEffect(() => {
@@ -37,14 +50,14 @@ const App: React.FC = () => {
     }
   }, [settings.darkMode]);
 
-  const calculateRoute = async (address: string) => {
+  // Geocode an address to coordinates
+  const geocodeAddress = async (address: string): Promise<google.maps.LatLng | null> => {
     if (!window.google) {
       console.error('Google Maps API not loaded');
-      return;
+      return null;
     }
 
     try {
-      // First, geocode the address to get coordinates
       const geocoder = new window.google.maps.Geocoder();
       const geocodeResult = await new Promise<google.maps.GeocoderResult[]>((resolve, reject) => {
         geocoder.geocode({ address }, (results, status) => {
@@ -57,16 +70,80 @@ const App: React.FC = () => {
       });
 
       if (geocodeResult.length > 0) {
-        const location = geocodeResult[0].geometry.location;
-        setDestination(location);
+        return geocodeResult[0].geometry.location;
       }
+    } catch (error) {
+      console.error('Error geocoding address:', error);
+    }
 
-      // Then calculate route
+    return null;
+  };
+
+  // Handle destination selection from search bar
+  const handleDestinationSelect = async (address: string) => {
+    setDestinationAddress(address);
+    const location = await geocodeAddress(address);
+
+    if (location) {
+      setDestination(location);
+      calculateRoute(startAddress, address);
+    }
+  };
+
+  // Handle start point selection
+  const handleStartPointSelect = async (address: string) => {
+    setStartAddress(address);
+    const location = await geocodeAddress(address);
+
+    if (location) {
+      setStartPoint(location);
+
+      // If we have a destination, recalculate the route
+      if (destinationAddress) {
+        calculateRoute(address, destinationAddress);
+      }
+    }
+  };
+
+  // Handle map click
+  const handleMapClick = async (location: google.maps.LatLng, address: string) => {
+    if (clickUsedForDestination) {
+      // If we already used a click for destination, use this one for start point
+      setStartAddress(address);
+      setStartPoint(location);
+      setClickUsedForDestination(false);
+
+      // Calculate route if we have both points
+      if (destinationAddress) {
+        calculateRoute(address, destinationAddress);
+      }
+    } else {
+      // Use this click for destination
+      setDestinationAddress(address);
+      setDestination(location);
+      setClickUsedForDestination(true);
+
+      // Calculate route if we have a start point
+      if (startAddress) {
+        calculateRoute(startAddress, address);
+      }
+    }
+  };
+
+  // Calculate route between two addresses
+  const calculateRoute = async (start: string, end: string) => {
+    if (!window.google) {
+      console.error('Google Maps API not loaded');
+      return;
+    }
+
+    try {
+      // Calculate route
       const directionsService = new window.google.maps.DirectionsService();
 
       const result = await directionsService.route({
-        origin: settings.homeAddress || 'Montreal, QC',
-        destination: address,
+        origin: start,
+        destination: end,
         travelMode: window.google.maps.TravelMode.DRIVING,
         provideRouteAlternatives: true
       });
@@ -97,6 +174,7 @@ const App: React.FC = () => {
     }
   };
 
+  // Select an alternative route
   const selectRoute = (index: number) => {
     if (alternativeRoutes[index]) {
       setRouteInfo(alternativeRoutes[index]);
@@ -115,15 +193,50 @@ const App: React.FC = () => {
     }
   };
 
+  // Reset app to initial state
+  const resetApp = () => {
+    setSettings(DEFAULT_SETTINGS);
+    setStartPoint(null);
+    setStartAddress(DEFAULT_SETTINGS.homeAddress);
+    setDestination(null);
+    setDestinationAddress("");
+    setDirections(null);
+    setRouteInfo(null);
+    setShowRouteInfo(false);
+    setAlternativeRoutes([]);
+    setSelectedRouteIndex(0);
+    setMapClickMode(false);
+    setClickUsedForDestination(false);
+    document.body.classList.remove('dark-mode');
+  };
+
+  // Toggle map click mode
+  const toggleMapClickMode = () => {
+    setMapClickMode(!mapClickMode);
+
+    // Reset click state when turning off
+    if (mapClickMode) {
+      setClickUsedForDestination(false);
+    }
+  };
+
   return (
     <div className={settings.darkMode ? 'dark-mode' : ''}>
       <Map
         directions={directions}
         destination={destination}
+        startPoint={startPoint}
         darkMode={settings.darkMode}
+        mapClickMode={mapClickMode}
+        onMapClick={handleMapClick}
       />
 
-      <SearchBar onSelect={calculateRoute} />
+      <SearchBar onSelect={handleDestinationSelect} />
+
+      <StartPointInput
+        initialValue={startAddress}
+        onSelect={handleStartPointSelect}
+      />
 
       <div className="controls">
         <ToggleButton
@@ -136,7 +249,27 @@ const App: React.FC = () => {
           icon={<Info size={24} />}
           label="About"
         />
+        <ToggleButton
+          onClick={toggleMapClickMode}
+          icon={<MapPin size={24} />}
+          label="Map Click Mode"
+          className={mapClickMode ? 'active' : ''}
+        />
       </div>
+
+      <button onClick={resetApp} className="reset-button">
+        <RotateCcw size={18} />
+        Reset App
+      </button>
+
+      {mapClickMode && (
+        <div className={`map-click-instructions ${mapClickMode ? 'active' : ''}`}>
+          <MousePointer size={16} style={{ marginRight: '8px' }} />
+          {clickUsedForDestination
+            ? "Click on map to set the starting point"
+            : "Click on map to set the destination"}
+        </div>
+      )}
 
       <SettingsWidget
         settings={settings}
@@ -151,31 +284,15 @@ const App: React.FC = () => {
       />
 
       {routeInfo && (
-        <>
-          <RouteInfo
-            route={routeInfo}
-            car={settings.car}
-            visible={showRouteInfo}
-            onClose={() => setShowRouteInfo(false)}
-          />
-
-          {alternativeRoutes.length > 1 && (
-            <div className="widget route-alternatives">
-              <p style={{ fontWeight: 'bold', marginBottom: '8px' }}>Alternative Routes:</p>
-              <div className="route-buttons">
-                {alternativeRoutes.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => selectRoute(index)}
-                    className={`route-button ${selectedRouteIndex === index ? 'selected' : ''}`}
-                  >
-                    {index + 1}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-        </>
+        <RouteInfo
+          route={routeInfo}
+          car={settings.car}
+          visible={showRouteInfo}
+          onClose={() => setShowRouteInfo(false)}
+          alternativeRoutes={alternativeRoutes}
+          selectedRouteIndex={selectedRouteIndex}
+          onSelectRoute={selectRoute}
+        />
       )}
     </div>
   );

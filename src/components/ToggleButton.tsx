@@ -5,11 +5,12 @@ export const ToggleButton: React.FC<{
     onClick: () => void;
     icon: React.ReactNode;
     label: string;
-}> = ({ onClick, icon, label }) => {
+    className?: string;
+}> = ({ onClick, icon, label, className = '' }) => {
     return (
         <button
             onClick={onClick}
-            className="toggle-button"
+            className={`toggle-button ${className}`}
             aria-label={label}
         >
             {icon}

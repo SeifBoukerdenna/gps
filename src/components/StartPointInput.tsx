@@ -1,16 +1,19 @@
-// src/components/SearchBar.tsx
+// src/components/StartPointInput.tsx
 import React, { useEffect, useState } from 'react';
 import usePlacesAutocomplete from 'use-places-autocomplete';
-import { Search } from 'lucide-react';
+import { MapPin } from 'lucide-react';
 
-export const SearchBar: React.FC<{ onSelect: (address: string) => void }> = ({ onSelect }) => {
+export const StartPointInput: React.FC<{
+    initialValue: string;
+    onSelect: (address: string) => void
+}> = ({ initialValue, onSelect }) => {
     const [isPlacesApiReady, setIsPlacesApiReady] = useState(false);
 
     // Check if Google Maps Places API is loaded
     useEffect(() => {
         const checkGoogleMapsLoaded = () => {
             if (window.google && window.google.maps && window.google.maps.places) {
-                console.log("Google Places API is loaded");
+                console.log("Google Places API is loaded for start point");
                 setIsPlacesApiReady(true);
                 return true;
             }
@@ -34,7 +37,8 @@ export const SearchBar: React.FC<{ onSelect: (address: string) => void }> = ({ o
         requestOptions: {},
         debounce: 300,
         cache: 24 * 60 * 60,
-        initOnMount: isPlacesApiReady
+        initOnMount: isPlacesApiReady,
+        defaultValue: initialValue
     });
 
     const {
@@ -51,16 +55,16 @@ export const SearchBar: React.FC<{ onSelect: (address: string) => void }> = ({ o
     };
 
     return (
-        <div className="search-bar">
+        <div className="start-point-input">
             <div className="input-wrapper">
                 <div className="input-icon">
-                    <Search size={18} color="#805AD5" />
+                    <MapPin size={18} color="#805AD5" />
                 </div>
                 <input
                     type="text"
                     value={value}
                     onChange={(e) => setValue(e.target.value)}
-                    placeholder="Enter destination..."
+                    placeholder="Enter starting point..."
                     className="search-input"
                 />
             </div>

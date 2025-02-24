@@ -1,31 +1,105 @@
 // src/components/RouteInfo.tsx
 import React from 'react';
-import { X } from 'lucide-react';
 import { Car, RouteInfoType } from '../types/types';
+import { Widget } from './Widget.tsx';
+import { MapPin, Clock, Droplet, DollarSign } from 'lucide-react';
 
 export const RouteInfo: React.FC<{
     route: RouteInfoType;
     car: Car;
     visible: boolean;
     onClose: () => void;
-}> = ({ route, car, visible, onClose }) => {
-    if (!visible) return null;
+    alternativeRoutes?: RouteInfoType[];
+    selectedRouteIndex?: number;
+    onSelectRoute?: (index: number) => void;
+}> = ({
+    route,
+    car,
+    visible,
+    onClose,
+    alternativeRoutes = [],
+    selectedRouteIndex = 0,
+    onSelectRoute
+}) => {
+        if (!visible) return null;
 
-    return (
-        <div className="widget route-info">
-            <div className="widget-header">
-                <h2 className="widget-title">Route Information</h2>
-                <button onClick={onClose} className="close-button">
-                    <X size={24} />
-                </button>
-            </div>
+        return (
+            <Widget
+                title="Route Information"
+                onClose={onClose}
+                className="route-info"
+                defaultPosition={{ x: 20, y: window.innerHeight - 220 }}
+            >
+                <div className="route-details">
+                    <div className="info-row">
+                        <div className="info-icon">
+                            <MapPin size={18} />
+                        </div>
+                        <div className="info-content">
+                            <span className="info-label">Car:</span>
+                            <span className="info-value">{car.model}</span>
+                        </div>
+                    </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <p>Car: {car.model}</p>
-                <p>Distance: {(route.distance / 1000).toFixed(1)} km</p>
-                <p>Duration: {route.duration}</p>
-                <p>Estimated Fuel Cost: ${route.fuelCost.toFixed(2)}</p>
-            </div>
-        </div>
-    );
-};
+                    <div className="info-row">
+                        <div className="info-icon">
+                            <MapPin size={18} />
+                        </div>
+                        <div className="info-content">
+                            <span className="info-label">Distance:</span>
+                            <span className="info-value">{(route.distance / 1000).toFixed(1)} km</span>
+                        </div>
+                    </div>
+
+                    <div className="info-row">
+                        <div className="info-icon">
+                            <Clock size={18} />
+                        </div>
+                        <div className="info-content">
+                            <span className="info-label">Duration:</span>
+                            <span className="info-value">{route.duration}</span>
+                        </div>
+                    </div>
+
+                    <div className="info-row">
+                        <div className="info-icon">
+                            <Droplet size={18} />
+                        </div>
+                        <div className="info-content">
+                            <span className="info-label">Fuel Usage:</span>
+                            <span className="info-value">
+                                {((route.distance / 1000) * (car.fuelConsumption / 100)).toFixed(2)} L
+                            </span>
+                        </div>
+                    </div>
+
+                    <div className="info-row highlight">
+                        <div className="info-icon">
+                            <DollarSign size={18} />
+                        </div>
+                        <div className="info-content">
+                            <span className="info-label">Estimated Fuel Cost:</span>
+                            <span className="info-value">${route.fuelCost.toFixed(2)}</span>
+                        </div>
+                    </div>
+
+                    {alternativeRoutes.length > 1 && onSelectRoute && (
+                        <div className="alternative-routes">
+                            <div className="route-buttons-header">Alternative Routes:</div>
+                            <div className="route-buttons">
+                                {alternativeRoutes.map((_, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={() => onSelectRoute(index)}
+                                        className={`route-button ${selectedRouteIndex === index ? 'selected' : ''}`}
+                                    >
+                                        {index + 1}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </Widget>
+        );
+    };

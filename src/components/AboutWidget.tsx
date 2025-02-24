@@ -1,12 +1,13 @@
 // src/components/AboutWidget.tsx
 import React, { useState } from 'react';
 import { Widget } from './Widget.tsx';
-import { Users, MapPin, Sparkles, Fuel, Moon, Code, Mail, Github, Linkedin } from 'lucide-react';
+import { Users, MapPin, Sparkles, Fuel, Moon, Code, Mail, Github, Linkedin, Keyboard } from 'lucide-react';
 
 export const AboutWidget: React.FC<{
     visible: boolean;
     onClose: () => void;
-}> = ({ visible, onClose }) => {
+    onShowKeyboardShortcuts: () => void;
+}> = ({ visible, onClose, onShowKeyboardShortcuts }) => {
     const [activeTab, setActiveTab] = useState('app');
 
     if (!visible) return null;
@@ -33,13 +34,20 @@ export const AboutWidget: React.FC<{
                     <Users size={16} />
                     Our Team
                 </button>
+                <button
+                    className={`about-tab ${activeTab === 'shortcuts' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('shortcuts')}
+                >
+                    <Keyboard size={16} />
+                    Shortcuts
+                </button>
             </div>
 
             <div className="about-content-wrapper">
                 {activeTab === 'app' && (
                     <div className="about-content">
                         <p>
-                            Welcome to our modern GPS application! This app helps you plan your routes
+                            Welcome to RouteWise - your modern GPS application! This app helps you plan your routes
                             while considering your vehicle's fuel consumption and current gas prices.
                         </p>
 
@@ -99,7 +107,7 @@ export const AboutWidget: React.FC<{
                                 <h4 className="member-name">Seif Boukerdenna</h4>
                                 <p className="member-role">Software Engineer</p>
                                 <p className="member-description">
-                                    I like to build stuff lmfaoo
+                                    Frontend specialist with a passion for creating intuitive user interfaces.
                                 </p>
                                 <div className="member-links">
                                     <a href="mailto:elmelz6472@gmail.com" className="social-link">
@@ -110,7 +118,7 @@ export const AboutWidget: React.FC<{
                                         <Github size={16} />
                                         GitHub
                                     </a>
-                                    <a href="www.linkedin.com/in/seif-boukerdenna" className="social-link">
+                                    <a href="https://www.linkedin.com/in/seif-boukerdenna" className="social-link">
                                         <Linkedin size={16} />
                                         LinkedIn
                                     </a>
@@ -123,11 +131,11 @@ export const AboutWidget: React.FC<{
                                 <div className="member-initial">D</div>
                             </div>
                             <div className="member-info">
-                                <h4 className="member-name">[Student Name]</h4>
+                                <h4 className="member-name">[Team Member]</h4>
                                 <p className="member-role">Software Engineer</p>
                                 <p className="member-description">
                                     Enthusiastic about algorithm optimization and data processing.
-                                    Specialized in the fuel consumption calculations and settings functionality.
+                                    Specialized in the fuel consumption calculations and route optimization.
                                 </p>
                                 <div className="member-links">
                                     <a href="mailto:student@example.com" className="social-link">
@@ -158,6 +166,52 @@ export const AboutWidget: React.FC<{
                                 Feel free to reach out if you have any questions or suggestions!
                             </p>
                         </div>
+                    </div>
+                )}
+
+                {activeTab === 'shortcuts' && (
+                    <div className="about-content shortcuts-overview">
+                        <p>
+                            RouteWise includes a comprehensive set of keyboard shortcuts to enhance your experience.
+                            Press <span className="inline-key">?</span> anywhere in the app to view the complete shortcuts guide.
+                        </p>
+
+                        <div className="shortcut-highlights">
+                            <div className="shortcut-highlight-item">
+                                <h4>Navigation</h4>
+                                <ul>
+                                    <li><span className="inline-key">M</span> - Toggle map click mode</li>
+                                    <li><span className="inline-key">H</span> - Set home as starting point</li>
+                                    <li><span className="inline-key">F</span> - Focus destination search</li>
+                                </ul>
+                            </div>
+
+                            <div className="shortcut-highlight-item">
+                                <h4>Interface</h4>
+                                <ul>
+                                    <li><span className="inline-key">D</span> - Toggle dark mode</li>
+                                    <li><span className="inline-key">S</span> - Open settings</li>
+                                    <li><span className="inline-key">Esc</span> - Close panels</li>
+                                </ul>
+                            </div>
+
+                            <div className="shortcut-highlight-item">
+                                <h4>Routes</h4>
+                                <ul>
+                                    <li><span className="inline-key">1-3</span> - Select routes</li>
+                                    <li><span className="inline-key">C</span> - Calculate route</li>
+                                    <li><span className="inline-key">I</span> - Toggle route info</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <button
+                            className="view-all-shortcuts-btn"
+                            onClick={onShowKeyboardShortcuts}
+                        >
+                            <Keyboard size={16} />
+                            View All Shortcuts
+                        </button>
                     </div>
                 )}
             </div>

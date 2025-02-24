@@ -98,7 +98,7 @@ export const SettingsWidget: React.FC<{
                     />
                 </div>
 
-                <div className="form-group checkbox-group">
+                {/* <div className="form-group checkbox-group">
                     <input
                         type="checkbox"
                         id="darkMode"
@@ -110,7 +110,7 @@ export const SettingsWidget: React.FC<{
                         className="checkbox-input"
                     />
                     <label htmlFor="darkMode">Dark Mode</label>
-                </div>
+                </div> */}
 
                 <button
                     type="submit"

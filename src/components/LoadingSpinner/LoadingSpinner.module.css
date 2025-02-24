@@ -1,11 +1,33 @@
 /* src/components/LoadingSpinner.module.css */
+.loadingContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
 .loadingSpinner {
-    border: 4px solid rgba(0, 0, 0, 0.1);
-    width: 36px;
-    height: 36px;
+    border: 4px solid rgba(128, 90, 213, 0.1);
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
-    border-left-color: #09f;
-    animation: spin 1s linear infinite;
+    border-left-color: #805AD5;
+    animation: spin 1.2s linear infinite;
+}
+
+.loadingText {
+    font-size: 18px;
+    font-weight: 600;
+    color: #805AD5;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.loadingLogo {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 15px;
+    animation: bounce 2s ease infinite;
 }
 
 @keyframes spin {
@@ -18,7 +40,42 @@
     }
 }
 
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+}
+
+@keyframes bounce {
+
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+        transform: translateY(0);
+    }
+
+    40% {
+        transform: translateY(-20px);
+    }
+
+    60% {
+        transform: translateY(-10px);
+    }
+}
+
 .dark .loadingSpinner {
-    border: 4px solid rgba(255, 255, 255, 0.1);
-    border-left-color: #09f;
+    border: 4px solid rgba(183, 148, 244, 0.2);
+    border-left-color: #B794F4;
+}
+
+.dark .loadingText {
+    color: #B794F4;
 }

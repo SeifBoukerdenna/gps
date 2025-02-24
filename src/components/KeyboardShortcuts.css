@@ -1,0 +1,111 @@
+/* src/components/KeyboardShortcuts.css */
+.keyboard-shortcuts-widget {
+    width: 380px;
+    max-height: 80vh;
+}
+
+.shortcuts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    max-height: 60vh;
+    overflow-y: auto;
+    padding-right: 12px;
+}
+
+.shortcuts-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.shortcuts-list::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 3px;
+}
+
+.shortcuts-list::-webkit-scrollbar-thumb {
+    background: rgba(128, 90, 213, 0.3);
+    border-radius: 3px;
+}
+
+.shortcut-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.shortcut-group-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #805AD5;
+    margin: 0;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(128, 90, 213, 0.2);
+}
+
+.shortcut-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.shortcut-item:hover {
+    background-color: rgba(128, 90, 213, 0.06);
+}
+
+.key-combo {
+    display: flex;
+    gap: 5px;
+    min-width: 80px;
+}
+
+.key {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f5f3ff;
+    border: 1px solid rgba(128, 90, 213, 0.3);
+    border-radius: 4px;
+    padding: 3px 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #805AD5;
+    min-width: 18px;
+    box-shadow: 0 2px 0 rgba(128, 90, 213, 0.2);
+}
+
+.shortcut-description {
+    font-size: 14px;
+    color: #333;
+}
+
+/* Dark mode styles */
+.dark-mode .shortcut-group-title {
+    color: #B794F4;
+    border-bottom-color: rgba(183, 148, 244, 0.2);
+}
+
+.dark-mode .shortcuts-list::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.dark-mode .shortcuts-list::-webkit-scrollbar-thumb {
+    background: rgba(183, 148, 244, 0.3);
+}
+
+.dark-mode .shortcut-item:hover {
+    background-color: rgba(183, 148, 244, 0.1);
+}
+
+.dark-mode .key {
+    background-color: #2D2B42;
+    border-color: rgba(183, 148, 244, 0.4);
+    color: #B794F4;
+    box-shadow: 0 2px 0 rgba(183, 148, 244, 0.3);
+}
+
+.dark-mode .shortcut-description {
+    color: #f0f0f0;
+}

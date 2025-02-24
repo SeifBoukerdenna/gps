@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 // src/App.tsx
 import React, { useState, useEffect } from 'react';
 import { UserSettings, RouteInfoType } from './types/types';
@@ -8,7 +9,12 @@ import { SettingsWidget } from './components/SettingsWidget';
 import { AboutWidget } from './components/AboutWidget';
 import { RouteInfo } from './components/RouteInfo';
 import { ToggleButton } from './components/ToggleButton';
-import { Info, Settings, MapPin, RotateCcw, MousePointer } from 'lucide-react';
+import { TipBanner } from './components/TipBanner';
+import { WelcomeSplash } from './components/WelcomeSplash';
+import { KeyboardShortcuts } from './components/KeyboardShortcuts';
+import { Info, Settings, MapPin, RotateCcw, MousePointer, Keyboard, Sun, Moon } from 'lucide-react';
+import "./components/KeyboardShortcuts.css"
+
 
 // Default settings
 const DEFAULT_SETTINGS: UserSettings = {
@@ -19,8 +25,10 @@ const DEFAULT_SETTINGS: UserSettings = {
   darkMode: true
 };
 
-// Local storage key
+// Local storage keys
 const STORAGE_KEY = 'gps_app_settings';
+const WELCOME_SHOWN_KEY = 'gps_welcome_shown';
+const TIPS_DISMISSED_KEY = 'routewise_tips_dismissed';
 
 const App: React.FC = () => {
   // Load settings from localStorage if available
@@ -38,6 +46,16 @@ const App: React.FC = () => {
 
   const [settings, setSettings] = useState<UserSettings>(loadSavedSettings());
 
+  // Check if welcome screen has been shown before
+  const [showWelcome, setShowWelcome] = useState(() => {
+    return !localStorage.getItem(WELCOME_SHOWN_KEY);
+  });
+
+  // State for tips visibility
+  const [showTip, setShowTip] = useState(() => {
+    return !localStorage.getItem(TIPS_DISMISSED_KEY);
+  });
+
   const [startPoint, setStartPoint] = useState<google.maps.LatLng | null>(null);
   const [startAddress, setStartAddress] = useState<string>(settings.homeAddress);
 
@@ -53,9 +71,12 @@ const App: React.FC = () => {
   const [alternativeRoutes, setAlternativeRoutes] = useState<RouteInfoType[]>([]);
   const [selectedRouteIndex, setSelectedRouteIndex] = useState(0);
 
-  // New state for map click mode
+  // State for map click mode
   const [mapClickMode, setMapClickMode] = useState(false);
   const [clickUsedForDestination, setClickUsedForDestination] = useState(false);
+
+  // State for keyboard shortcuts panel
+  const [showKeyboardShortcuts, setShowKeyboardShortcuts] = useState(false);
 
   // Apply dark mode
   useEffect(() => {
@@ -87,6 +108,24 @@ const App: React.FC = () => {
       console.error('Error saving settings to localStorage:', error);
     }
   }, [settings]);
+
+  // Handle welcome screen close
+  const handleWelcomeClose = () => {
+    setShowWelcome(false);
+    // Remember that the welcome screen has been shown
+    localStorage.setItem(WELCOME_SHOWN_KEY, 'true');
+  };
+
+  // Toggle tips visibility
+  const toggleTips = () => {
+    const newState = !showTip;
+    setShowTip(newState);
+    if (!newState) {
+      localStorage.setItem(TIPS_DISMISSED_KEY, 'true');
+    } else {
+      localStorage.removeItem(TIPS_DISMISSED_KEY);
+    }
+  };
 
   // Geocode an address to coordinates
   const geocodeAddress = async (address: string): Promise<google.maps.LatLng | null> => {
@@ -141,6 +180,21 @@ const App: React.FC = () => {
         calculateRoute(address, destinationAddress);
       }
     }
+  };
+
+  // Set home as starting point
+  const setHomeAsStart = () => {
+    setStartAddress(settings.homeAddress);
+    geocodeAddress(settings.homeAddress).then(location => {
+      if (location) {
+        setStartPoint(location);
+
+        // Recalculate route if we have a destination
+        if (destinationAddress) {
+          calculateRoute(settings.homeAddress, destinationAddress);
+        }
+      }
+    });
   };
 
   // Handle map click
@@ -212,6 +266,13 @@ const App: React.FC = () => {
     }
   };
 
+  // Trigger route calculation manually (for keyboard shortcut)
+  const triggerRouteCalculation = () => {
+    if (startAddress && destinationAddress) {
+      calculateRoute(startAddress, destinationAddress);
+    }
+  };
+
   // Select an alternative route
   const selectRoute = (index: number) => {
     if (alternativeRoutes[index]) {
@@ -259,8 +320,153 @@ const App: React.FC = () => {
     }
   };
 
+  // Toggle dark mode
+  const toggleDarkMode = () => {
+    setSettings({
+      ...settings,
+      darkMode: !settings.darkMode
+    });
+  };
+
+  // Toggle settings widget
+  const toggleSettings = () => {
+    setShowSettings(!showSettings);
+    if (showAbout) setShowAbout(false);
+    if (showKeyboardShortcuts) setShowKeyboardShortcuts(false);
+  };
+
+  // Toggle about widget
+  const toggleAbout = () => {
+    setShowAbout(!showAbout);
+    if (showSettings) setShowSettings(false);
+    if (showKeyboardShortcuts) setShowKeyboardShortcuts(false);
+  };
+
+  // Toggle route info widget
+  const toggleRouteInfo = () => {
+    if (routeInfo) {
+      setShowRouteInfo(!showRouteInfo);
+    }
+  };
+
+  // Toggle keyboard shortcuts widget
+  const toggleKeyboardShortcuts = () => {
+    setShowKeyboardShortcuts(!showKeyboardShortcuts);
+    if (showSettings) setShowSettings(false);
+    if (showAbout) setShowAbout(false);
+  };
+
+  // Close all panels
+  const closeAllPanels = () => {
+    if (showSettings) setShowSettings(false);
+    if (showAbout) setShowAbout(false);
+    if (showKeyboardShortcuts) setShowKeyboardShortcuts(false);
+    if (showRouteInfo) setShowRouteInfo(false);
+  };
+
+  // Focus search inputs
+  const focusDestinationSearch = () => {
+    const destinationInput = document.querySelector('.search-bar input') as HTMLInputElement;
+    if (destinationInput) destinationInput.focus();
+  };
+
+  const focusStartPointSearch = () => {
+    const startPointInput = document.querySelector('.start-point-input input') as HTMLInputElement;
+    if (startPointInput) startPointInput.focus();
+  };
+
+  // Set up keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't trigger shortcuts when typing in form fields
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
+        return;
+      }
+
+      const key = e.key.toLowerCase();
+
+      switch (key) {
+        case 's':
+          toggleSettings();
+          break;
+
+        case 'a':
+          toggleAbout();
+          break;
+
+        case 'm':
+          toggleMapClickMode();
+          break;
+
+        case 'd':
+          toggleDarkMode();
+          break;
+
+        case 'h':
+          setHomeAsStart();
+          break;
+
+        case 'r':
+          resetApp();
+          break;
+
+        case 'escape':
+          closeAllPanels();
+          break;
+
+        case '?':
+          toggleKeyboardShortcuts();
+          break;
+
+        case 'f':
+          if (e.shiftKey) {
+            // Focus start point search
+            focusStartPointSearch();
+          } else {
+            // Focus destination search
+            focusDestinationSearch();
+          }
+          break;
+
+        case '1':
+        case '2':
+        case '3':
+          {
+            const routeIndex = parseInt(key) - 1;
+            if (alternativeRoutes.length > routeIndex) {
+              selectRoute(routeIndex);
+            }
+            break;
+          }
+
+        case 'c':
+          triggerRouteCalculation();
+          break;
+
+        case 'i':
+          toggleRouteInfo();
+          break;
+
+        case 't':
+          toggleTips();
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [
+    toggleSettings, toggleAbout, toggleMapClickMode, toggleDarkMode,
+    setHomeAsStart, resetApp, toggleKeyboardShortcuts,
+    focusDestinationSearch, focusStartPointSearch,
+    alternativeRoutes, toggleRouteInfo, toggleTips
+  ]);
+
   return (
     <div className={settings.darkMode ? 'dark-mode' : ''}>
+      {/* Welcome Splash Screen */}
+      {showWelcome && <WelcomeSplash onClose={handleWelcomeClose} />}
+
       <Map
         directions={directions}
         destination={destination}
@@ -270,7 +476,7 @@ const App: React.FC = () => {
         onMapClick={handleMapClick}
       />
 
-      {/* Reordered input fields - starting point first, then destination */}
+      {/* Input fields - starting point first, then destination */}
       <StartPointInput
         initialValue={startAddress}
         onSelect={handleStartPointSelect}
@@ -281,7 +487,10 @@ const App: React.FC = () => {
         onSelect={handleDestinationSelect}
       />
 
-      {/* Reordered buttons - Map, then Info, then Settings */}
+      {/* Tip Banner */}
+      {showTip && <TipBanner />}
+
+      {/* Control buttons */}
       <div className="controls">
         <ToggleButton
           onClick={toggleMapClickMode}
@@ -290,14 +499,27 @@ const App: React.FC = () => {
           className={mapClickMode ? 'active' : ''}
         />
         <ToggleButton
-          onClick={() => setShowAbout(!showAbout)}
+          onClick={toggleAbout}
           icon={<Info size={24} />}
           label="About"
+          className={showAbout ? 'active' : ''}
         />
         <ToggleButton
-          onClick={() => setShowSettings(!showSettings)}
+          onClick={toggleSettings}
           icon={<Settings size={24} />}
           label="Settings"
+          className={showSettings ? 'active' : ''}
+        />
+        <ToggleButton
+          onClick={toggleDarkMode}
+          icon={settings.darkMode ? <Sun size={24} /> : <Moon size={24} />}
+          label={settings.darkMode ? "Light Mode" : "Dark Mode"}
+        />
+        <ToggleButton
+          onClick={toggleKeyboardShortcuts}
+          icon={<Keyboard size={24} />}
+          label="Keyboard Shortcuts"
+          className={showKeyboardShortcuts ? 'active' : ''}
         />
       </div>
 
@@ -315,6 +537,7 @@ const App: React.FC = () => {
         </div>
       )}
 
+      {/* Widgets */}
       <SettingsWidget
         settings={settings}
         onUpdate={setSettings}
@@ -325,6 +548,12 @@ const App: React.FC = () => {
       <AboutWidget
         visible={showAbout}
         onClose={() => setShowAbout(false)}
+        onShowKeyboardShortcuts={toggleKeyboardShortcuts}
+      />
+
+      <KeyboardShortcuts
+        visible={showKeyboardShortcuts}
+        onClose={() => setShowKeyboardShortcuts(false)}
       />
 
       {routeInfo && (

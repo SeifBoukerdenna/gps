@@ -1,11 +1,11 @@
 // src/types/types.ts
-export interface Car {
+export interface CarType {
   model: string;
   fuelConsumption: number; // L/100km
 }
 
 export interface UserSettings {
-  car: Car;
+  car: CarType;
   homeAddress: string;
   favoriteAddresses: string[];
   fuelPrice: number;

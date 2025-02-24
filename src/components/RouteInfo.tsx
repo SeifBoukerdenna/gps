@@ -1,12 +1,12 @@
 // src/components/RouteInfo.tsx
 import React from 'react';
-import { Car, RouteInfoType } from '../types/types';
+import { CarType, RouteInfoType } from '../types/types';
 import { Widget } from './Widget.tsx';
-import { MapPin, Droplet, DollarSign, Navigation, ChevronRight } from 'lucide-react';
+import { Droplet, DollarSign, Navigation, ChevronRight, Car, } from 'lucide-react';
 
 export const RouteInfo: React.FC<{
     route: RouteInfoType;
-    car: Car;
+    car: CarType;
     visible: boolean;
     onClose: () => void;
     alternativeRoutes?: RouteInfoType[];
@@ -46,7 +46,7 @@ export const RouteInfo: React.FC<{
                     <div className="info-section">
                         <div className="info-row">
                             <div className="info-icon car">
-                                <MapPin size={18} />
+                                <Car size={18} />
                             </div>
                             <div className="info-content">
                                 <span className="info-value">{car.model}</span>

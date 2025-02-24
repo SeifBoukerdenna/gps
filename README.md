@@ -1,92 +1,50 @@
+# React + TypeScript + Vite
 
-# GPS React App with Google Maps Integration
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## Introduction
+Currently, two official plugins are available:
 
-This repository contains a GPS application built with React and integrated with Google Maps. The app allows users to search for schools, visualize their location on the map, and calculate distances from randomly generated houses.
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Getting Started
+## Expanding the ESLint configuration
 
-### Prerequisites
+If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
 
-Make sure you have [Node.js](https://nodejs.org/) and [npm](https://www.npmjs.com/) installed on your machine.
+- Configure the top-level `parserOptions` property like this:
 
-### Installation
-
-1. Clone the repository:
-
-``` bash
-git clone https://github.com/elmelz6472/gps.git
+```js
+export default tseslint.config({
+  languageOptions: {
+    // other options...
+    parserOptions: {
+      project: ['./tsconfig.node.json', './tsconfig.app.json'],
+      tsconfigRootDir: import.meta.dirname,
+    },
+  },
+})
 ```
 
-2. Navigate to the project directory:
+- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
+- Optionally add `...tseslint.configs.stylisticTypeChecked`
+- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
 
-``` bash
-cd gps
+```js
+// eslint.config.js
+import react from 'eslint-plugin-react'
+
+export default tseslint.config({
+  // Set the react version
+  settings: { react: { version: '18.3' } },
+  plugins: {
+    // Add the react plugin
+    react,
+  },
+  rules: {
+    // other rules...
+    // Enable its recommended rules
+    ...react.configs.recommended.rules,
+    ...react.configs['jsx-runtime'].rules,
+  },
+})
 ```
-
-3. Install dependencies:
-
-``` bash
-npm install
-```
-
-### Running the App
-
-Run the development server:
-
-``` bash
-npm run dev
-```
-
-Open your browser and navigate to [http://localhost:3000](http://localhost:3000/) to view the app.
-
-## Screenshots
-
-<!-- Add screenshots here -->
-
-Base page
-
-![Landing page](pictures/base-min.png)
-
-Clusters with markers and Locations
-
-![App page](pictures/app-min.png)
-
-Directions (only drive)
-
-![Direction](pictures/drive-min.png)
-
-## Project Structure
-
-- Most files are for typescript/next/configs, actual source code is located in the components directory and pages directory
-
-- `components/distance.tsx`: Displays distance information.
-
-- `components/map.tsx`: Main map component.
-
-- `components/places.tsx`: Handles school search functionality.
-
-- `googleMapIds.json`: Lists of different google map ids for hot reloading.
-
-## Environment variables
-
-- Create a .env.local file at the root base of the project and assign your api key to `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY="XXXXXXXXXXXXXXXXXX"`
-
-- Optionally use your own map for styling through `NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID="XXXXXXX`
-
-## TODOs
-
-- Implement multiple modes of transit.
-
-- Better maps.
-
-- Lots more features.
-
-- Improve UI/UX.
-
-- Add tests for components.
-
-- Enhance error handling.
-
-- Optimize code for production.

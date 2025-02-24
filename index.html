@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modern GPS App</title>
+  <!-- Explicitly load Google Maps with Places API before the app script runs -->
+  <script>
+    function initGoogleMapsScript() {
+      console.log("Loading Google Maps API script...");
+    }
+  </script>
+  <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBq8xfUPRMt0k9w-8pBglhqHQ_xf4nZcLM&libraries=places&callback=initGoogleMapsScript">
+    </script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
+</html>

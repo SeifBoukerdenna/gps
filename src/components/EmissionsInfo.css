@@ -1,0 +1,215 @@
+/* src/components/EmissionsInfo.css */
+.emissions-info {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 16px;
+    border: 1px solid rgba(128, 90, 213, 0.1);
+    transition: all 0.3s ease;
+}
+
+.emissions-info:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(76, 175, 80, 0.1);
+}
+
+.emissions-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.emissions-icon {
+    color: #4caf50;
+    margin-right: 8px;
+}
+
+.emissions-title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #4caf50;
+}
+
+.emissions-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.emission-rating-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.emission-rating {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 16px;
+    color: white;
+    margin-bottom: 4px;
+}
+
+.rating-label {
+    font-size: 12px;
+    color: #666;
+}
+
+.emissions-details {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.emission-detail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+}
+
+.detail-value {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+}
+
+.detail-label {
+    font-size: 12px;
+    color: #666;
+    text-align: center;
+    margin-top: 4px;
+}
+
+.tree-equivalent {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #4caf50;
+}
+
+.eco-tip {
+    background: rgba(255, 152, 0, 0.1);
+    border-radius: 8px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #ff9800;
+}
+
+.eco-tip svg {
+    flex-shrink: 0;
+}
+
+/* Dark mode styles */
+.dark-mode .emissions-info {
+    background: rgba(40, 40, 60, 0.7);
+    border-color: rgba(183, 148, 244, 0.2);
+}
+
+.dark-mode .emissions-title {
+    color: #81c784;
+}
+
+.dark-mode .emissions-icon {
+    color: #81c784;
+}
+
+.dark-mode .rating-label,
+.dark-mode .detail-label {
+    color: #aaa;
+}
+
+.dark-mode .detail-value {
+    color: #f0f0f0;
+}
+
+.dark-mode .tree-equivalent {
+    color: #81c784;
+}
+
+.dark-mode .eco-tip {
+    background: rgba(255, 152, 0, 0.15);
+    color: #ffb74d;
+}
+
+/* Emissions comparison table styles */
+.emissions-comparison {
+    margin-top: 16px;
+}
+
+.comparison-header {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #4caf50;
+}
+
+.route-comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.route-comparison-table th {
+    text-align: left;
+    padding: 8px;
+    background: rgba(76, 175, 80, 0.1);
+    color: #333;
+    font-weight: 600;
+}
+
+.route-comparison-table td {
+    padding: 8px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.route-comparison-table tr.selected {
+    background: rgba(76, 175, 80, 0.05);
+}
+
+.route-comparison-table .rating-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.route-comparison-table .rating-badge {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 12px;
+    color: white;
+}
+
+.dark-mode .comparison-header {
+    color: #81c784;
+}
+
+.dark-mode .route-comparison-table th {
+    background: rgba(76, 175, 80, 0.15);
+    color: #f0f0f0;
+}
+
+.dark-mode .route-comparison-table td {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+    color: #e0e0e0;
+}
+
+.dark-mode .route-comparison-table tr.selected {
+    background: rgba(76, 175, 80, 0.1);
+}

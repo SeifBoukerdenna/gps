@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-// src/App.tsx
 import React, { useState, useEffect } from 'react';
 import { UserSettings, RouteInfoType } from './types/types';
 import { Map } from './components/Map';
@@ -12,20 +10,40 @@ import { ToggleButton } from './components/ToggleButton';
 import { TipBanner } from './components/TipBanner';
 import { WelcomeSplash } from './components/WelcomeSplash';
 import { KeyboardShortcuts } from './components/KeyboardShortcuts';
-import { Info, Settings, MapPin, RotateCcw, MousePointer, Keyboard, Sun, Moon } from 'lucide-react';
-import "./components/KeyboardShortcuts.css"
+import {
+  Info,
+  Settings,
+  MapPin,
+  RotateCcw,
+  MousePointer,
+  Keyboard,
+  Sun,
+  Moon
+} from 'lucide-react';
 
+// Emissions & route calculation utilities
+import {
+  calculateCO2Emissions,
+  calculateTreeEquivalent,
+  getEnvironmentalImpactRating
+} from './utils/emissionsUtils';
 
-// Default settings
+import "./components/KeyboardShortcuts.css";
+import "./components/EmissionsInfo.css";
+
 const DEFAULT_SETTINGS: UserSettings = {
-  car: { model: 'Toyota Corolla', fuelConsumption: 7.1 },
+  car: {
+    model: 'Toyota Corolla',
+    fuelConsumption: 7.1, // L/100km or kWh/100km
+    fuelType: 'gasoline'
+  },
   homeAddress: 'Montreal, QC',
   favoriteAddresses: [],
-  fuelPrice: 1.50,
-  darkMode: true
+  fuelPrice: 1.5,
+  darkMode: false,
+  showEmissions: true
 };
 
-// Local storage keys
 const STORAGE_KEY = 'gps_app_settings';
 const WELCOME_SHOWN_KEY = 'gps_welcome_shown';
 const TIPS_DISMISSED_KEY = 'routewise_tips_dismissed';
@@ -51,7 +69,7 @@ const App: React.FC = () => {
     return !localStorage.getItem(WELCOME_SHOWN_KEY);
   });
 
-  // State for tips visibility
+  // Tips visibility
   const [showTip, setShowTip] = useState(() => {
     return !localStorage.getItem(TIPS_DISMISSED_KEY);
   });
@@ -60,7 +78,7 @@ const App: React.FC = () => {
   const [startAddress, setStartAddress] = useState<string>(settings.homeAddress);
 
   const [destination, setDestination] = useState<google.maps.LatLng | null>(null);
-  const [destinationAddress, setDestinationAddress] = useState<string>("");
+  const [destinationAddress, setDestinationAddress] = useState<string>('');
 
   const [directions, setDirections] = useState<google.maps.DirectionsResult | null>(null);
   const [routeInfo, setRouteInfo] = useState<RouteInfoType | null>(null);
@@ -71,14 +89,14 @@ const App: React.FC = () => {
   const [alternativeRoutes, setAlternativeRoutes] = useState<RouteInfoType[]>([]);
   const [selectedRouteIndex, setSelectedRouteIndex] = useState(0);
 
-  // State for map click mode
+  // Map click mode
   const [mapClickMode, setMapClickMode] = useState(false);
   const [clickUsedForDestination, setClickUsedForDestination] = useState(false);
 
-  // State for keyboard shortcuts panel
+  // Keyboard shortcuts panel
   const [showKeyboardShortcuts, setShowKeyboardShortcuts] = useState(false);
 
-  // Apply dark mode
+  // Dark mode
   useEffect(() => {
     if (settings.darkMode) {
       document.body.classList.add('dark-mode');
@@ -87,12 +105,11 @@ const App: React.FC = () => {
     }
   }, [settings.darkMode]);
 
-  // Update starting point when settings change
+  // Geocode the user's home address (start point) whenever settings.homeAddress changes
   useEffect(() => {
     setStartAddress(settings.homeAddress);
-    // Geocode the new home address
     if (settings.homeAddress) {
-      geocodeAddress(settings.homeAddress).then(location => {
+      geocodeAddress(settings.homeAddress).then((location) => {
         if (location) {
           setStartPoint(location);
         }
@@ -109,31 +126,39 @@ const App: React.FC = () => {
     }
   }, [settings]);
 
+  // If we have an existing route, recalculate it when settings change (like consumption or fuelType)
+  // so that route widget auto-updates.
+  const handleSettingsUpdate = (newSettings: UserSettings) => {
+    setSettings(newSettings);
+    // If we already have a route displayed, recalc
+    if (startAddress && destinationAddress) {
+      calculateRoute(startAddress, destinationAddress);
+    }
+  };
+
   // Handle welcome screen close
   const handleWelcomeClose = () => {
     setShowWelcome(false);
-    // Remember that the welcome screen has been shown
     localStorage.setItem(WELCOME_SHOWN_KEY, 'true');
   };
 
-  // Toggle tips visibility
+  // Toggle tips
   const toggleTips = () => {
-    const newState = !showTip;
-    setShowTip(newState);
-    if (!newState) {
+    const newVal = !showTip;
+    setShowTip(newVal);
+    if (!newVal) {
       localStorage.setItem(TIPS_DISMISSED_KEY, 'true');
     } else {
       localStorage.removeItem(TIPS_DISMISSED_KEY);
     }
   };
 
-  // Geocode an address to coordinates
+  // Geocode a given address
   const geocodeAddress = async (address: string): Promise<google.maps.LatLng | null> => {
     if (!window.google) {
       console.error('Google Maps API not loaded');
       return null;
     }
-
     try {
       const geocoder = new window.google.maps.Geocoder();
       const geocodeResult = await new Promise<google.maps.GeocoderResult[]>((resolve, reject) => {
@@ -145,37 +170,31 @@ const App: React.FC = () => {
           }
         });
       });
-
       if (geocodeResult.length > 0) {
         return geocodeResult[0].geometry.location;
       }
     } catch (error) {
       console.error('Error geocoding address:', error);
     }
-
     return null;
   };
 
-  // Handle destination selection from search bar
+  // Destination selection
   const handleDestinationSelect = async (address: string) => {
     setDestinationAddress(address);
     const location = await geocodeAddress(address);
-
     if (location) {
       setDestination(location);
       calculateRoute(startAddress, address);
     }
   };
 
-  // Handle start point selection
+  // Start point selection
   const handleStartPointSelect = async (address: string) => {
     setStartAddress(address);
     const location = await geocodeAddress(address);
-
     if (location) {
       setStartPoint(location);
-
-      // If we have a destination, recalculate the route
       if (destinationAddress) {
         calculateRoute(address, destinationAddress);
       }
@@ -185,11 +204,9 @@ const App: React.FC = () => {
   // Set home as starting point
   const setHomeAsStart = () => {
     setStartAddress(settings.homeAddress);
-    geocodeAddress(settings.homeAddress).then(location => {
+    geocodeAddress(settings.homeAddress).then((location) => {
       if (location) {
         setStartPoint(location);
-
-        // Recalculate route if we have a destination
         if (destinationAddress) {
           calculateRoute(settings.homeAddress, destinationAddress);
         }
@@ -197,42 +214,19 @@ const App: React.FC = () => {
     });
   };
 
-  // Handle map click
-  const handleMapClick = async (location: google.maps.LatLng, address: string) => {
-    if (clickUsedForDestination) {
-      // If we already used a click for destination, use this one for start point
-      setStartAddress(address);
-      setStartPoint(location);
-      setClickUsedForDestination(false);
-
-      // Calculate route if we have both points
-      if (destinationAddress) {
-        calculateRoute(address, destinationAddress);
-      }
-    } else {
-      // Use this click for destination
-      setDestinationAddress(address);
-      setDestination(location);
-      setClickUsedForDestination(true);
-
-      // Calculate route if we have a start point
-      if (startAddress) {
-        calculateRoute(startAddress, address);
-      }
-    }
-  };
-
-  // Calculate route between two addresses
-  const calculateRoute = async (start: string, end: string) => {
+  // Calculate route
+  const calculateRoute = async (
+    start: string | null,
+    end: string | null
+  ) => {
     if (!window.google) {
       console.error('Google Maps API not loaded');
       return;
     }
+    if (!start || !end) return;
 
     try {
-      // Calculate route
       const directionsService = new window.google.maps.DirectionsService();
-
       const result = await directionsService.route({
         origin: start,
         destination: end,
@@ -242,17 +236,44 @@ const App: React.FC = () => {
 
       setDirections(result);
 
-      // Process main and alternative routes
-      const routes: RouteInfoType[] = result.routes.map(route => {
-        const distance = route.legs[0].distance?.value || 0;
-        const duration = route.legs[0].duration?.text || '';
+      // Build RouteInfo array
+      const routes: RouteInfoType[] = result.routes.map((r) => {
+        const distance = r.legs[0].distance?.value || 0;
+        const duration = r.legs[0].duration?.text || '';
 
-        const fuelCost = (distance / 1000) * (settings.car.fuelConsumption / 100) * settings.fuelPrice;
+        // If you want cost = 0 for electric, you can do:
+        // if (settings.car.fuelType === 'electric') {
+        //   fuelCost = 0;
+        // } else { ... }
+
+        // For simplicity, we treat .fuelConsumption as kWh/100km if electric
+        // and .fuelPrice as $/kWh.
+        // The same formula works for gas/diesel too, just a different meaning:
+        const fuelCost =
+          (distance / 1000) *
+          (settings.car.fuelConsumption / 100) *
+          settings.fuelPrice;
+
+        // CO2
+        const co2Emissions = calculateCO2Emissions(
+          distance,
+          settings.car.fuelConsumption,
+          settings.car.fuelType
+        );
+
+        // Rating
+        const emissionRating = getEnvironmentalImpactRating(co2Emissions);
+
+        // Trees needed
+        const treeEquivalent = calculateTreeEquivalent(co2Emissions);
 
         return {
           distance,
           duration,
           fuelCost,
+          co2Emissions,
+          emissionRating,
+          treeEquivalent,
           route: result
         };
       });
@@ -266,39 +287,39 @@ const App: React.FC = () => {
     }
   };
 
-  // Trigger route calculation manually (for keyboard shortcut)
-  const triggerRouteCalculation = () => {
-    if (startAddress && destinationAddress) {
-      calculateRoute(startAddress, destinationAddress);
-    }
+  // Force route calculation from user clicking "Get Route" near the search bar
+  const handleGetRouteClick = () => {
+    calculateRoute(startAddress, destinationAddress);
   };
 
-  // Select an alternative route
+  // Select alternative route
   const selectRoute = (index: number) => {
     if (alternativeRoutes[index]) {
       setRouteInfo(alternativeRoutes[index]);
       setSelectedRouteIndex(index);
 
-      // Update the directions to show this route
+      // reorder directions so selected route is the primary
       if (directions) {
         const newDirections = { ...directions };
-        // Set the selected route as the first one to be displayed
         if (newDirections.routes.length > index) {
-          const selectedRoute = newDirections.routes[index];
-          newDirections.routes = [selectedRoute, ...newDirections.routes.filter((_, i) => i !== index)];
+          const selected = newDirections.routes[index];
+          newDirections.routes = [
+            selected,
+            ...newDirections.routes.filter((_, i) => i !== index)
+          ];
           setDirections(newDirections);
         }
       }
     }
   };
 
-  // Reset app to initial state
+  // Reset everything
   const resetApp = () => {
     setSettings(DEFAULT_SETTINGS);
     setStartPoint(null);
     setStartAddress(DEFAULT_SETTINGS.homeAddress);
     setDestination(null);
-    setDestinationAddress("");
+    setDestinationAddress('');
     setDirections(null);
     setRouteInfo(null);
     setShowRouteInfo(false);
@@ -313,8 +334,6 @@ const App: React.FC = () => {
   // Toggle map click mode
   const toggleMapClickMode = () => {
     setMapClickMode(!mapClickMode);
-
-    // Reset click state when turning off
     if (mapClickMode) {
       setClickUsedForDestination(false);
     }
@@ -322,10 +341,7 @@ const App: React.FC = () => {
 
   // Toggle dark mode
   const toggleDarkMode = () => {
-    setSettings({
-      ...settings,
-      darkMode: !settings.darkMode
-    });
+    setSettings({ ...settings, darkMode: !settings.darkMode });
   };
 
   // Toggle settings widget
@@ -342,14 +358,14 @@ const App: React.FC = () => {
     if (showKeyboardShortcuts) setShowKeyboardShortcuts(false);
   };
 
-  // Toggle route info widget
+  // Toggle route info
   const toggleRouteInfo = () => {
     if (routeInfo) {
       setShowRouteInfo(!showRouteInfo);
     }
   };
 
-  // Toggle keyboard shortcuts widget
+  // Toggle keyboard shortcuts
   const toggleKeyboardShortcuts = () => {
     setShowKeyboardShortcuts(!showKeyboardShortcuts);
     if (showSettings) setShowSettings(false);
@@ -364,107 +380,112 @@ const App: React.FC = () => {
     if (showRouteInfo) setShowRouteInfo(false);
   };
 
-  // Focus search inputs
+  // Focus search
   const focusDestinationSearch = () => {
-    const destinationInput = document.querySelector('.search-bar input') as HTMLInputElement;
-    if (destinationInput) destinationInput.focus();
+    const destInput = document.querySelector('.search-bar input') as HTMLInputElement;
+    if (destInput) destInput.focus();
   };
-
   const focusStartPointSearch = () => {
-    const startPointInput = document.querySelector('.start-point-input input') as HTMLInputElement;
-    if (startPointInput) startPointInput.focus();
+    const startInput = document.querySelector('.start-point-input input') as HTMLInputElement;
+    if (startInput) startInput.focus();
   };
 
-  // Set up keyboard shortcuts
+  // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Don't trigger shortcuts when typing in form fields
+      // Don’t trigger if typing in input/textarea
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
         return;
       }
 
       const key = e.key.toLowerCase();
-
       switch (key) {
         case 's':
           toggleSettings();
           break;
-
         case 'a':
           toggleAbout();
           break;
-
         case 'm':
           toggleMapClickMode();
           break;
-
         case 'd':
           toggleDarkMode();
           break;
-
         case 'h':
           setHomeAsStart();
           break;
-
         case 'r':
           resetApp();
           break;
-
         case 'escape':
           closeAllPanels();
           break;
-
         case '?':
           toggleKeyboardShortcuts();
           break;
-
         case 'f':
           if (e.shiftKey) {
-            // Focus start point search
             focusStartPointSearch();
           } else {
-            // Focus destination search
             focusDestinationSearch();
           }
           break;
-
         case '1':
         case '2':
         case '3':
           {
-            const routeIndex = parseInt(key) - 1;
+            const routeIndex = parseInt(key, 10) - 1;
             if (alternativeRoutes.length > routeIndex) {
               selectRoute(routeIndex);
             }
-            break;
           }
-
-        case 'c':
-          triggerRouteCalculation();
           break;
-
+        case 'c':
+          // “Calculate route” keyboard shortcut
+          if (startAddress && destinationAddress) {
+            calculateRoute(startAddress, destinationAddress);
+          }
+          break;
         case 'i':
           toggleRouteInfo();
           break;
-
         case 't':
           toggleTips();
+          break;
+        // NEW: Toggle showEmissions with 'e'
+        case 'e':
+          setSettings({ ...settings, showEmissions: !settings.showEmissions });
+          break;
+        default:
           break;
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    toggleSettings, toggleAbout, toggleMapClickMode, toggleDarkMode,
-    setHomeAsStart, resetApp, toggleKeyboardShortcuts,
-    focusDestinationSearch, focusStartPointSearch,
-    alternativeRoutes, toggleRouteInfo, toggleTips
+    toggleSettings,
+    toggleAbout,
+    toggleMapClickMode,
+    toggleDarkMode,
+    setHomeAsStart,
+    resetApp,
+    closeAllPanels,
+    toggleKeyboardShortcuts,
+    focusDestinationSearch,
+    focusStartPointSearch,
+    alternativeRoutes,
+    toggleRouteInfo,
+    toggleTips,
+    startAddress,
+    destinationAddress,
+    settings
   ]);
 
   return (
     <div className={settings.darkMode ? 'dark-mode' : ''}>
-      {/* Welcome Splash Screen */}
       {showWelcome && <WelcomeSplash onClose={handleWelcomeClose} />}
 
       <Map
@@ -473,24 +494,90 @@ const App: React.FC = () => {
         startPoint={startPoint}
         darkMode={settings.darkMode}
         mapClickMode={mapClickMode}
-        onMapClick={handleMapClick}
+        onMapClick={(loc, addr) => {
+          if (clickUsedForDestination) {
+            setStartAddress(addr);
+            setStartPoint(loc);
+            setClickUsedForDestination(false);
+            if (destinationAddress) {
+              calculateRoute(addr, destinationAddress);
+            }
+          } else {
+            setDestinationAddress(addr);
+            setDestination(loc);
+            setClickUsedForDestination(true);
+            if (startAddress) {
+              calculateRoute(startAddress, addr);
+            }
+          }
+        }}
       />
 
-      {/* Input fields - starting point first, then destination */}
-      <StartPointInput
-        initialValue={startAddress}
-        onSelect={handleStartPointSelect}
-      />
+/* In your App.tsx (or wherever you render StartPointInput & SearchBar) */
 
-      <SearchBar
-        value={destinationAddress}
-        onSelect={handleDestinationSelect}
-      />
+      <div
+        style={{
+          position: 'absolute',
+          top: 20,
+          left: 20,
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px',
+          zIndex: 10
+        }}
+      >
+        <StartPointInput
+          initialValue={startAddress}
+          onSelect={handleStartPointSelect}
+        />
 
-      {/* Tip Banner */}
+        <SearchBar
+          value={destinationAddress}
+          onSelect={handleDestinationSelect}
+        />
+
+        <button
+          onClick={handleGetRouteClick}
+          style={{
+            position: "absolute",
+            top: 20,
+            left: 400,
+            padding: '12px 16px',
+            borderRadius: '10px',
+            border: 'none',
+            background: 'rgba(255,255,255,0.9)',
+            backdropFilter: 'blur(5px)',
+            cursor: 'pointer',
+            fontWeight: 600,
+            boxShadow: '0 15px 40px rgba(128, 90, 213, 0.15)',
+            transition: 'transform 0.2s, box-shadow 0.2s, background 0.2s'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'scale(1.05)';
+            e.currentTarget.style.boxShadow = '0 6px 16px rgba(0,0,0,0.2)';
+            e.currentTarget.style.background = 'rgba(240,240,240,0.9)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'scale(1)';
+            e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
+            e.currentTarget.style.background = 'rgba(255,255,255,0.9)';
+          }}
+          onMouseDown={(e) => {
+            e.currentTarget.style.transform = 'scale(0.95)';
+            e.currentTarget.style.background = 'rgba(220,220,220,0.9)';
+          }}
+          onMouseUp={(e) => {
+            e.currentTarget.style.transform = 'scale(1.05)';
+            e.currentTarget.style.background = 'rgba(240,240,240,0.9)';
+          }}
+        >
+          Get Route
+        </button>
+      </div>
+
       {showTip && <TipBanner />}
 
-      {/* Control buttons */}
+      {/* Controls */}
       <div className="controls">
         <ToggleButton
           onClick={toggleMapClickMode}
@@ -513,7 +600,7 @@ const App: React.FC = () => {
         <ToggleButton
           onClick={toggleDarkMode}
           icon={settings.darkMode ? <Sun size={24} /> : <Moon size={24} />}
-          label={settings.darkMode ? "Light Mode" : "Dark Mode"}
+          label={settings.darkMode ? 'Light Mode' : 'Dark Mode'}
         />
         <ToggleButton
           onClick={toggleKeyboardShortcuts}
@@ -532,15 +619,15 @@ const App: React.FC = () => {
         <div className={`map-click-instructions ${mapClickMode ? 'active' : ''}`}>
           <MousePointer size={16} style={{ marginRight: '8px' }} />
           {clickUsedForDestination
-            ? "Click on map to set the starting point"
-            : "Click on map to set the destination"}
+            ? 'Click on map to set the starting point'
+            : 'Click on map to set the destination'}
         </div>
       )}
 
       {/* Widgets */}
       <SettingsWidget
         settings={settings}
-        onUpdate={setSettings}
+        onUpdate={handleSettingsUpdate}
         visible={showSettings}
         onClose={() => setShowSettings(false)}
       />
@@ -565,6 +652,10 @@ const App: React.FC = () => {
           alternativeRoutes={alternativeRoutes}
           selectedRouteIndex={selectedRouteIndex}
           onSelectRoute={selectRoute}
+          showEmissions={settings.showEmissions}
+          toggleEmissions={() =>
+            setSettings({ ...settings, showEmissions: !settings.showEmissions })
+          }
         />
       )}
     </div>

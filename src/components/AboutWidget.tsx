@@ -94,8 +94,8 @@ export const AboutWidget: React.FC<{
 
                         <div className="team-intro">
                             <p>
-                                We're software engineering students from Polytechnique Montréal passionate about
-                                creating practical applications that solve real-world problems.
+                                We're software engineering students from Polytechnique Montréal and we were constantly
+                                wondering the impact bringing a car would have on our wallet and the environment.
                             </p>
                         </div>
 
@@ -107,7 +107,7 @@ export const AboutWidget: React.FC<{
                                 <h4 className="member-name">Seif Boukerdenna</h4>
                                 <p className="member-role">Software Engineer</p>
                                 <p className="member-description">
-                                    Frontend specialist with a passion for creating intuitive user interfaces.
+                                    I just like to build stuff lmao.
                                 </p>
                                 <div className="member-links">
                                     <a href="mailto:elmelz6472@gmail.com" className="social-link">
@@ -131,25 +131,25 @@ export const AboutWidget: React.FC<{
                                 <div className="member-initial">D</div>
                             </div>
                             <div className="member-info">
-                                <h4 className="member-name">[Team Member]</h4>
+                                <h4 className="member-name">Maya Ait Djebara</h4>
                                 <p className="member-role">Software Engineer</p>
                                 <p className="member-description">
-                                    Enthusiastic about algorithm optimization and data processing.
-                                    Specialized in the fuel consumption calculations and route optimization.
+                                    I love journalism and raising awareness about various topics, including the environment.
+                                    I also enjoy working on front-end development to create engaging user experiences.
                                 </p>
                                 <div className="member-links">
                                     <a href="mailto:student@example.com" className="social-link">
                                         <Mail size={16} />
                                         Email
                                     </a>
-                                    <a href="https://github.com/username" className="social-link">
+                                    <a href="https://github.com/mxyamx" className="social-link">
                                         <Github size={16} />
                                         GitHub
                                     </a>
-                                    <a href="https://linkedin.com/in/username" className="social-link">
+                                    {/* <a href="https://linkedin.com/in/username" className="social-link">
                                         <Linkedin size={16} />
                                         LinkedIn
-                                    </a>
+                                    </a> */}
                                 </div>
                             </div>
                         </div>

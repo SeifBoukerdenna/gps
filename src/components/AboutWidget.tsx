@@ -105,7 +105,7 @@ export const AboutWidget: React.FC<{
                             </div>
                             <div className="member-info">
                                 <h4 className="member-name">Seif Boukerdenna</h4>
-                                <p className="member-role">Software Engineer</p>
+                                <p className="member-role">Software Engineer & Eternal curious</p>
                                 <p className="member-description">
                                     I just like to build stuff lmao.
                                 </p>
@@ -132,7 +132,7 @@ export const AboutWidget: React.FC<{
                             </div>
                             <div className="member-info">
                                 <h4 className="member-name">Maya Ait Djebara</h4>
-                                <p className="member-role">Software Engineer</p>
+                                <p className="member-role">Software Engineer Student & Aspiring Journalist</p>
                                 <p className="member-description">
                                     I love journalism and raising awareness about various topics, including the environment.
                                     I also enjoy working on front-end development to create engaging user experiences.
